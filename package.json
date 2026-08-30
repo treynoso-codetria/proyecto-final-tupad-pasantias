@@ -1,0 +1,13 @@
+{
+  "name": "portal-pasantias",
+  "private": true,
+  "version": "0.0.0",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev:backend": "npm run start:dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend"
+  }
+}
