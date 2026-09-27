@@ -6,12 +6,11 @@ Desarrollado como **Trabajo Final Integrador** de la Tecnicatura en Programació
 
 ---
 
-## 👥 Integrantes
+## 👤 Integrante
 
-| Nombre              | GitHub                                           |
-| ------------------- | ------------------------------------------------ |
-| Thomas Reynoso      | [@usuario](https://github.com/treynoso-codetria) |
-| Florencia Eyo Bartl | [@usuario](https://github.com/usuario)           |
+| Nombre         | GitHub                                                     |
+| -------------- | ---------------------------------------------------------- |
+| Thomas Reynoso | [@treynoso-codetria](https://github.com/treynoso-codetria) |
 
 **Tutora/Tutor:** Juan Ignacio Schiavonni
 
@@ -55,6 +54,21 @@ Desarrollado como **Trabajo Final Integrador** de la Tecnicatura en Programació
 | Deploy Backend        | [Render](https://render.com) |
 | Base de datos (cloud) | [Neon](https://neon.tech)    |
 | Control de versiones  | Git + GitHub                 |
+| Almacenamiento de archivos | Cloudinary (CV y logos) |
+
+Arquitectura: SPA React + API REST NestJS organizada como **monolito modular en capas**. Detalle y justificación en [`docs/arquitectura.md`](docs/arquitectura.md).
+
+---
+
+## 📚 Documentación
+
+| Documento | Ubicación |
+| --- | --- |
+| Arquitectura y tecnologías | [`docs/arquitectura.md`](docs/arquitectura.md) |
+| Listado de módulos y prioridades | [`docs/modulos.md`](docs/modulos.md) |
+| Modelo de datos (DER, diccionario, índices) | [`docs/database/modelo-de-datos.md`](docs/database/modelo-de-datos.md) |
+| Scripts DDL / DML | [`database/`](database/) |
+| Informes de avance | [`docs/informes/`](docs/informes/) |
 
 ---
 
@@ -72,10 +86,17 @@ Desarrollado como **Trabajo Final Integrador** de la Tecnicatura en Programació
 
 ```
 /
-├── frontend/          # Aplicación React (cliente)
-├── backend/           # API REST con NestJS
-│   └── prisma/        # Schema y migraciones de Prisma
-├── docs/              # Informes de avance, esquemas y documentación
+├── frontend/              # Cliente React 18 + TypeScript (Vite)
+├── backend/               # API REST con NestJS + TypeScript
+│   └── prisma/
+│       └── schema.prisma  # Modelo de datos (fuente de verdad)
+├── database/              # Scripts DDL (schema.sql) y DML (seed.sql)
+├── docs/
+│   ├── arquitectura.md    # Arquitectura, tecnologías y justificación
+│   ├── modulos.md         # Listado de módulos y prioridades
+│   ├── database/          # DER y diccionario de datos
+│   └── informes/          # Informes de avance por entrega
+├── package.json           # Monorepo (npm workspaces)
 └── README.md
 ```
 
@@ -137,7 +158,7 @@ La API estará disponible en `http://localhost:3000` y el cliente en `http://loc
 | Entrega          | Descripción                                       | Fecha          |
 | ---------------- | ------------------------------------------------- | -------------- |
 | ✅ 1.ª Entrega   | Propuesta de proyecto y repositorio               | 30/08/2026     |
-| ⏳ 2.ª Entrega   | Esquema de BD y listado de módulos                | 27/09/2026     |
+| 📤 2.ª Entrega   | Esquema de BD y listado de módulos                | 27/09/2026     |
 | ⏳ Entrega Final | Repositorio completo, despliegue, informe y video | 14/11/2026     |
 | 🎤 Defensa oral  | Presentación ante el comité                       | Mesa de examen |
 

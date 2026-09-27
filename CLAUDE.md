@@ -8,7 +8,7 @@ Responder siempre en español en este proyecto (código, commits y documentació
 
 ## Estado del proyecto
 
-Es un Trabajo Final Integrador de la Tecnicatura en Programación, desarrollado por Thomas Reynoso y Florencia Eyo Bartl, con tutoría de Juan Ignacio Schiavonni. Fechas de entrega: esquema de BD y listado de módulos el 27/09/2026, repositorio completo/despliegue/informe/video el 14/11/2026.
+Es un Trabajo Final Integrador de la Tecnicatura en Programación, desarrollado por Thomas Reynoso, con tutoría de Juan Ignacio Schiavonni. Fechas de entrega: esquema de BD y listado de módulos el 27/09/2026, repositorio completo/despliegue/informe/video el 14/11/2026.
 
 `frontend/` (Vite + React 18 + TS) y `backend/` (NestJS + TS + Prisma) ya están scaffoldeados y arrancan localmente, pero todavía sin lógica de dominio (sin modelos de Prisma, sin módulos propios en Nest más allá del `AppModule` default). El repo es un **monorepo con npm workspaces** — esto es un requisito explícito de la cátedra, no una decisión de conveniencia: no separar frontend/backend en repos distintos.
 
@@ -29,7 +29,8 @@ Explícitamente fuera de alcance en esta versión: pasarela de pagos, integracio
 ├── frontend/          # Cliente React 18 + TypeScript
 ├── backend/           # API REST con NestJS + TypeScript
 │   └── prisma/        # Schema y migraciones de Prisma
-├── docs/              # Informes de avance, esquemas y documentación
+├── database/          # DDL (schema.sql, generado desde schema.prisma) y DML (seed.sql)
+├── docs/              # arquitectura.md, modulos.md, database/ (DER), informes/
 └── README.md
 ```
 
