@@ -10,7 +10,7 @@ Responder siempre en español en este proyecto (código, commits y documentació
 
 Es un Trabajo Final Integrador de la Tecnicatura en Programación, desarrollado por Thomas Reynoso, con tutoría de Juan Ignacio Schiavonni. Fechas de entrega: esquema de BD y listado de módulos el 27/09/2026, repositorio completo/despliegue/informe/video el 14/11/2026.
 
-`frontend/` (Vite + React 18 + TS) y `backend/` (NestJS + TS + Prisma) ya están scaffoldeados y arrancan localmente, pero todavía sin lógica de dominio (sin modelos de Prisma, sin módulos propios en Nest más allá del `AppModule` default). El repo es un **monorepo con npm workspaces** — esto es un requisito explícito de la cátedra, no una decisión de conveniencia: no separar frontend/backend en repos distintos.
+`frontend/` (Vite + React 18 + TS) y `backend/` (NestJS + TS + Prisma) ya están scaffoldeados y arrancan localmente. El esquema de BD y las reglas de negocio están aprobados por el tutor (`backend/prisma/schema.prisma`, migración `init` aplicada; reglas en `docs/database/modelo-de-datos.md` §6, módulos en `docs/modulos.md`). En el backend está implementado M1 (auth: registro de estudiante/empleador, login, `GET /auth/me`, `JwtAuthGuard` + `RolesGuard` globales con `@Public()` / `@Roles()`); el resto de los módulos y todo el frontend siguen pendientes. La API usa el prefijo `/api` y Swagger está en `http://localhost:3000/api/docs`. El repo es un **monorepo con npm workspaces** — esto es un requisito explícito de la cátedra, no una decisión de conveniencia: no separar frontend/backend en repos distintos.
 
 ## Producto: Portal de Pasantías y Búsqueda Laboral Estudiantil
 
@@ -45,14 +45,14 @@ Monorepo con **npm workspaces** (`package.json` raíz con `workspaces: ["backend
 
 ```bash
 npm install                # desde la raíz, instala frontend y backend
-npm run dev:backend        # nest start --watch, en http://localhost:3000
+npm run dev:backend        # nest start --watch, en http://localhost:3000/api (Swagger en /api/docs)
 npm run dev:frontend       # vite dev, en http://localhost:5173
 ```
 
 Backend — variables de entorno y base de datos (Prisma + PostgreSQL):
 ```bash
 cd backend
-cp .env.example .env       # completar DATABASE_URL
+cp .env.example .env       # completar DATABASE_URL y JWT_SECRET (mín. 32 caracteres)
 npx prisma migrate dev     # aplica el schema (backend/prisma/schema.prisma)
 npx prisma generate        # regenera el cliente en backend/src/generated/prisma (gitignored)
 ```

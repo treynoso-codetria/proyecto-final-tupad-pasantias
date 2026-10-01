@@ -123,7 +123,7 @@ npm install   # instala las dependencias de frontend y backend
 
 ```bash
 cd backend
-cp .env.example .env   # completar DATABASE_URL
+cp .env.example .env   # completar DATABASE_URL y JWT_SECRET
 
 # si no tenés PostgreSQL corriendo, se puede levantar uno local con Docker:
 docker run -d --name pasantias-postgres \
@@ -149,7 +149,7 @@ npm run dev:backend
 npm run dev:frontend
 ```
 
-La API estará disponible en `http://localhost:3000` y el cliente en `http://localhost:5173`.
+La API estará disponible en `http://localhost:3000/api`, su documentación interactiva (Swagger) en `http://localhost:3000/api/docs` y el cliente en `http://localhost:5173`.
 
 ---
 
