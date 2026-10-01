@@ -46,7 +46,7 @@ Desarrollado como **Trabajo Final Integrador** de la Tecnicatura en Programació
 
 | Capa                  | Tecnología                   |
 | --------------------- | ---------------------------- |
-| Frontend              | React 18 + TypeScript        |
+| Frontend              | React 19 + TypeScript        |
 | Backend               | NestJS + TypeScript          |
 | Base de datos         | PostgreSQL + Prisma ORM      |
 | Autenticación         | JWT + Passport.js            |
@@ -86,7 +86,7 @@ Arquitectura: SPA React + API REST NestJS organizada como **monolito modular en 
 
 ```
 /
-├── frontend/              # Cliente React 18 + TypeScript (Vite)
+├── frontend/              # Cliente React 19 + TypeScript (Vite)
 ├── backend/               # API REST con NestJS + TypeScript
 │   └── prisma/
 │       └── schema.prisma  # Modelo de datos (fuente de verdad)
@@ -108,7 +108,7 @@ Este repositorio es un **monorepo** (npm workspaces): `frontend/` y `backend/` c
 
 ### Requisitos previos
 
-- Node.js 20+
+- Node.js 22.22+ (recomendado: 24 LTS)
 - PostgreSQL (local, por ejemplo vía Docker, o una instancia en Neon)
 
 ### Instalación

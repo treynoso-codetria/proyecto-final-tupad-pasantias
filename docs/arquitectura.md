@@ -13,7 +13,7 @@ El cliente y la API se comunican exclusivamente por HTTP/JSON y se despliegan de
 ```mermaid
 flowchart LR
     subgraph Cliente["Navegador"]
-        SPA["SPA React 18 + TS<br/>(Vercel)"]
+        SPA["SPA React 19 + TS<br/>(Vercel)"]
     end
     subgraph Servidor["Render"]
         API["API REST NestJS<br/>JWT + Passport"]
@@ -146,7 +146,7 @@ frontend/src/
 | Capa | Tecnología | Justificación |
 | --- | --- | --- |
 | Lenguaje | **TypeScript** (frontend y backend) | Un solo lenguaje en todo el stack; tipado estático que detecta errores en compilación y permite compartir convenciones entre cliente y servidor. |
-| Frontend | **React 18** + **Vite** | Biblioteca UI más difundida del mercado; Vite ofrece arranque y *hot reload* rápidos. |
+| Frontend | **React 19** + **Vite** | Biblioteca UI más difundida del mercado; Vite ofrece arranque y *hot reload* rápidos. |
 | Ruteo / datos (FE) | React Router, TanStack Query, React Hook Form + Zod | Estándares de facto; resuelven navegación, caché de datos remotos y validación de formularios sin escribir infraestructura propia. |
 | Backend | **NestJS** | Arquitectura modular, inyección de dependencias y decoradores que imponen la separación en capas; integración oficial con Passport, JWT, Swagger y validación. |
 | Validación (BE) | class-validator + class-transformer | Integración nativa con los `ValidationPipe` de NestJS. |

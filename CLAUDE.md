@@ -10,7 +10,7 @@ Responder siempre en español en este proyecto (código, commits y documentació
 
 Es un Trabajo Final Integrador de la Tecnicatura en Programación, desarrollado por Thomas Reynoso, con tutoría de Juan Ignacio Schiavonni. Fechas de entrega: esquema de BD y listado de módulos el 27/09/2026, repositorio completo/despliegue/informe/video el 14/11/2026.
 
-`frontend/` (Vite + React 18 + TS) y `backend/` (NestJS + TS + Prisma) ya están scaffoldeados y arrancan localmente. El esquema de BD y las reglas de negocio están aprobados por el tutor (`backend/prisma/schema.prisma`, migración `init` aplicada; reglas en `docs/database/modelo-de-datos.md` §6, módulos en `docs/modulos.md`). En el backend está implementado M1 (auth: registro de estudiante/empleador, login, `GET /auth/me`, `JwtAuthGuard` + `RolesGuard` globales con `@Public()` / `@Roles()`); en el frontend, login, registro (estudiante/empresa) y una home vacía por rol (`/student`, `/employer`, `/admin`). El resto de los módulos sigue pendiente. La API usa el prefijo `/api` y Swagger está en `http://localhost:3000/api/docs`. El repo es un **monorepo con npm workspaces** — esto es un requisito explícito de la cátedra, no una decisión de conveniencia: no separar frontend/backend en repos distintos.
+`frontend/` (Vite + React 19 + TS) y `backend/` (NestJS + TS + Prisma) ya están scaffoldeados y arrancan localmente. El esquema de BD y las reglas de negocio están aprobados por el tutor (`backend/prisma/schema.prisma`, migración `init` aplicada; reglas en `docs/database/modelo-de-datos.md` §6, módulos en `docs/modulos.md`). En el backend está implementado M1 (auth: registro de estudiante/empleador, login, `GET /auth/me`, `JwtAuthGuard` + `RolesGuard` globales con `@Public()` / `@Roles()`); en el frontend, login, registro (estudiante/empresa) y una home vacía por rol (`/student`, `/employer`, `/admin`). El resto de los módulos sigue pendiente. La API usa el prefijo `/api` y Swagger está en `http://localhost:3000/api/docs`. El repo es un **monorepo con npm workspaces** — esto es un requisito explícito de la cátedra, no una decisión de conveniencia: no separar frontend/backend en repos distintos.
 
 ## Producto: Portal de Pasantías y Búsqueda Laboral Estudiantil
 
@@ -26,7 +26,7 @@ Explícitamente fuera de alcance en esta versión: pasarela de pagos, integracio
 
 ```
 /
-├── frontend/          # Cliente React 18 + TypeScript
+├── frontend/          # Cliente React 19 + TypeScript
 ├── backend/           # API REST con NestJS + TypeScript
 │   └── prisma/        # Schema y migraciones de Prisma
 ├── database/          # DDL (schema.sql, generado desde schema.prisma) y DML (seed.sql)
@@ -34,7 +34,7 @@ Explícitamente fuera de alcance en esta versión: pasarela de pagos, integracio
 └── README.md
 ```
 
-- **Frontend**: React 18 + TypeScript, desplegado en Vercel.
+- **Frontend**: React 19 + TypeScript, desplegado en Vercel.
 - **Backend**: NestJS + TypeScript, exponiendo una API REST, desplegado en Render. El sistema de módulos de NestJS debería mapear naturalmente a los dominios por rol descriptos arriba (ej. un módulo por: auth, estudiantes, empleadores, ofertas, postulaciones, mensajería, admin).
 - **Base de datos**: PostgreSQL con Prisma ORM (schema/migraciones en `backend/prisma`), alojada en Neon (Postgres serverless) en producción.
 - **Autenticación**: JWT + Passport.js, autenticación stateless para la API REST. La lógica de autorización debe contemplar los tres roles (estudiante / empleador / administrador) en toda la API.
@@ -57,7 +57,7 @@ npx prisma migrate dev     # aplica el schema (backend/prisma/schema.prisma)
 npx prisma generate        # regenera el cliente en backend/src/generated/prisma (gitignored)
 ```
 
-Requiere Node.js 20+ y PostgreSQL accesible en `DATABASE_URL`. Para levantar uno local con Docker (evitar el puerto 5432/5433 si ya hay otros proyectos con Postgres corriendo en esta máquina):
+Requiere Node.js 22.22+ (recomendado 24 LTS; lo exigen React Router 8 y las herramientas de Nest) y PostgreSQL accesible en `DATABASE_URL`. Para levantar uno local con Docker (evitar el puerto 5432/5433 si ya hay otros proyectos con Postgres corriendo en esta máquina):
 ```bash
 docker run -d --name pasantias-postgres \
   -e POSTGRES_USER=pasantias -e POSTGRES_PASSWORD=pasantias -e POSTGRES_DB=pasantias \
@@ -73,8 +73,16 @@ Nota sobre Prisma: el proyecto está fijado a la versión estable `prisma@7.10.0
 - **Color por rol**: los componentes usan `bg-accent` / `bg-accent-soft`; el color sale del atributo `data-role` (`STUDENT` violeta, `EMPLOYER` verde, `ADMIN` naranja, sin rol amarillo) más cercano. No hardcodear el color de un rol en un componente.
 - **Estructura**: `app/` (router, layout privado), `api/` (cliente HTTP y token), `components/ui/`, `features/<módulo>/`. Imports con el alias `@/` → `src/`. Sin punto y coma, comillas simples.
 - **Formularios**: React Hook Form + Zod; los límites de `features/auth/schemas.ts` replican los DTOs del backend.
-- **React Router está fijado en v7**: la v8 exige React 19 y el proyecto usa React 18.
 - El backend habilita CORS para `CORS_ORIGIN` (por defecto `http://localhost:5173`).
+
+## Versiones y dependencias fijadas
+
+Actualizado el 01/10/2026: React 19.3, React Router 8, Vite 8.3, Tailwind 4.3, NestJS 12.1, Vitest 5. Lo que **no** está en la última versión es intencional:
+
+- **Prisma 7.10** (no 8): al 01/10/2026 la v8 solo existe como release candidate del CLI (`prisma@8.0.0-rc.19`); `@prisma/client` y `@prisma/adapter-pg` no tienen ninguna versión 8 publicada. Revisar cuando salga la 8.0.0 estable de los tres paquetes.
+- **TypeScript 6 en el backend, 7 en el frontend**: el CLI de Nest (`nest build` / `nest start`) necesita la API de compilación de TypeScript, que la 7.0 no incluye (anunciada para la 7.1); `@nestjs/swagger` además declara `typescript ^5.5 || ^6`. El frontend solo usa `tsc` para chequear tipos, así que usa la 7.
+- **`@types/node` 24**: debe coincidir con la versión mayor de Node en uso (24), no con la última publicada.
+- **Una sola copia de React**: Prisma Studio (dependencia del backend) también depende de React. Si tras un `npm install` aparecen dos versiones (`npm ls react`), los hooks fallan en runtime aunque el build pase; `frontend/vite.config.ts` tiene `resolve.dedupe` como resguardo.
 
 ## Internacionalización (i18n)
 
