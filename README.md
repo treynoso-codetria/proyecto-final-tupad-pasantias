@@ -80,6 +80,8 @@ Arquitectura: SPA React + API REST NestJS organizada como **monolito modular en 
 | Backend (API) | [enlace pendiente]           |
 | Base de datos | Neon (PostgreSQL serverless) |
 
+Guía paso a paso: [`docs/despliegue.md`](docs/despliegue.md).
+
 ---
 
 ## 📁 Estructura del repositorio

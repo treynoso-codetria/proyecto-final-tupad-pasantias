@@ -75,6 +75,14 @@ Nota sobre Prisma: el proyecto está fijado a la versión estable `prisma@7.10.0
 - **Formularios**: React Hook Form + Zod; los límites de `features/auth/schemas.ts` replican los DTOs del backend.
 - El backend habilita CORS para `CORS_ORIGIN` (por defecto `http://localhost:5173`).
 
+## Despliegue
+
+Neon (base) + Render (backend, definido en `render.yaml`) + Vercel (frontend, `frontend/vercel.json`), todo en plan gratuito y con despliegue automático desde `main`. La guía paso a paso y las variables de entorno de producción están en `docs/despliegue.md`.
+
+- El build del backend corre desde la raíz del monorepo y termina con `prisma migrate deploy` (script `db:deploy`): toda migración nueva commiteada se aplica sola en producción al desplegar.
+- `npm run build` del backend ejecuta antes `prisma generate` (script `prebuild`), porque el cliente generado no se versiona.
+- `DATABASE_URL` de producción es la conexión **directa** de Neon (sin pooler), porque `prisma migrate deploy` no funciona a través del pooler.
+
 ## Versiones y dependencias fijadas
 
 Actualizado el 01/10/2026: React 19.3, React Router 8, Vite 8.3, Tailwind 4.3, NestJS 12.1, Vitest 5. Lo que **no** está en la última versión es intencional:

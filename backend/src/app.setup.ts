@@ -15,7 +15,8 @@ export function configureApp(app: INestApplication): void {
     origin: config
       .get('CORS_ORIGIN', { infer: true })
       .split(',')
-      .map((origin) => origin.trim()),
+      // Browsers send the Origin header without a trailing slash.
+      .map((origin) => origin.trim().replace(/\/+$/, '')),
   });
   app.useGlobalPipes(
     new ValidationPipe({

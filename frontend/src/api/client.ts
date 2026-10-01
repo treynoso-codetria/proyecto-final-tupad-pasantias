@@ -1,7 +1,11 @@
 import { getCurrentLanguage } from '@/i18n'
 import { getToken } from './token'
 
-const API_URL = `${import.meta.env.VITE_API_URL ?? 'http://localhost:3000'}/api`
+// A trailing slash in VITE_API_URL is tolerated ("https://host/" → "https://host").
+const API_BASE = (
+  import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
+).replace(/\/+$/, '')
+const API_URL = `${API_BASE}/api`
 
 // `status` is the HTTP status, or 0 when the request never reached the API.
 // `code` is the API's language-independent error identifier (e.g.

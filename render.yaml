@@ -1,0 +1,43 @@
+# Render Blueprint for the backend (NestJS API).
+# Step-by-step guide: docs/despliegue.md
+services:
+  - type: web
+    name: pasantias-api
+    runtime: node
+    plan: free
+    # Same region as the Neon database (AWS us-east-1) to keep queries fast.
+    region: virginia
+    branch: main
+    autoDeploy: true
+    # Commands run from the repository root because this is an npm workspaces
+    # monorepo with a single package-lock.json. devDependencies are needed to
+    # build (Nest CLI, TypeScript, Prisma CLI). Pending migrations are applied
+    # at the end of the build, so a failed migration never goes live.
+    buildCommand: >-
+      npm ci --include=dev --workspace=backend --include-workspace-root &&
+      npm run build --workspace=backend &&
+      npm run db:deploy --workspace=backend
+    startCommand: npm run start:prod --workspace=backend
+    healthCheckPath: /api
+    # Do not redeploy the API when only the frontend or the docs change.
+    buildFilter:
+      paths:
+        - backend/**
+        - package.json
+        - package-lock.json
+        - render.yaml
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: NODE_ENV
+        value: production
+      # Neon connection string (the direct one, not the "pooled" one).
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 1d
+      # URL of the frontend on Vercel, without a trailing slash.
+      - key: CORS_ORIGIN
+        sync: false
