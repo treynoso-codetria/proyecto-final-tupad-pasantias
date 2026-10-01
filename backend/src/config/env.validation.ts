@@ -23,6 +23,11 @@ export class EnvironmentVariables {
   @IsOptional()
   JWT_EXPIRES_IN: string = '1d';
 
+  // Frontend origin(s) allowed by CORS; comma-separated for more than one.
+  @IsString()
+  @IsOptional()
+  CORS_ORIGIN: string = 'http://localhost:5173';
+
   @IsInt()
   @Min(1)
   @Max(65535)

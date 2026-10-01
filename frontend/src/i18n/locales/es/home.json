@@ -1,0 +1,19 @@
+{
+  "greeting": "¡Hola, {{name}}!",
+  "student": {
+    "description": "Este es tu espacio para encontrar pasantías y seguir tus postulaciones.",
+    "emptyTitle": "Todavía no hay ofertas para mostrar",
+    "emptyDescription": "Muy pronto vas a poder buscar ofertas, postularte y ver acá el estado de cada postulación."
+  },
+  "employer": {
+    "description": "Desde acá vas a publicar ofertas y gestionar a quienes se postulen.",
+    "emptyTitle": "Todavía no publicaste ofertas",
+    "emptyDescription": "Muy pronto vas a poder publicar pasantías y empleos, y revisar acá a los postulantes de cada una."
+  },
+  "admin": {
+    "title": "Panel de administración",
+    "description": "Desde acá vas a gestionar cuentas, moderar publicaciones y mantener categorías y etiquetas.",
+    "emptyTitle": "Todavía no hay nada para administrar",
+    "emptyDescription": "Muy pronto vas a ver acá las cuentas, las publicaciones y el catálogo del portal."
+  }
+}

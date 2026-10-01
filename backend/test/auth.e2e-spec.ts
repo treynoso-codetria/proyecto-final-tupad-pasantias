@@ -179,6 +179,83 @@ describe('Auth (e2e)', () => {
     });
   });
 
+  describe('error responses (i18n)', () => {
+    const wrongLogin = { email: student.email, password: 'wrong-password' };
+
+    it('returns a stable code and an English message by default', async () => {
+      const response = await http()
+        .post('/api/auth/login')
+        .send(wrongLogin)
+        .expect(401);
+
+      expect(response.body).toEqual({
+        statusCode: 401,
+        code: 'INVALID_CREDENTIALS',
+        message: 'Invalid email or password',
+      });
+    });
+
+    it('translates the message with Accept-Language: es', async () => {
+      const response = await http()
+        .post('/api/auth/login')
+        .set('Accept-Language', 'es-AR,es;q=0.9,en;q=0.8')
+        .send(wrongLogin)
+        .expect(401);
+
+      expect(response.body.code).toBe('INVALID_CREDENTIALS');
+      expect(response.body.message).toBe(
+        'El email o la contraseña no son correctos',
+      );
+    });
+
+    it('falls back to English for an unsupported language', async () => {
+      const response = await http()
+        .post('/api/auth/login')
+        .set('Accept-Language', 'fr')
+        .send(wrongLogin)
+        .expect(401);
+
+      expect(response.body.message).toBe('Invalid email or password');
+    });
+
+    it('translates validation errors, including decorator arguments', async () => {
+      const invalid = { ...employer, password: 'short', cuit: '123' };
+
+      const english = await http()
+        .post('/api/auth/register/employer')
+        .send(invalid)
+        .expect(400);
+      expect(english.body.code).toBe('VALIDATION_FAILED');
+      expect(english.body.message.sort()).toEqual([
+        'cuit must have the format XX-XXXXXXXX-X',
+        'password must have at least 8 characters',
+      ]);
+
+      const spanish = await http()
+        .post('/api/auth/register/employer')
+        .set('Accept-Language', 'es')
+        .send(invalid)
+        .expect(400);
+      expect(spanish.body.message.sort()).toEqual([
+        'cuit debe tener el formato XX-XXXXXXXX-X',
+        'password debe tener al menos 8 caracteres',
+      ]);
+    });
+
+    it('translates errors raised by the guards', async () => {
+      const response = await http()
+        .get('/api/auth/me')
+        .set('Accept-Language', 'es')
+        .expect(401);
+
+      expect(response.body).toEqual({
+        statusCode: 401,
+        code: 'UNAUTHORIZED',
+        message: 'Se requiere autenticación',
+      });
+    });
+  });
+
   describe('deactivated account', () => {
     it('cannot log in, and its existing token stops working', async () => {
       const login = await http()

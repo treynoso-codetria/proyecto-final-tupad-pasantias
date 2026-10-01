@@ -1,0 +1,21 @@
+{
+  "validation": {
+    "required": "Completá este campo.",
+    "tooLong": "Este texto es demasiado largo.",
+    "emailRequired": "Ingresá tu email.",
+    "emailInvalid": "Ingresá un email válido.",
+    "passwordRequired": "Ingresá tu contraseña.",
+    "passwordTooShort": "Usá al menos 8 caracteres.",
+    "passwordTooLong": "Usá como máximo 72 caracteres.",
+    "cuitInvalid": "Ingresá los 11 dígitos del CUIT."
+  },
+  "api": {
+    "EMAIL_TAKEN": "Ya existe una cuenta con este email.",
+    "CUIT_TAKEN": "Ya existe una empresa registrada con este CUIT.",
+    "EMAIL_OR_CUIT_TAKEN": "El email o el CUIT ya están registrados.",
+    "INVALID_CREDENTIALS": "El email o la contraseña no son correctos.",
+    "ACCOUNT_DEACTIVATED": "Tu cuenta está desactivada. Contactá a un administrador.",
+    "network": "No pudimos conectar con el servidor. Revisá tu conexión y probá de nuevo.",
+    "unexpected": "Ocurrió un error inesperado. Probá de nuevo en unos minutos."
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "isDefined": "{property} es obligatorio",
+  "isNotEmpty": "{property} es obligatorio",
+  "isString": "{property} debe ser texto",
+  "isEmail": "{property} debe ser un email válido",
+  "minLength": "{property} debe tener al menos {constraints.0} caracteres",
+  "maxLength": "{property} debe tener como máximo {constraints.0} caracteres",
+  "matches": "{property} tiene un formato inválido",
+  "isInt": "{property} debe ser un número entero",
+  "isNumber": "{property} debe ser un número",
+  "min": "{property} debe ser como mínimo {constraints.0}",
+  "max": "{property} debe ser como máximo {constraints.0}",
+  "isBoolean": "{property} debe ser verdadero o falso",
+  "isEnum": "{property} tiene un valor no permitido",
+  "isUuid": "{property} debe ser un identificador válido",
+  "isUrl": "{property} debe ser una URL válida",
+  "isDateString": "{property} debe ser una fecha válida",
+  "whitelistValidation": "{property} no es un campo permitido",
+  "cuitFormat": "{property} debe tener el formato XX-XXXXXXXX-X"
+}

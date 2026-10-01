@@ -1,0 +1,22 @@
+{
+  "appName": "Portal de Pasantías",
+  "language": {
+    "label": "Idioma"
+  },
+  "roles": {
+    "STUDENT": "Estudiante",
+    "EMPLOYER": "Empresa",
+    "ADMIN": "Administrador"
+  },
+  "logout": "Salir",
+  "loading": "Cargando",
+  "password": {
+    "show": "Mostrar contraseña",
+    "hide": "Ocultar contraseña"
+  },
+  "notFound": {
+    "title": "Esta página no existe",
+    "description": "Puede que el enlace esté mal escrito o que la página se haya movido.",
+    "back": "Volver al inicio"
+  }
+}

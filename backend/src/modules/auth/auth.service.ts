@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcrypt';
+import { ErrorCode } from '../../common/errors/error-code.js';
 import { Prisma } from '../../generated/prisma/client.js';
 import { UserRole } from '../../generated/prisma/enums.js';
 import { PrismaService } from '../../prisma/prisma.service.js';
@@ -53,7 +54,7 @@ export class AuthService {
       select: { id: true },
     });
     if (existingCompany) {
-      throw new ConflictException('CUIT is already registered');
+      throw new ConflictException(ErrorCode.CUIT_TAKEN);
     }
 
     const user = await this.createUser({
@@ -73,10 +74,10 @@ export class AuthService {
     // Same error for unknown email and wrong password, so the response does
     // not reveal which emails are registered.
     if (!user || !(await bcrypt.compare(dto.password, user.passwordHash))) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException(ErrorCode.INVALID_CREDENTIALS);
     }
     if (!user.isActive) {
-      throw new ForbiddenException('Account is deactivated');
+      throw new ForbiddenException(ErrorCode.ACCOUNT_DEACTIVATED);
     }
 
     await this.prisma.user.update({
@@ -110,7 +111,7 @@ export class AuthService {
       select: { id: true },
     });
     if (existing) {
-      throw new ConflictException('Email is already registered');
+      throw new ConflictException(ErrorCode.EMAIL_TAKEN);
     }
   }
 
@@ -124,7 +125,7 @@ export class AuthService {
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === 'P2002'
       ) {
-        throw new ConflictException('Email or CUIT is already registered');
+        throw new ConflictException(ErrorCode.EMAIL_OR_CUIT_TAKEN);
       }
       throw error;
     }

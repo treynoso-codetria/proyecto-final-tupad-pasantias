@@ -1,0 +1,19 @@
+{
+  "greeting": "Hi, {{name}}!",
+  "student": {
+    "description": "This is your space to find internships and track your applications.",
+    "emptyTitle": "There are no offers to show yet",
+    "emptyDescription": "Soon you'll be able to search offers, apply and see the status of each application here."
+  },
+  "employer": {
+    "description": "From here you'll post offers and manage the people who apply.",
+    "emptyTitle": "You haven't posted any offers yet",
+    "emptyDescription": "Soon you'll be able to post internships and jobs, and review the applicants for each one here."
+  },
+  "admin": {
+    "title": "Administration panel",
+    "description": "From here you'll manage accounts, moderate posts and maintain categories and tags.",
+    "emptyTitle": "There's nothing to manage yet",
+    "emptyDescription": "Soon you'll see the portal's accounts, posts and catalog here."
+  }
+}

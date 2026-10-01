@@ -18,6 +18,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
+import { ErrorResponseDto } from '../../common/dto/error-response.dto.js';
 import { Public } from '../../common/decorators/public.decorator.js';
 import type { AuthenticatedUser } from '../../common/interfaces/authenticated-user.interface.js';
 import { AuthService } from './auth.service.js';
@@ -36,8 +37,14 @@ export class AuthController {
   @Post('register/student')
   @ApiOperation({ summary: 'Register a student account with its profile' })
   @ApiCreatedResponse({ type: AuthResponseDto })
-  @ApiBadRequestResponse({ description: 'Validation failed' })
-  @ApiConflictResponse({ description: 'Email is already registered' })
+  @ApiBadRequestResponse({
+    description: 'Validation failed',
+    type: ErrorResponseDto,
+  })
+  @ApiConflictResponse({
+    description: 'Email is already registered',
+    type: ErrorResponseDto,
+  })
   registerStudent(@Body() dto: RegisterStudentDto): Promise<AuthResponseDto> {
     return this.authService.registerStudent(dto);
   }
@@ -46,8 +53,14 @@ export class AuthController {
   @Post('register/employer')
   @ApiOperation({ summary: 'Register an employer account with its company' })
   @ApiCreatedResponse({ type: AuthResponseDto })
-  @ApiBadRequestResponse({ description: 'Validation failed' })
-  @ApiConflictResponse({ description: 'Email or CUIT is already registered' })
+  @ApiBadRequestResponse({
+    description: 'Validation failed',
+    type: ErrorResponseDto,
+  })
+  @ApiConflictResponse({
+    description: 'Email or CUIT is already registered',
+    type: ErrorResponseDto,
+  })
   registerEmployer(@Body() dto: RegisterEmployerDto): Promise<AuthResponseDto> {
     return this.authService.registerEmployer(dto);
   }
@@ -57,9 +70,18 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Log in with email and password' })
   @ApiOkResponse({ type: AuthResponseDto })
-  @ApiBadRequestResponse({ description: 'Validation failed' })
-  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
-  @ApiForbiddenResponse({ description: 'Account is deactivated' })
+  @ApiBadRequestResponse({
+    description: 'Validation failed',
+    type: ErrorResponseDto,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Invalid credentials',
+    type: ErrorResponseDto,
+  })
+  @ApiForbiddenResponse({
+    description: 'Account is deactivated',
+    type: ErrorResponseDto,
+  })
   login(@Body() dto: LoginDto): Promise<AuthResponseDto> {
     return this.authService.login(dto);
   }
@@ -70,6 +92,7 @@ export class AuthController {
   @ApiOkResponse({ type: MeResponseDto })
   @ApiUnauthorizedResponse({
     description: 'Missing, invalid or expired token, or deactivated account',
+    type: ErrorResponseDto,
   })
   getMe(@CurrentUser() user: AuthenticatedUser): Promise<MeResponseDto> {
     return this.authService.getMe(user.id);

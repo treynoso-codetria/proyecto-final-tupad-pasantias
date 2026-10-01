@@ -1,0 +1,22 @@
+{
+  "appName": "Internship Portal",
+  "language": {
+    "label": "Language"
+  },
+  "roles": {
+    "STUDENT": "Student",
+    "EMPLOYER": "Company",
+    "ADMIN": "Administrator"
+  },
+  "logout": "Log out",
+  "loading": "Loading",
+  "password": {
+    "show": "Show password",
+    "hide": "Hide password"
+  },
+  "notFound": {
+    "title": "This page doesn't exist",
+    "description": "The link may be mistyped, or the page may have moved.",
+    "back": "Back to home"
+  }
+}

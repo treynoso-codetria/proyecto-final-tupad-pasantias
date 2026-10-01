@@ -115,7 +115,7 @@ Cada carpeta de `modules/` contiene `*.module.ts`, `*.controller.ts`, `*.service
 
 ## 3. Arquitectura del frontend (React)
 
-- **SPA** construida con **Vite**, con **React Router** para la navegación y rutas protegidas por rol (`/estudiante/*`, `/empresa/*`, `/admin/*`).
+- **SPA** construida con **Vite**, con **React Router** para la navegación y rutas protegidas por rol (`/student/*`, `/employer/*`, `/admin/*`).
 - **Organización por *features*** que replica los módulos del backend:
 
 ```

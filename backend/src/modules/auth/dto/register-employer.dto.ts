@@ -15,6 +15,7 @@ export class RegisterEmployerDto extends RegisterAccountDto {
   @Trim()
   @Matches(/^\d{2}-\d{8}-\d$/, {
     message: 'cuit must have the format XX-XXXXXXXX-X',
+    context: { i18nKey: 'cuitFormat' },
   })
   cuit: string;
 }

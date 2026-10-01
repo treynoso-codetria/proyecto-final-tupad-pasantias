@@ -1,0 +1,13 @@
+{
+  "EMAIL_TAKEN": "El email ya está registrado",
+  "CUIT_TAKEN": "El CUIT ya está registrado",
+  "EMAIL_OR_CUIT_TAKEN": "El email o el CUIT ya está registrado",
+  "INVALID_CREDENTIALS": "El email o la contraseña no son correctos",
+  "ACCOUNT_DEACTIVATED": "Esta cuenta está desactivada",
+  "BAD_REQUEST": "La solicitud no es válida",
+  "UNAUTHORIZED": "Se requiere autenticación",
+  "FORBIDDEN": "No tenés permiso para realizar esta acción",
+  "NOT_FOUND": "No se encontró el recurso solicitado",
+  "CONFLICT": "La solicitud entra en conflicto con el estado actual del recurso",
+  "TOO_MANY_REQUESTS": "Demasiadas solicitudes, probá de nuevo más tarde"
+}

@@ -1,0 +1,20 @@
+{
+  "isDefined": "{property} is required",
+  "isNotEmpty": "{property} is required",
+  "isString": "{property} must be text",
+  "isEmail": "{property} must be a valid email address",
+  "minLength": "{property} must have at least {constraints.0} characters",
+  "maxLength": "{property} must have at most {constraints.0} characters",
+  "matches": "{property} has an invalid format",
+  "isInt": "{property} must be a whole number",
+  "isNumber": "{property} must be a number",
+  "min": "{property} must be at least {constraints.0}",
+  "max": "{property} must be at most {constraints.0}",
+  "isBoolean": "{property} must be true or false",
+  "isEnum": "{property} has a value that is not allowed",
+  "isUuid": "{property} must be a valid identifier",
+  "isUrl": "{property} must be a valid URL",
+  "isDateString": "{property} must be a valid date",
+  "whitelistValidation": "{property} is not an allowed field",
+  "cuitFormat": "{property} must have the format XX-XXXXXXXX-X"
+}

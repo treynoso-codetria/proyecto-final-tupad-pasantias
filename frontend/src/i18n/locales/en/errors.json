@@ -1,0 +1,21 @@
+{
+  "validation": {
+    "required": "Fill in this field.",
+    "tooLong": "This text is too long.",
+    "emailRequired": "Enter your email.",
+    "emailInvalid": "Enter a valid email.",
+    "passwordRequired": "Enter your password.",
+    "passwordTooShort": "Use at least 8 characters.",
+    "passwordTooLong": "Use at most 72 characters.",
+    "cuitInvalid": "Enter the 11 digits of the CUIT."
+  },
+  "api": {
+    "EMAIL_TAKEN": "An account with this email already exists.",
+    "CUIT_TAKEN": "A company with this CUIT is already registered.",
+    "EMAIL_OR_CUIT_TAKEN": "The email or the CUIT is already registered.",
+    "INVALID_CREDENTIALS": "The email or password is incorrect.",
+    "ACCOUNT_DEACTIVATED": "Your account is deactivated. Contact an administrator.",
+    "network": "We couldn't reach the server. Check your connection and try again.",
+    "unexpected": "Something went wrong. Try again in a few minutes."
+  }
+}
