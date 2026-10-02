@@ -1,15 +1,20 @@
 import { createBrowserRouter } from 'react-router'
+import { AccountPage } from '@/features/account/AccountPage'
+import { ConfirmEmailChangePage } from '@/features/account/ConfirmEmailChangePage'
 import { AuthLayout } from '@/features/auth/components/AuthLayout'
 import type { AuthPanel } from '@/features/auth/components/auth-panel'
 import {
   GuestOnly,
+  RequireAuth,
   RequireRole,
   RootRedirect,
 } from '@/features/auth/components/guards'
+import { CheckEmailPage } from '@/features/auth/pages/CheckEmailPage'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { RegisterChoicePage } from '@/features/auth/pages/RegisterChoicePage'
 import { RegisterEmployerPage } from '@/features/auth/pages/RegisterEmployerPage'
 import { RegisterStudentPage } from '@/features/auth/pages/RegisterStudentPage'
+import { VerifyEmailPage } from '@/features/auth/pages/VerifyEmailPage'
 import { AdminHomePage } from '@/features/home/AdminHomePage'
 import { EmployerHomePage } from '@/features/home/EmployerHomePage'
 import { StudentHomePage } from '@/features/home/StudentHomePage'
@@ -22,10 +27,10 @@ const employerPanel: AuthPanel = { role: 'EMPLOYER', content: 'employer' }
 export const router = createBrowserRouter([
   { path: '/', element: <RootRedirect /> },
   {
-    element: <GuestOnly />,
+    element: <AuthLayout />,
     children: [
       {
-        element: <AuthLayout />,
+        element: <GuestOnly />,
         children: [
           { path: '/login', element: <LoginPage /> },
           { path: '/register', element: <RegisterChoicePage /> },
@@ -39,8 +44,12 @@ export const router = createBrowserRouter([
             element: <RegisterEmployerPage />,
             handle: employerPanel,
           },
+          { path: '/check-email', element: <CheckEmailPage /> },
         ],
       },
+      // Opened from emailed links; they work with or without a session.
+      { path: '/verify-email', element: <VerifyEmailPage /> },
+      { path: '/confirm-email-change', element: <ConfirmEmailChangePage /> },
     ],
   },
   {
@@ -70,6 +79,15 @@ export const router = createBrowserRouter([
         path: '/admin',
         element: <AppShell />,
         children: [{ index: true, element: <AdminHomePage /> }],
+      },
+    ],
+  },
+  {
+    element: <RequireAuth />,
+    children: [
+      {
+        element: <AppShell />,
+        children: [{ path: '/account', element: <AccountPage /> }],
       },
     ],
   },

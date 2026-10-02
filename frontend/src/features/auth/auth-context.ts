@@ -1,10 +1,5 @@
 import { createContext, useContext } from 'react'
-import type {
-  CurrentUser,
-  LoginInput,
-  RegisterEmployerInput,
-  RegisterStudentInput,
-} from './types'
+import type { CurrentUser, LoginInput } from './types'
 
 export type AuthState =
   // A stored token is being checked against the API.
@@ -14,8 +9,11 @@ export type AuthState =
 
 export type AuthContextValue = AuthState & {
   login: (input: LoginInput) => Promise<void>
-  registerStudent: (input: RegisterStudentInput) => Promise<void>
-  registerEmployer: (input: RegisterEmployerInput) => Promise<void>
+  // Starts a session from an access token obtained outside the login form
+  // (the email verification link returns one).
+  loginWithToken: (accessToken: string) => Promise<void>
+  // Reloads the signed-in user, e.g. after their email changed.
+  refreshUser: () => Promise<void>
   logout: () => void
 }
 

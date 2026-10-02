@@ -1,18 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
 import { PasswordField } from '@/components/ui/PasswordField'
 import { TextField } from '@/components/ui/TextField'
-import { useAuth } from '../auth-context'
+import { authApi } from '../api'
 import { RegisterFormShell } from '../components/RegisterFormShell'
-import { getApiErrorKey, getConflictField } from '../errors'
+import { getApiErrorKey, getErrorField } from '../errors'
 import { registerStudentSchema } from '../schemas'
 import { useErrorText } from '../use-error-text'
 
 export function RegisterStudentPage() {
   const { t } = useTranslation('auth')
   const errorText = useErrorText()
-  const { registerStudent } = useAuth()
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -22,12 +23,15 @@ export function RegisterStudentPage() {
 
   const onSubmit = handleSubmit(async (values) => {
     try {
-      await registerStudent(values)
+      const { email, verificationEmailSent } =
+        await authApi.registerStudent(values)
+      await navigate('/check-email', {
+        state: { email, emailSent: verificationEmailSent },
+      })
     } catch (error) {
       // A taken email is shown on its field; anything else, above the form.
-      const field = getConflictField(error) === 'email' ? 'email' : 'root'
       setError(
-        field,
+        getErrorField(error, { EMAIL_TAKEN: 'email' }) ?? 'root',
         { message: getApiErrorKey(error) },
         { shouldFocus: true },
       )

@@ -10,10 +10,23 @@ export function GuestOnly() {
   const auth = useAuth()
 
   if (auth.status === 'loading') {
-    return <FullPageLoader />
+    return <FullPageLoader fullPage={false} />
   }
   if (auth.status === 'authenticated') {
     return <Navigate to={ROLE_HOME_PATH[auth.user.role]} replace />
+  }
+  return <Outlet />
+}
+
+// Wraps screens that any signed-in user can open, whatever their role.
+export function RequireAuth() {
+  const auth = useAuth()
+
+  if (auth.status === 'loading') {
+    return <FullPageLoader />
+  }
+  if (auth.status === 'anonymous') {
+    return <Navigate to="/login" replace />
   }
   return <Outlet />
 }

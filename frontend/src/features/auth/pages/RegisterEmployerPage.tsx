@@ -1,18 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
 import { PasswordField } from '@/components/ui/PasswordField'
 import { TextField } from '@/components/ui/TextField'
-import { useAuth } from '../auth-context'
+import { authApi } from '../api'
 import { RegisterFormShell } from '../components/RegisterFormShell'
-import { getApiErrorKey, getConflictField } from '../errors'
+import { getApiErrorKey, getErrorField } from '../errors'
 import { formatCuit, registerEmployerSchema } from '../schemas'
 import { useErrorText } from '../use-error-text'
 
 export function RegisterEmployerPage() {
   const { t } = useTranslation('auth')
   const errorText = useErrorText()
-  const { registerEmployer } = useAuth()
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -23,12 +24,17 @@ export function RegisterEmployerPage() {
 
   const onSubmit = handleSubmit(async (values) => {
     try {
-      await registerEmployer(values)
+      const { email, verificationEmailSent } =
+        await authApi.registerEmployer(values)
+      await navigate('/check-email', {
+        state: { email, emailSent: verificationEmailSent },
+      })
     } catch (error) {
       // A taken email or CUIT is shown on its field; anything else, above
       // the form.
       setError(
-        getConflictField(error) ?? 'root',
+        getErrorField(error, { EMAIL_TAKEN: 'email', CUIT_TAKEN: 'cuit' }) ??
+          'root',
         { message: getApiErrorKey(error) },
         { shouldFocus: true },
       )

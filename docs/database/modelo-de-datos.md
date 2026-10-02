@@ -36,6 +36,7 @@ erDiagram
         varchar password_hash
         UserRole role
         boolean is_active
+        timestamptz email_verified_at
         timestamptz last_login_at
         timestamptz created_at
         timestamptz updated_at
@@ -210,6 +211,7 @@ erDiagram
 | `password_hash` | `VARCHAR(255)` | No | | Hash bcrypt. Nunca se guarda la contraseña en texto plano. |
 | `role` | `UserRole` | No | | Rol del usuario. |
 | `is_active` | `BOOLEAN` | No | `true` | `false` = cuenta desactivada por un administrador (no puede iniciar sesión). |
+| `email_verified_at` | `TIMESTAMPTZ` | Sí | | Momento en que el usuario confirmó su email con el enlace recibido. `NULL` = email sin verificar (no puede iniciar sesión). |
 | `last_login_at` | `TIMESTAMPTZ` | Sí | | Último inicio de sesión. |
 | `created_at` / `updated_at` | `TIMESTAMPTZ` | No | `now()` | Auditoría. |
 
@@ -409,4 +411,5 @@ Algunas reglas no se expresan como restricciones de la base y las controla el ba
 - `salary_min <= salary_max` cuando ambos están presentes.
 - En `messages`, el `sender_id` debe ser el estudiante de la postulación o el usuario de la empresa dueña de la oferta.
 - Un usuario con `is_active = false` no puede autenticarse.
+- Un usuario con `email_verified_at` nulo no puede iniciar sesión: debe confirmar su email con el enlace que recibe al registrarse. Al cambiar de email, el nuevo se aplica recién cuando se confirma desde esa dirección.
 - Toda baja/restauración de oferta y toda activación/desactivación de cuenta genera un registro en `admin_actions`.

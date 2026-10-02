@@ -10,7 +10,7 @@ Responder siempre en español en este proyecto (código, commits y documentació
 
 Es un Trabajo Final Integrador de la Tecnicatura en Programación, desarrollado por Thomas Reynoso, con tutoría de Juan Ignacio Schiavonni. Fechas de entrega: esquema de BD y listado de módulos el 27/09/2026, repositorio completo/despliegue/informe/video el 14/11/2026.
 
-`frontend/` (Vite + React 19 + TS) y `backend/` (NestJS + TS + Prisma) ya están scaffoldeados y arrancan localmente. El esquema de BD y las reglas de negocio están aprobados por el tutor (`backend/prisma/schema.prisma`, migración `init` aplicada; reglas en `docs/database/modelo-de-datos.md` §6, módulos en `docs/modulos.md`). En el backend está implementado M1 (auth: registro de estudiante/empleador, login, `GET /auth/me`, `JwtAuthGuard` + `RolesGuard` globales con `@Public()` / `@Roles()`); en el frontend, login, registro (estudiante/empresa) y una home vacía por rol (`/student`, `/employer`, `/admin`). El resto de los módulos sigue pendiente. La API usa el prefijo `/api` y Swagger está en `http://localhost:3000/api/docs`. El repo es un **monorepo con npm workspaces** — esto es un requisito explícito de la cátedra, no una decisión de conveniencia: no separar frontend/backend en repos distintos.
+`frontend/` (Vite + React 19 + TS) y `backend/` (NestJS + TS + Prisma) ya están scaffoldeados y arrancan localmente. El esquema de BD y las reglas de negocio están aprobados por el tutor (`backend/prisma/schema.prisma`, migración `init` aplicada; reglas en `docs/database/modelo-de-datos.md` §6, módulos en `docs/modulos.md`). En el backend está implementado M1 (auth: registro de estudiante/empleador, login, `GET /auth/me`, `JwtAuthGuard` + `RolesGuard` globales con `@Public()` / `@Roles()`); y M2 (cuentas: verificación de email obligatoria para iniciar sesión, cambio de contraseña y cambio de email con confirmación, `MailModule` con Brevo, límite de peticiones con `@nestjs/throttler`). En el frontend: login, registro (estudiante/empresa), pantallas de verificación de email, pantalla de cuenta (`/account`) y una home vacía por rol (`/student`, `/employer`, `/admin`). El resto de los módulos sigue pendiente. La API usa el prefijo `/api` y Swagger está en `http://localhost:3000/api/docs`. El repo es un **monorepo con npm workspaces** — esto es un requisito explícito de la cátedra, no una decisión de conveniencia: no separar frontend/backend en repos distintos.
 
 ## Producto: Portal de Pasantías y Búsqueda Laboral Estudiantil
 
@@ -74,6 +74,14 @@ Nota sobre Prisma: el proyecto está fijado a la versión estable `prisma@7.10.0
 - **Estructura**: `app/` (router, layout privado), `api/` (cliente HTTP y token), `components/ui/`, `features/<módulo>/`. Imports con el alias `@/` → `src/`. Sin punto y coma, comillas simples.
 - **Formularios**: React Hook Form + Zod; los límites de `features/auth/schemas.ts` replican los DTOs del backend.
 - El backend habilita CORS para `CORS_ORIGIN` (por defecto `http://localhost:5173`).
+
+## Emails y enlaces de cuenta
+
+- **Envío**: `MailService` (`backend/src/mail`) usa la API HTTPS de Brevo, no SMTP (el plan gratuito de Render bloquea los puertos SMTP). Sin `BREVO_API_KEY` (desarrollo y tests) no envía nada: escribe el email y su enlace en el log del servidor. En producción `BREVO_API_KEY` y `MAIL_FROM_EMAIL` son obligatorias y el backend no arranca sin ellas.
+- **`MailService` nunca lanza**: cada método devuelve si el email salió, y quien llama decide si un fallo es un error para el usuario (reenvío, cambio de email → 503) o no (avisos).
+- **Enlaces**: `EmailLinkService` (`modules/auth`) genera enlaces con un JWT firmado y con vencimiento (verificación 24 h, cambio de email 1 h); no hay tabla de tokens. Se firman con una clave derivada de `JWT_SECRET` distinta de la de los tokens de acceso, así que ninguno sirve en lugar del otro. Un enlace deja de valer cuando el email de la cuenta ya no coincide con el que tenía al generarse.
+- **Tests e2e**: usan `FakeMailService` (`backend/test/support/test-app.ts`), que captura los emails para seguir sus enlaces. El límite de peticiones está desactivado con `NODE_ENV=test`.
+- Los textos de los emails están en `backend/src/i18n/{en,es}/mail.json` y siguen el idioma del request que dispara el envío.
 
 ## Despliegue
 

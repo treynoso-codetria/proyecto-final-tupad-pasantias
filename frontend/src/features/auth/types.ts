@@ -7,6 +7,12 @@ export type AuthResponse = {
   user: { id: string; email: string; role: Role }
 }
 
+// Registering does not log the user in: the email must be verified first.
+export type RegisterResponse = {
+  email: string
+  verificationEmailSent: boolean
+}
+
 export type CurrentUser = {
   id: string
   email: string

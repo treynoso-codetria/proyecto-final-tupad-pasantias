@@ -7,7 +7,8 @@
     "passwordRequired": "Ingresá tu contraseña.",
     "passwordTooShort": "Usá al menos 8 caracteres.",
     "passwordTooLong": "Usá como máximo 72 caracteres.",
-    "cuitInvalid": "Ingresá los 11 dígitos del CUIT."
+    "cuitInvalid": "Ingresá los 11 dígitos del CUIT.",
+    "passwordsDontMatch": "Las contraseñas no coinciden."
   },
   "api": {
     "EMAIL_TAKEN": "Ya existe una cuenta con este email.",
@@ -15,6 +16,13 @@
     "EMAIL_OR_CUIT_TAKEN": "El email o el CUIT ya están registrados.",
     "INVALID_CREDENTIALS": "El email o la contraseña no son correctos.",
     "ACCOUNT_DEACTIVATED": "Tu cuenta está desactivada. Contactá a un administrador.",
+    "EMAIL_ALREADY_VERIFIED": "Este email ya está confirmado.",
+    "INVALID_OR_EXPIRED_TOKEN": "El enlace no es válido o ya venció.",
+    "INVALID_CURRENT_PASSWORD": "La contraseña actual no es correcta.",
+    "NEW_PASSWORD_SAME_AS_CURRENT": "La contraseña nueva debe ser distinta de la actual.",
+    "EMAIL_UNCHANGED": "Este ya es tu email.",
+    "MAIL_DELIVERY_FAILED": "No pudimos enviar el email. Probá de nuevo en unos minutos.",
+    "TOO_MANY_REQUESTS": "Demasiados intentos. Esperá un minuto y probá de nuevo.",
     "network": "No pudimos conectar con el servidor. Revisá tu conexión y probá de nuevo.",
     "unexpected": "Ocurrió un error inesperado. Probá de nuevo en unos minutos."
   }

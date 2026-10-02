@@ -7,7 +7,8 @@
     "passwordRequired": "Enter your password.",
     "passwordTooShort": "Use at least 8 characters.",
     "passwordTooLong": "Use at most 72 characters.",
-    "cuitInvalid": "Enter the 11 digits of the CUIT."
+    "cuitInvalid": "Enter the 11 digits of the CUIT.",
+    "passwordsDontMatch": "The passwords do not match."
   },
   "api": {
     "EMAIL_TAKEN": "An account with this email already exists.",
@@ -15,6 +16,13 @@
     "EMAIL_OR_CUIT_TAKEN": "The email or the CUIT is already registered.",
     "INVALID_CREDENTIALS": "The email or password is incorrect.",
     "ACCOUNT_DEACTIVATED": "Your account is deactivated. Contact an administrator.",
+    "EMAIL_ALREADY_VERIFIED": "This email is already confirmed.",
+    "INVALID_OR_EXPIRED_TOKEN": "The link is not valid or has expired.",
+    "INVALID_CURRENT_PASSWORD": "The current password is incorrect.",
+    "NEW_PASSWORD_SAME_AS_CURRENT": "The new password must be different from the current one.",
+    "EMAIL_UNCHANGED": "This is already your email.",
+    "MAIL_DELIVERY_FAILED": "We couldn't send the email. Try again in a few minutes.",
+    "TOO_MANY_REQUESTS": "Too many attempts. Wait a minute and try again.",
     "network": "We couldn't reach the server. Check your connection and try again.",
     "unexpected": "Something went wrong. Try again in a few minutes."
   }

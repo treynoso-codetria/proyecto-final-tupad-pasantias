@@ -3,16 +3,16 @@ import type { ErrorKey } from './errors'
 
 // These limits mirror the backend DTOs (backend/src/modules/auth/dto).
 // Messages are translation keys, see errors.ts.
-const key = (errorKey: ErrorKey) => errorKey
+export const key = (errorKey: ErrorKey) => errorKey
 
-const email = z
+export const email = z
   .string()
   .trim()
   .min(1, key('validation.emailRequired'))
   .max(255, key('validation.tooLong'))
   .pipe(z.email(key('validation.emailInvalid')))
 
-const newPassword = z
+export const newPassword = z
   .string()
   .min(8, key('validation.passwordTooShort'))
   .max(72, key('validation.passwordTooLong'))

@@ -1,13 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
 import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
+import { NormalizeEmail } from '../../../common/decorators/normalize-email.decorator.js';
 
 // Credentials shared by every registration flow.
 export class RegisterAccountDto {
   @ApiProperty({ example: 'ana.gomez@alumnos.dev', maxLength: 255 })
-  @Transform(({ value }: { value: unknown }) =>
-    typeof value === 'string' ? value.trim().toLowerCase() : value,
-  )
+  @NormalizeEmail()
   @IsEmail()
   @MaxLength(255)
   email: string;

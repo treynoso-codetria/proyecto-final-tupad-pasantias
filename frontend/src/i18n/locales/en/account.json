@@ -1,0 +1,21 @@
+{
+  "title": "My account",
+  "description": "Manage the email and password you use to log in.",
+  "email": {
+    "title": "Email",
+    "current": "Your current email is <strong>{{email}}</strong>.",
+    "newEmail": "New email",
+    "currentPassword": "Current password",
+    "passwordHint": "We ask for it to confirm that it is you.",
+    "submit": "Change email",
+    "success": "We sent a confirmation link to <strong>{{email}}</strong>. Your email will change when you open it."
+  },
+  "password": {
+    "title": "Password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Repeat the new password",
+    "submit": "Change password",
+    "success": "Your password was changed."
+  }
+}

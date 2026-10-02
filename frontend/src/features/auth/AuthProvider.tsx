@@ -6,7 +6,6 @@ import {
   type AuthContextValue,
   type AuthState,
 } from './auth-context'
-import type { AuthResponse } from './types'
 
 const ANONYMOUS: AuthState = { status: 'anonymous', user: null }
 
@@ -40,10 +39,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  // Login and registration both return a token; the full user (with profile
-  // or company name) is then loaded from /auth/me.
-  const startSession = useCallback(async (request: Promise<AuthResponse>) => {
-    const { accessToken } = await request
+  // The token only identifies the user; the full user (with profile or
+  // company name) is loaded from /auth/me.
+  const loginWithToken = useCallback(async (accessToken: string) => {
     setToken(accessToken)
     try {
       const user = await authApi.getMe()
@@ -57,16 +55,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = useMemo<AuthContextValue>(
     () => ({
       ...state,
-      login: (input) => startSession(authApi.login(input)),
-      registerStudent: (input) => startSession(authApi.registerStudent(input)),
-      registerEmployer: (input) =>
-        startSession(authApi.registerEmployer(input)),
+      login: async (input) => {
+        const { accessToken } = await authApi.login(input)
+        await loginWithToken(accessToken)
+      },
+      loginWithToken,
+      refreshUser: async () => {
+        const user = await authApi.getMe()
+        setState({ status: 'authenticated', user })
+      },
       logout: () => {
         clearToken()
         setState(ANONYMOUS)
       },
     }),
-    [state, startSession],
+    [state, loginWithToken],
   )
 
   return <AuthContext value={value}>{children}</AuthContext>

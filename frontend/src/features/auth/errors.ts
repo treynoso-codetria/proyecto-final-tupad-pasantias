@@ -22,16 +22,14 @@ export function getApiErrorKey(error: unknown): ErrorKey {
   return 'api.unexpected'
 }
 
-// Form field to mark when registration fails because a value is taken.
-export function getConflictField(error: unknown): 'email' | 'cuit' | null {
-  if (!(error instanceof ApiError)) {
-    return null
-  }
-  if (error.code === 'EMAIL_TAKEN') {
-    return 'email'
-  }
-  if (error.code === 'CUIT_TAKEN') {
-    return 'cuit'
-  }
-  return null
+// Form field to mark for an API error: `fields` maps error codes to the
+// field each one is about. Returns undefined for errors that belong above
+// the form.
+export function getErrorField<Field extends string>(
+  error: unknown,
+  fields: Partial<Record<string, Field>>,
+): Field | undefined {
+  return error instanceof ApiError && error.code
+    ? fields[error.code]
+    : undefined
 }

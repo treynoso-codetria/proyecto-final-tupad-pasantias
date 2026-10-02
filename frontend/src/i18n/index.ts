@@ -1,9 +1,11 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
+import enAccount from './locales/en/account.json'
 import enAuth from './locales/en/auth.json'
 import enCommon from './locales/en/common.json'
 import enErrors from './locales/en/errors.json'
 import enHome from './locales/en/home.json'
+import esAccount from './locales/es/account.json'
 import esAuth from './locales/es/auth.json'
 import esCommon from './locales/es/common.json'
 import esErrors from './locales/es/errors.json'
@@ -18,12 +20,19 @@ const STORAGE_KEY = 'pasantias.language'
 // One JSON file per language and namespace (roughly one namespace per
 // feature). English is the reference: it defines the keys TypeScript accepts
 // in t(), see i18next.d.ts.
-const en = { common: enCommon, auth: enAuth, home: enHome, errors: enErrors }
+const en = {
+  common: enCommon,
+  auth: enAuth,
+  account: enAccount,
+  home: enHome,
+  errors: enErrors,
+}
 
 // Typed as `typeof en` so that the build fails if Spanish is missing a key.
 const es: typeof en = {
   common: esCommon,
   auth: esAuth,
+  account: esAccount,
   home: esHome,
   errors: esErrors,
 }

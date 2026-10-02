@@ -40,12 +40,14 @@ INSERT INTO tags (id, name, slug) VALUES
 
 -- ─── Users ───────────────────────────────────────────────────
 
-INSERT INTO users (id, email, password_hash, role) VALUES
-  ('00000000-0000-0000-0000-000000000001', 'admin@pasantias.dev',     crypt('Password123!', gen_salt('bf', 10)), 'ADMIN'),
-  ('00000000-0000-0000-0000-000000000002', 'rrhh@techsur.dev',        crypt('Password123!', gen_salt('bf', 10)), 'EMPLOYER'),
-  ('00000000-0000-0000-0000-000000000003', 'talento@datacorp.dev',    crypt('Password123!', gen_salt('bf', 10)), 'EMPLOYER'),
-  ('00000000-0000-0000-0000-000000000004', 'ana.gomez@alumnos.dev',   crypt('Password123!', gen_salt('bf', 10)), 'STUDENT'),
-  ('00000000-0000-0000-0000-000000000005', 'lucas.perez@alumnos.dev', crypt('Password123!', gen_salt('bf', 10)), 'STUDENT');
+-- Demo accounts are created already verified (email_verified_at), since their
+-- addresses are not real mailboxes.
+INSERT INTO users (id, email, password_hash, role, email_verified_at) VALUES
+  ('00000000-0000-0000-0000-000000000001', 'admin@pasantias.dev',     crypt('Password123!', gen_salt('bf', 10)), 'ADMIN', now()),
+  ('00000000-0000-0000-0000-000000000002', 'rrhh@techsur.dev',        crypt('Password123!', gen_salt('bf', 10)), 'EMPLOYER', now()),
+  ('00000000-0000-0000-0000-000000000003', 'talento@datacorp.dev',    crypt('Password123!', gen_salt('bf', 10)), 'EMPLOYER', now()),
+  ('00000000-0000-0000-0000-000000000004', 'ana.gomez@alumnos.dev',   crypt('Password123!', gen_salt('bf', 10)), 'STUDENT', now()),
+  ('00000000-0000-0000-0000-000000000005', 'lucas.perez@alumnos.dev', crypt('Password123!', gen_salt('bf', 10)), 'STUDENT', now());
 
 INSERT INTO companies (id, user_id, name, cuit, industry, description, website, province, city) VALUES
   ('30000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000002',

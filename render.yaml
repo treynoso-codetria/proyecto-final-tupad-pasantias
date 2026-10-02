@@ -41,3 +41,15 @@ services:
       # URL of the frontend on Vercel, without a trailing slash.
       - key: CORS_ORIGIN
         sync: false
+      # Base URL used in the links sent by email (verification, email change).
+      - key: FRONTEND_URL
+        value: https://proyecto-final-tupad-pasantias.vercel.app
+      # Email is sent through Brevo's HTTPS API: the free plan blocks SMTP.
+      # The API refuses to start in production without these two.
+      - key: BREVO_API_KEY
+        sync: false
+      # Must be a verified sender in the Brevo account.
+      - key: MAIL_FROM_EMAIL
+        sync: false
+      - key: MAIL_FROM_NAME
+        value: Internship Portal

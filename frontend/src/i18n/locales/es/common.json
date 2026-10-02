@@ -8,6 +8,7 @@
     "EMPLOYER": "Empresa",
     "ADMIN": "Administrador"
   },
+  "account": "Mi cuenta",
   "logout": "Salir",
   "loading": "Cargando",
   "password": {

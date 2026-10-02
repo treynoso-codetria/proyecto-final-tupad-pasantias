@@ -1,0 +1,26 @@
+{
+  "linkFallback": "If the button doesn't work, copy this link into your browser:",
+  "footer": "You are receiving this email because of activity on your Internship Portal account.",
+  "verifyEmail": {
+    "subject": "Confirm your email",
+    "heading": "Confirm your email",
+    "body": "Thanks for signing up. Confirm that this address is yours to activate your account. The link expires in 24 hours.",
+    "button": "Confirm email"
+  },
+  "confirmEmailChange": {
+    "subject": "Confirm your new email",
+    "heading": "Confirm your new email",
+    "body": "You asked to use this address for your account. Confirm it to complete the change. The link expires in 1 hour. If it wasn't you, ignore this email.",
+    "button": "Confirm new email"
+  },
+  "emailChangeNotice": {
+    "subject": "Email change requested",
+    "heading": "Email change requested",
+    "body": "Someone asked to change the email of your account to {newEmail}. The change only takes effect once that address is confirmed. If it wasn't you, change your password now."
+  },
+  "passwordChanged": {
+    "subject": "Your password was changed",
+    "heading": "Your password was changed",
+    "body": "The password of your account was just changed. If it wasn't you, contact an administrator."
+  }
+}

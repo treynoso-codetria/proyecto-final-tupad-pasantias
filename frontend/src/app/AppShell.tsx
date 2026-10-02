@@ -1,6 +1,6 @@
-import { LogOut } from 'lucide-react'
+import { LogOut, UserRound } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Outlet } from 'react-router'
+import { Link, Outlet } from 'react-router'
 import { Button } from '@/components/ui/Button'
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { Logo } from '@/components/ui/Logo'
@@ -21,15 +21,21 @@ export function AppShell() {
       <header className="border-b-2 border-ink bg-surface">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-5 py-3 sm:px-8">
           <Logo />
-          <div className="flex items-center gap-3">
-            <p className="hidden min-w-0 items-center gap-2 text-sm md:flex">
-              <span className="truncate font-semibold">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link
+              to="/account"
+              aria-label={t('account')}
+              title={t('account')}
+              className="flex min-w-0 items-center gap-2 rounded-xl border-2 border-transparent px-2 py-1 text-sm hover:border-ink hover:bg-accent-soft focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            >
+              <UserRound className="size-5 shrink-0" aria-hidden="true" />
+              <span className="hidden truncate font-semibold md:inline">
                 {getDisplayName(user)}
               </span>
-              <span className="rounded-full border-2 border-ink bg-accent px-2.5 py-0.5 text-xs font-bold tracking-wide uppercase">
+              <span className="hidden rounded-full border-2 border-ink bg-accent px-2.5 py-0.5 text-xs font-bold tracking-wide uppercase md:inline">
                 {t(`roles.${user.role}`)}
               </span>
-            </p>
+            </Link>
             <LanguageSwitcher />
             {/* Icon-only on small screens; the label stays for screen readers. */}
             <Button variant="secondary" size="sm" onClick={logout}>

@@ -1,16 +1,33 @@
 import { LoaderCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/lib/cn'
 
-export function FullPageLoader() {
+type FullPageLoaderProps = {
+  // False when it is shown inside a layout instead of filling the screen.
+  fullPage?: boolean
+  // Shown under the spinner; defaults to no visible text.
+  label?: string
+}
+
+export function FullPageLoader({ fullPage = true, label }: FullPageLoaderProps) {
   const { t } = useTranslation()
 
   return (
     <div
       role="status"
-      className="grid min-h-dvh place-items-center"
-      aria-label={t('loading')}
+      aria-label={label ? undefined : t('loading')}
+      className={cn(
+        'grid place-items-center gap-4 text-center',
+        fullPage ? 'min-h-dvh' : 'min-h-48',
+      )}
     >
-      <LoaderCircle className="size-10 animate-spin" aria-hidden="true" />
+      <div>
+        <LoaderCircle
+          className="mx-auto size-10 animate-spin"
+          aria-hidden="true"
+        />
+        {label && <p className="mt-4 font-semibold">{label}</p>}
+      </div>
     </div>
   )
 }

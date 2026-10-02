@@ -1,15 +1,19 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationException } from './common/errors/validation.exception.js';
 import { EnvironmentVariables } from './config/env.validation.js';
 
 // HTTP-level configuration shared by main.ts and the e2e tests, so both run
 // the app with the same prefix and validation rules.
-export function configureApp(app: INestApplication): void {
+export function configureApp(app: NestExpressApplication): void {
   const config =
     app.get<ConfigService<EnvironmentVariables, true>>(ConfigService);
 
+  // The app runs behind one reverse proxy in production (Render). Trusting
+  // it makes `req.ip` the real client IP, which the rate limiter relies on.
+  app.set('trust proxy', 1);
   app.setGlobalPrefix('api');
   app.enableCors({
     origin: config
@@ -29,7 +33,7 @@ export function configureApp(app: INestApplication): void {
   );
 }
 
-export function setupSwagger(app: INestApplication): void {
+export function setupSwagger(app: NestExpressApplication): void {
   const config = new DocumentBuilder()
     .setTitle('Portal de Pasantías API')
     .setDescription(

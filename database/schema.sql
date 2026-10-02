@@ -39,6 +39,7 @@ CREATE TABLE "users" (
     "password_hash" VARCHAR(255) NOT NULL,
     "role" "UserRole" NOT NULL,
     "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "email_verified_at" TIMESTAMPTZ(3),
     "last_login_at" TIMESTAMPTZ(3),
     "created_at" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

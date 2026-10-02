@@ -1,0 +1,21 @@
+{
+  "title": "Mi cuenta",
+  "description": "Administrá el email y la contraseña con los que iniciás sesión.",
+  "email": {
+    "title": "Email",
+    "current": "Tu email actual es <strong>{{email}}</strong>.",
+    "newEmail": "Nuevo email",
+    "currentPassword": "Contraseña actual",
+    "passwordHint": "Te la pedimos para confirmar que sos vos.",
+    "submit": "Cambiar email",
+    "success": "Te enviamos un enlace de confirmación a <strong>{{email}}</strong>. Tu email va a cambiar cuando lo abras."
+  },
+  "password": {
+    "title": "Contraseña",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Repetí la nueva contraseña",
+    "submit": "Cambiar contraseña",
+    "success": "Tu contraseña fue cambiada."
+  }
+}

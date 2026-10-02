@@ -1,0 +1,26 @@
+{
+  "linkFallback": "Si el botón no funciona, copiá este enlace en tu navegador:",
+  "footer": "Recibís este email por actividad en tu cuenta del Portal de Pasantías.",
+  "verifyEmail": {
+    "subject": "Confirmá tu email",
+    "heading": "Confirmá tu email",
+    "body": "Gracias por registrarte. Confirmá que esta dirección es tuya para activar tu cuenta. El enlace vence en 24 horas.",
+    "button": "Confirmar email"
+  },
+  "confirmEmailChange": {
+    "subject": "Confirmá tu nuevo email",
+    "heading": "Confirmá tu nuevo email",
+    "body": "Pediste usar esta dirección en tu cuenta. Confirmala para completar el cambio. El enlace vence en 1 hora. Si no fuiste vos, ignorá este email.",
+    "button": "Confirmar nuevo email"
+  },
+  "emailChangeNotice": {
+    "subject": "Se pidió un cambio de email",
+    "heading": "Se pidió un cambio de email",
+    "body": "Alguien pidió cambiar el email de tu cuenta a {newEmail}. El cambio solo se aplica cuando esa dirección se confirma. Si no fuiste vos, cambiá tu contraseña ahora."
+  },
+  "passwordChanged": {
+    "subject": "Tu contraseña fue cambiada",
+    "heading": "Tu contraseña fue cambiada",
+    "body": "La contraseña de tu cuenta se acaba de cambiar. Si no fuiste vos, contactá a un administrador."
+  }
+}

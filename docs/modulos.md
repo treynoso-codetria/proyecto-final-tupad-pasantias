@@ -41,7 +41,7 @@ Registro e inicio de sesión para los tres roles, con autenticación **stateless
 - Login con email y contraseña (hash con bcrypt); emite un JWT con `sub`, `role` y expiración.
 - Estrategia `passport-jwt` + `JwtAuthGuard` global; decorador `@Public()` para endpoints abiertos (listado de ofertas, login, registro).
 - `RolesGuard` + decorador `@Roles(...)` para restringir endpoints por rol.
-- Rechazo de login y de tokens de cuentas desactivadas (`is_active = false`).
+- Rechazo de login y de tokens de cuentas desactivadas (`is_active = false`), y de login de cuentas con el email sin verificar (ver M2).
 - Endpoint `GET /auth/me` con los datos del usuario autenticado.
 - **Frontend:** páginas de login y registro, almacenamiento del token, rutas protegidas por rol.
 
@@ -49,7 +49,10 @@ Registro e inicio de sesión para los tres roles, con autenticación **stateless
 
 Operaciones sobre la cuenta propia y consultas de usuarios que usan otros módulos.
 
-- Cambio de contraseña y de email del usuario autenticado.
+- Cambio de contraseña del usuario autenticado (pide la contraseña actual; se avisa por email).
+- Cambio de email en dos pasos: se pide la contraseña actual, se envía un enlace de confirmación a la dirección **nueva** y el email recién cambia cuando ese enlace se abre. Se avisa a la dirección anterior.
+- **Verificación de email:** al registrarse (M1) se envía un enlace de verificación; la cuenta no puede iniciar sesión hasta abrirlo. Incluye reenvío del enlace.
+- Envío de emails por la API de Brevo (`MailModule`), con textos en inglés y español.
 - Servicio interno de usuarios (búsqueda por id/email, verificación de estado) reutilizado por M1 y M11.
 
 ### M3 — Perfil del estudiante · Prioridad **Alta**

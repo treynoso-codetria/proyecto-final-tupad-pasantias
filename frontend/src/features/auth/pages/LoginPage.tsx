@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
+import { ApiError } from '@/api/client'
 import { Alert } from '@/components/ui/Alert'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
@@ -16,6 +17,7 @@ export function LoginPage() {
   const { t } = useTranslation('auth')
   const errorText = useErrorText()
   const { login } = useAuth()
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -28,6 +30,14 @@ export function LoginPage() {
       // On success GuestOnly redirects to the home of the user's role.
       await login(values)
     } catch (error) {
+      // The account exists but its email was never confirmed: take the user
+      // to the screen that explains it and lets them resend the link.
+      if (error instanceof ApiError && error.code === 'EMAIL_NOT_VERIFIED') {
+        await navigate('/check-email', {
+          state: { email: values.email, reason: 'login' },
+        })
+        return
+      }
       setError('root', { message: getApiErrorKey(error) })
     }
   })
