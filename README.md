@@ -74,11 +74,14 @@ Arquitectura: SPA React + API REST NestJS organizada como **monolito modular en 
 
 ## ☁️ Despliegue
 
-| Servicio      | URL                          |
-| ------------- | ---------------------------- |
-| Frontend      | [enlace pendiente]           |
-| Backend (API) | [enlace pendiente]           |
-| Base de datos | Neon (PostgreSQL serverless) |
+| Servicio          | URL                                                                                      |
+| ----------------- | ---------------------------------------------------------------------------------------- |
+| Frontend          | <https://proyecto-final-tupad-pasantias.vercel.app>                                      |
+| Backend (API)     | <https://pasantias-api.onrender.com/api>                                                 |
+| Documentación API | <https://pasantias-api.onrender.com/api/docs> (Swagger)                                  |
+| Base de datos     | Neon (PostgreSQL serverless)                                                             |
+
+> El backend usa el plan gratuito de Render: tras unos 15 minutos sin uso se suspende y la primera solicitud puede tardar cerca de un minuto.
 
 Guía paso a paso: [`docs/despliegue.md`](docs/despliegue.md).
 
