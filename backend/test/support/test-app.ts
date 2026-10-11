@@ -101,6 +101,13 @@ export async function createTestApp() {
     email,
     http: () => request(app.getHttpServer()),
 
+    // Offers need a category; its slug carries the run id so close() finds it.
+    createCategory(name: string) {
+      return prisma.category.create({
+        data: { name: `${name} ${runId}`, slug: `${name}-${runId}` },
+      });
+    },
+
     // Creates an already verified account directly in the database.
     async createVerifiedStudent(name: string) {
       return prisma.user.create({
@@ -118,6 +125,28 @@ export async function createTestApp() {
             },
           },
         },
+        include: { studentProfile: true },
+      });
+    },
+
+    // Creates an already verified employer with its company. `cuitSuffix`
+    // (two digits) keeps the CUIT unique among the employers of one test file.
+    async createVerifiedEmployer(name: string, cuitSuffix: string) {
+      const runDigits = parseInt(runId, 16).toString().padStart(8, '0');
+      return prisma.user.create({
+        data: {
+          email: email(name),
+          passwordHash: await hashPassword(password),
+          role: UserRole.EMPLOYER,
+          emailVerifiedAt: new Date(),
+          company: {
+            create: {
+              name: `${name} S.A.`,
+              cuit: `${cuitSuffix}-${runDigits.slice(-8)}-0`,
+            },
+          },
+        },
+        include: { company: true },
       });
     },
 
@@ -130,8 +159,13 @@ export async function createTestApp() {
     },
 
     async close() {
+      // Deleting the users cascades to their profiles, companies, offers and
+      // applications; categories are not owned by a user.
       await prisma.user.deleteMany({
         where: { email: { endsWith: `@${emailDomain}` } },
+      });
+      await prisma.category.deleteMany({
+        where: { slug: { endsWith: `-${runId}` } },
       });
       await app.close();
     },

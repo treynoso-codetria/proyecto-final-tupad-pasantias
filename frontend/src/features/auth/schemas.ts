@@ -17,7 +17,7 @@ export const newPassword = z
   .min(8, key('validation.passwordTooShort'))
   .max(72, key('validation.passwordTooLong'))
 
-const requiredText = (max: number) =>
+export const requiredText = (max: number) =>
   z
     .string()
     .trim()

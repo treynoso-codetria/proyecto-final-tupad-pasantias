@@ -1,11 +1,30 @@
 import { LogOut, UserRound } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Link, Outlet } from 'react-router'
+import { Link, NavLink, Outlet } from 'react-router'
 import { Button } from '@/components/ui/Button'
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { Logo } from '@/components/ui/Logo'
 import { useAuth } from '@/features/auth/auth-context'
 import { getDisplayName } from '@/features/auth/roles'
+import type { Role } from '@/features/auth/types'
+import { cn } from '@/lib/cn'
+
+// Sections of each role's area; labels are under `nav` in the `common`
+// translations. A role with a single section gets no navigation bar.
+const NAVIGATION: Record<
+  Role,
+  { to: string; label: 'home' | 'studentProfile' | 'company' }[]
+> = {
+  STUDENT: [
+    { to: '/student', label: 'home' },
+    { to: '/student/profile', label: 'studentProfile' },
+  ],
+  EMPLOYER: [
+    { to: '/employer', label: 'home' },
+    { to: '/employer/company', label: 'company' },
+  ],
+  ADMIN: [{ to: '/admin', label: 'home' }],
+}
 
 // Frame of the private area: top bar + page content, tinted with the color
 // of the signed-in user's role. Only rendered under <RequireRole>.
@@ -15,6 +34,7 @@ export function AppShell() {
   if (!user) {
     return null
   }
+  const navigation = NAVIGATION[user.role]
 
   return (
     <div data-role={user.role} className="min-h-dvh">
@@ -44,6 +64,32 @@ export function AppShell() {
             </Button>
           </div>
         </div>
+        {navigation.length > 1 && (
+          <nav
+            aria-label={t('nav.label')}
+            className="mx-auto flex max-w-5xl gap-2 overflow-x-auto px-5 pb-3 sm:px-8"
+          >
+            {navigation.map(({ to, label }) => (
+              <NavLink
+                key={to}
+                to={to}
+                // `end`: the home link is not "active" on its sub-pages.
+                end
+                className={({ isActive }) =>
+                  cn(
+                    'shrink-0 rounded-xl border-2 px-3 py-1.5 font-display text-sm font-bold whitespace-nowrap',
+                    'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ink',
+                    isActive
+                      ? 'border-ink bg-accent shadow-hard-sm'
+                      : 'border-transparent hover:border-ink hover:bg-accent-soft',
+                  )
+                }
+              >
+                {t(`nav.${label}`)}
+              </NavLink>
+            ))}
+          </nav>
+        )}
         {/* Role-colored strip: the user always knows which area they are in. */}
         <div className="h-2 border-t-2 border-ink bg-accent" />
       </header>

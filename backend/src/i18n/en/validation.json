@@ -16,5 +16,10 @@
   "isUrl": "{property} must be a valid URL",
   "isDateString": "{property} must be a valid date",
   "whitelistValidation": "{property} is not an allowed field",
-  "cuitFormat": "{property} must have the format XX-XXXXXXXX-X"
+  "cuitFormat": "{property} must have the format XX-XXXXXXXX-X",
+  "isIn": "{property} has a value that is not allowed",
+  "isDate": "{property} must be a valid date",
+  "minDate": "{property} is too far in the past",
+  "maxDate": "{property} cannot be in the future",
+  "phoneFormat": "{property} must be a phone number (digits, spaces, +, - and parentheses)"
 }

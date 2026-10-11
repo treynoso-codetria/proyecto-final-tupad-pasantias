@@ -16,5 +16,10 @@
   "isUrl": "{property} debe ser una URL válida",
   "isDateString": "{property} debe ser una fecha válida",
   "whitelistValidation": "{property} no es un campo permitido",
-  "cuitFormat": "{property} debe tener el formato XX-XXXXXXXX-X"
+  "cuitFormat": "{property} debe tener el formato XX-XXXXXXXX-X",
+  "isIn": "{property} tiene un valor no permitido",
+  "isDate": "{property} debe ser una fecha válida",
+  "minDate": "{property} es demasiado antigua",
+  "maxDate": "{property} no puede ser una fecha futura",
+  "phoneFormat": "{property} debe ser un teléfono (dígitos, espacios, +, - y paréntesis)"
 }

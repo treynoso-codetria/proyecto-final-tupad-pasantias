@@ -15,9 +15,11 @@ import { RegisterChoicePage } from '@/features/auth/pages/RegisterChoicePage'
 import { RegisterEmployerPage } from '@/features/auth/pages/RegisterEmployerPage'
 import { RegisterStudentPage } from '@/features/auth/pages/RegisterStudentPage'
 import { VerifyEmailPage } from '@/features/auth/pages/VerifyEmailPage'
+import { CompanyProfilePage } from '@/features/companies/CompanyProfilePage'
 import { AdminHomePage } from '@/features/home/AdminHomePage'
 import { EmployerHomePage } from '@/features/home/EmployerHomePage'
 import { StudentHomePage } from '@/features/home/StudentHomePage'
+import { StudentProfilePage } from '@/features/students/StudentProfilePage'
 import { AppShell } from './AppShell'
 import { NotFoundPage } from './NotFoundPage'
 
@@ -58,7 +60,10 @@ export const router = createBrowserRouter([
       {
         path: '/student',
         element: <AppShell />,
-        children: [{ index: true, element: <StudentHomePage /> }],
+        children: [
+          { index: true, element: <StudentHomePage /> },
+          { path: 'profile', element: <StudentProfilePage /> },
+        ],
       },
     ],
   },
@@ -68,7 +73,10 @@ export const router = createBrowserRouter([
       {
         path: '/employer',
         element: <AppShell />,
-        children: [{ index: true, element: <EmployerHomePage /> }],
+        children: [
+          { index: true, element: <EmployerHomePage /> },
+          { path: 'company', element: <CompanyProfilePage /> },
+        ],
       },
     ],
   },

@@ -8,7 +8,11 @@
     "passwordTooShort": "Use at least 8 characters.",
     "passwordTooLong": "Use at most 72 characters.",
     "cuitInvalid": "Enter the 11 digits of the CUIT.",
-    "passwordsDontMatch": "The passwords do not match."
+    "passwordsDontMatch": "The passwords do not match.",
+    "phoneInvalid": "Enter a valid phone number.",
+    "urlInvalid": "Enter a full link, starting with https://",
+    "dateInvalid": "Enter a valid date.",
+    "dateInFuture": "The date cannot be in the future."
   },
   "api": {
     "EMAIL_TAKEN": "An account with this email already exists.",
@@ -23,6 +27,7 @@
     "EMAIL_UNCHANGED": "This is already your email.",
     "MAIL_DELIVERY_FAILED": "We couldn't send the email. Try again in a few minutes.",
     "TOO_MANY_REQUESTS": "Too many attempts. Wait a minute and try again.",
+    "VALIDATION_FAILED": "Some fields are not valid. Check them and try again.",
     "network": "We couldn't reach the server. Check your connection and try again.",
     "unexpected": "Something went wrong. Try again in a few minutes."
   }

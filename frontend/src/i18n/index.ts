@@ -5,11 +5,13 @@ import enAuth from './locales/en/auth.json'
 import enCommon from './locales/en/common.json'
 import enErrors from './locales/en/errors.json'
 import enHome from './locales/en/home.json'
+import enProfile from './locales/en/profile.json'
 import esAccount from './locales/es/account.json'
 import esAuth from './locales/es/auth.json'
 import esCommon from './locales/es/common.json'
 import esErrors from './locales/es/errors.json'
 import esHome from './locales/es/home.json'
+import esProfile from './locales/es/profile.json'
 
 export const LANGUAGES = ['en', 'es'] as const
 export type Language = (typeof LANGUAGES)[number]
@@ -25,6 +27,7 @@ const en = {
   auth: enAuth,
   account: enAccount,
   home: enHome,
+  profile: enProfile,
   errors: enErrors,
 }
 
@@ -34,6 +37,7 @@ const es: typeof en = {
   auth: esAuth,
   account: esAccount,
   home: esHome,
+  profile: esProfile,
   errors: esErrors,
 }
 

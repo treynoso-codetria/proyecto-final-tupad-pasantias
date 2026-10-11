@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { clearToken, getToken, setToken } from '@/api/token'
+import { queryClient } from '@/lib/query-client'
 import { authApi } from './api'
 import {
   AuthContext,
@@ -66,6 +67,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
       logout: () => {
         clearToken()
+        // Cached server data belongs to the user who is leaving.
+        queryClient.clear()
         setState(ANONYMOUS)
       },
     }),

@@ -8,6 +8,12 @@
     "EMPLOYER": "Company",
     "ADMIN": "Administrator"
   },
+  "nav": {
+    "label": "Main navigation",
+    "home": "Home",
+    "studentProfile": "My profile",
+    "company": "Company profile"
+  },
   "account": "My account",
   "logout": "Log out",
   "loading": "Loading",
@@ -19,5 +25,7 @@
     "title": "This page doesn't exist",
     "description": "The link may be mistyped, or the page may have moved.",
     "back": "Back to home"
-  }
+  },
+  "loadFailed": "We couldn't load this information.",
+  "retry": "Try again"
 }
