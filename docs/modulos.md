@@ -80,6 +80,7 @@ Núcleo del portal.
 ### M6 — Categorías y etiquetas · Prioridad **Alta**
 
 - ABM de categorías (alta, edición, activar/desactivar) y de etiquetas, reservado al administrador.
+- Implementado: las categorías no se borran (toda oferta necesita una), solo se desactivan; las etiquetas sí se pueden eliminar y desaparecen de las ofertas que las tenían. El slug se genera a partir del nombre (sin tildes, "C++" → `c-plus-plus`, "C#" → `c-sharp`) y no se admiten dos nombres que den el mismo slug. Renombrar cambia el slug.
 - Endpoints públicos de lectura para poblar los filtros y formularios del frontend (implementados junto con M5: `GET /categories` con las activas y `GET /tags`).
 - Se considera de prioridad alta porque M5 depende de que existan categorías; el seed carga un conjunto inicial.
 

@@ -1,5 +1,7 @@
 import { ShieldCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
+import { buttonStyles } from '@/components/ui/button-styles'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { HomeHeading } from './HomeHeading'
 
@@ -17,6 +19,11 @@ export function AdminHomePage() {
         icon={ShieldCheck}
         title={t('admin.emptyTitle')}
         description={t('admin.emptyDescription')}
+        action={
+          <Link to="/admin/catalog" className={buttonStyles()}>
+            {t('admin.action')}
+          </Link>
+        }
       />
     </>
   )

@@ -13,7 +13,13 @@ import { cn } from '@/lib/cn'
 
 type NavItem = {
   to: string
-  label: 'home' | 'offers' | 'myOffers' | 'studentProfile' | 'company'
+  label:
+    | 'home'
+    | 'offers'
+    | 'myOffers'
+    | 'studentProfile'
+    | 'company'
+    | 'catalog'
   // Only active on that exact path, not on the pages below it.
   end?: boolean
 }
@@ -34,6 +40,7 @@ const NAVIGATION: Record<Role, NavItem[]> = {
   ADMIN: [
     { to: '/admin', label: 'home', end: true },
     { to: '/offers', label: 'offers' },
+    { to: '/admin/catalog', label: 'catalog' },
   ],
 }
 

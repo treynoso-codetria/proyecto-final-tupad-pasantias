@@ -1,0 +1,33 @@
+{
+  "title": "Catalog",
+  "description": "Categories and tags organize the offers and are what students filter by.",
+  "offers_one": "{{count}} offer",
+  "offers_other": "{{count}} offers",
+  "name": "Name",
+  "add": "Add",
+  "rename": "Rename",
+  "save": "Save",
+  "cancel": "Cancel",
+  "categories": {
+    "title": "Categories",
+    "hint": "Every offer has one. An inactive category cannot be chosen for new offers nor used as a filter; offers that already have it keep it.",
+    "new": "New category",
+    "active": "Active",
+    "inactive": "Inactive",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "empty": "There are no categories yet."
+  },
+  "tags": {
+    "title": "Tags",
+    "hint": "Optional labels for offers, such as technologies or languages.",
+    "new": "New tag",
+    "delete": "Delete",
+    "deleteTitle": "Delete this tag?",
+    "deleteText_zero": "\"{{name}}\" will be deleted. No offer uses it.",
+    "deleteText_one": "\"{{name}}\" will be deleted and removed from the offer that uses it.",
+    "deleteText_other": "\"{{name}}\" will be deleted and removed from the {{count}} offers that use it.",
+    "deleteConfirm": "Delete tag",
+    "empty": "There are no tags yet."
+  }
+}

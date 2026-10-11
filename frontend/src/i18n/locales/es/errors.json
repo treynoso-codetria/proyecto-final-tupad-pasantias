@@ -39,6 +39,9 @@
     "OFFER_LOCATION_REQUIRED": "Elegí una provincia para ofertas presenciales e híbridas.",
     "SALARY_RANGE_INVALID": "El salario máximo no puede ser menor que el mínimo.",
     "OFFER_NOT_OPEN": "Solo se pueden modificar ofertas abiertas.",
+    "CATEGORY_NAME_TAKEN": "Ya existe una categoría con ese nombre.",
+    "TAG_NAME_TAKEN": "Ya existe una etiqueta con ese nombre.",
+    "CATALOG_NAME_INVALID": "El nombre debe tener letras o números.",
     "network": "No pudimos conectar con el servidor. Revisá tu conexión y probá de nuevo.",
     "unexpected": "Ocurrió un error inesperado. Probá de nuevo en unos minutos."
   }

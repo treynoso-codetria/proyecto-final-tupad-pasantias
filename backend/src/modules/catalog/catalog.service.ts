@@ -4,8 +4,8 @@ import { CatalogItemDto } from './dto/catalog-item.dto.js';
 
 const catalogFields = { id: true, name: true, slug: true } as const;
 
-// Read side of M6. Creating and editing categories and tags is reserved to
-// administrators and arrives with that module.
+// Public, read-only side of the catalog. Administrators manage it through
+// AdminCatalogService.
 @Injectable()
 export class CatalogService {
   constructor(private readonly prisma: PrismaService) {}

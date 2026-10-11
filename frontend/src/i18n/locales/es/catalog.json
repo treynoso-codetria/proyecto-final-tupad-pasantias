@@ -1,0 +1,33 @@
+{
+  "title": "Catálogo",
+  "description": "Las categorías y etiquetas organizan las ofertas y son los filtros que usan los estudiantes.",
+  "offers_one": "{{count}} oferta",
+  "offers_other": "{{count}} ofertas",
+  "name": "Nombre",
+  "add": "Agregar",
+  "rename": "Renombrar",
+  "save": "Guardar",
+  "cancel": "Cancelar",
+  "categories": {
+    "title": "Categorías",
+    "hint": "Cada oferta tiene una. Una categoría inactiva no se puede elegir para ofertas nuevas ni usar como filtro; las ofertas que ya la tienen la conservan.",
+    "new": "Nueva categoría",
+    "active": "Activa",
+    "inactive": "Inactiva",
+    "activate": "Activar",
+    "deactivate": "Desactivar",
+    "empty": "Todavía no hay categorías."
+  },
+  "tags": {
+    "title": "Etiquetas",
+    "hint": "Rótulos opcionales de las ofertas, como tecnologías o idiomas.",
+    "new": "Nueva etiqueta",
+    "delete": "Eliminar",
+    "deleteTitle": "¿Eliminar esta etiqueta?",
+    "deleteText_zero": "Se va a eliminar \"{{name}}\". Ninguna oferta la usa.",
+    "deleteText_one": "Se va a eliminar \"{{name}}\" y se va a quitar de la oferta que la usa.",
+    "deleteText_other": "Se va a eliminar \"{{name}}\" y se va a quitar de las {{count}} ofertas que la usan.",
+    "deleteConfirm": "Eliminar etiqueta",
+    "empty": "Todavía no hay etiquetas."
+  }
+}

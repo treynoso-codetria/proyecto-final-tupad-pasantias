@@ -15,6 +15,7 @@ import { RegisterChoicePage } from '@/features/auth/pages/RegisterChoicePage'
 import { RegisterEmployerPage } from '@/features/auth/pages/RegisterEmployerPage'
 import { RegisterStudentPage } from '@/features/auth/pages/RegisterStudentPage'
 import { VerifyEmailPage } from '@/features/auth/pages/VerifyEmailPage'
+import { CatalogAdminPage } from '@/features/catalog/CatalogAdminPage'
 import { CompanyProfilePage } from '@/features/companies/CompanyProfilePage'
 import { PublicCompanyPage } from '@/features/companies/PublicCompanyPage'
 import { AdminHomePage } from '@/features/home/AdminHomePage'
@@ -97,7 +98,10 @@ export const router = createBrowserRouter([
       {
         path: '/admin',
         element: <AppShell />,
-        children: [{ index: true, element: <AdminHomePage /> }],
+        children: [
+          { index: true, element: <AdminHomePage /> },
+          { path: 'catalog', element: <CatalogAdminPage /> },
+        ],
       },
     ],
   },

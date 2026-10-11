@@ -14,7 +14,8 @@
     "studentProfile": "My profile",
     "company": "Company profile",
     "offers": "Offers",
-    "myOffers": "My offers"
+    "myOffers": "My offers",
+    "catalog": "Catalog"
   },
   "account": "My account",
   "logout": "Log out",

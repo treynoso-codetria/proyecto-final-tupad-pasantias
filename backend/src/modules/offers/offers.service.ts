@@ -112,7 +112,9 @@ export class OffersService {
           ]
         : [{ publishedAt: 'desc' }, { id: 'asc' }];
 
-    const [total, offers] = await this.prisma.$transaction([
+    // Two independent queries in parallel (each on its own connection): a
+    // count that is a moment off from the page does no harm here.
+    const [total, offers] = await Promise.all([
       this.prisma.jobOffer.count({ where }),
       this.prisma.jobOffer.findMany({
         where,

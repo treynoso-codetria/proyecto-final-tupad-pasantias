@@ -14,8 +14,9 @@
   },
   "admin": {
     "title": "Administration panel",
-    "description": "From here you'll manage accounts, moderate posts and maintain categories and tags.",
-    "emptyTitle": "There's nothing to manage yet",
-    "emptyDescription": "Soon you'll see the portal's accounts, posts and catalog here."
+    "description": "From here you manage the catalog, and soon you will also moderate accounts and offers.",
+    "emptyTitle": "Manage the catalog",
+    "emptyDescription": "Create and maintain the categories and tags that organize the offers.",
+    "action": "Go to the catalog"
   }
 }

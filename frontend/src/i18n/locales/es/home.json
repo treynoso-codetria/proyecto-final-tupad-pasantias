@@ -14,8 +14,9 @@
   },
   "admin": {
     "title": "Panel de administración",
-    "description": "Desde acá vas a gestionar cuentas, moderar publicaciones y mantener categorías y etiquetas.",
-    "emptyTitle": "Todavía no hay nada para administrar",
-    "emptyDescription": "Muy pronto vas a ver acá las cuentas, las publicaciones y el catálogo del portal."
+    "description": "Desde acá administrás el catálogo, y pronto también vas a moderar cuentas y ofertas.",
+    "emptyTitle": "Administrá el catálogo",
+    "emptyDescription": "Creá y mantené las categorías y etiquetas que organizan las ofertas.",
+    "action": "Ir al catálogo"
   }
 }
