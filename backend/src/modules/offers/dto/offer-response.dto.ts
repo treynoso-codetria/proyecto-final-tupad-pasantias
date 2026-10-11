@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  ApplicationStatus,
   OfferStatus,
   OfferType,
   WorkModality,
@@ -33,6 +34,17 @@ export class OfferCompanyDetailDto extends OfferCompanyDto {
 
   @ApiProperty({ type: String, nullable: true })
   city: string | null;
+}
+
+export class OfferApplicationRefDto {
+  @ApiProperty({ format: 'uuid' })
+  id: string;
+
+  @ApiProperty({ enum: ApplicationStatus, enumName: 'ApplicationStatus' })
+  status: ApplicationStatus;
+
+  @ApiProperty({ type: String, format: 'date-time' })
+  appliedAt: Date;
 }
 
 // An offer in a list: enough to show a card.
@@ -122,6 +134,15 @@ export class OfferDetailDto extends OfferSummaryDto {
 
   @ApiProperty({ type: OfferCompanyDetailDto })
   declare company: OfferCompanyDetailDto;
+
+  @ApiProperty({
+    type: OfferApplicationRefDto,
+    nullable: true,
+    description:
+      "The authenticated student's application to this offer, if any; " +
+      'always null for other users.',
+  })
+  myApplication: OfferApplicationRefDto | null;
 }
 
 // An offer in the employer's "My offers" list.

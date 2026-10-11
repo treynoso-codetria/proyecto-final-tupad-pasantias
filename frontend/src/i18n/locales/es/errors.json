@@ -42,6 +42,10 @@
     "CATEGORY_NAME_TAKEN": "Ya existe una categoría con ese nombre.",
     "TAG_NAME_TAKEN": "Ya existe una etiqueta con ese nombre.",
     "CATALOG_NAME_INVALID": "El nombre debe tener letras o números.",
+    "OFFER_NOT_ACCEPTING_APPLICATIONS": "Esta oferta ya no recibe postulaciones.",
+    "ALREADY_APPLIED": "Ya te postulaste a esta oferta.",
+    "APPLICATION_NOT_PENDING": "Solo se pueden retirar postulaciones pendientes.",
+    "APPLICATION_WITHDRAWN": "El estudiante retiró esta postulación.",
     "network": "No pudimos conectar con el servidor. Revisá tu conexión y probá de nuevo.",
     "unexpected": "Ocurrió un error inesperado. Probá de nuevo en unos minutos."
   }

@@ -5,7 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { today, toIsoDate } from '../../common/dates.js';
+import { toIsoDate } from '../../common/dates.js';
 import { ErrorCode } from '../../common/errors/error-code.js';
 import { AuthenticatedUser } from '../../common/interfaces/authenticated-user.interface.js';
 import { Prisma } from '../../generated/prisma/client.js';
@@ -25,6 +25,10 @@ import {
   OfferSummaryDto,
 } from './dto/offer-response.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
+import {
+  acceptingApplications,
+  acceptsApplications,
+} from './offer-availability.js';
 
 const catalogFields = { id: true, name: true, slug: true } as const;
 
@@ -61,17 +65,6 @@ type OfferWithSummary = Prisma.JobOfferGetPayload<{
 type OfferWithDetail = Prisma.JobOfferGetPayload<{
   include: typeof detailInclude;
 }>;
-
-// Offers that anyone can find: open, with no deadline or one that has not
-// passed, from a company whose account is active. Removed (moderated) and
-// closed offers are never listed publicly.
-function acceptingApplications(): Prisma.JobOfferWhereInput {
-  return {
-    status: OfferStatus.OPEN,
-    OR: [{ deadline: null }, { deadline: { gte: today() } }],
-    company: { user: { isActive: true } },
-  };
-}
 
 @Injectable()
 export class OffersService {
@@ -159,7 +152,16 @@ export class OffersService {
       throw new NotFoundException();
     }
 
-    return toDetail(offer, privileged);
+    // A student sees whether (and how) they already applied.
+    const myApplication =
+      viewer?.role === UserRole.STUDENT
+        ? await this.prisma.application.findFirst({
+            where: { offerId, student: { userId: viewer.id } },
+            select: { id: true, status: true, appliedAt: true },
+          })
+        : null;
+
+    return { ...toDetail(offer, privileged), myApplication };
   }
 
   async listMine(
@@ -221,7 +223,7 @@ export class OffersService {
       },
       include: detailInclude,
     });
-    return toDetail(offer, true);
+    return { ...toDetail(offer, true), myApplication: null };
   }
 
   async update(
@@ -262,7 +264,7 @@ export class OffersService {
       },
       include: detailInclude,
     });
-    return toDetail(updated, true);
+    return { ...toDetail(updated, true), myApplication: null };
   }
 
   // Closing stops new applications; the offer and its applications are kept.
@@ -273,7 +275,7 @@ export class OffersService {
       data: { status: OfferStatus.CLOSED, closedAt: new Date() },
       include: detailInclude,
     });
-    return toDetail(closed, true);
+    return { ...toDetail(closed, true), myApplication: null };
   }
 
   // Only the company that published an offer changes it, and only while it is
@@ -361,7 +363,10 @@ function toSummary(offer: OfferWithSummary): OfferSummaryDto {
   };
 }
 
-function toDetail(offer: OfferWithDetail, privileged: boolean): OfferDetailDto {
+function toDetail(
+  offer: OfferWithDetail,
+  privileged: boolean,
+): Omit<OfferDetailDto, 'myApplication'> {
   const { company } = offer;
   return {
     ...toSummary(offer),
@@ -370,10 +375,7 @@ function toDetail(offer: OfferWithDetail, privileged: boolean): OfferDetailDto {
     vacancies: offer.vacancies,
     closedAt: offer.closedAt,
     updatedAt: offer.updatedAt,
-    isAcceptingApplications:
-      offer.status === OfferStatus.OPEN &&
-      company.user.isActive &&
-      (offer.deadline === null || offer.deadline >= today()),
+    isAcceptingApplications: acceptsApplications(offer),
     removalReason: privileged ? offer.removalReason : null,
     company: {
       id: company.id,

@@ -42,6 +42,10 @@
     "CATEGORY_NAME_TAKEN": "A category with that name already exists.",
     "TAG_NAME_TAKEN": "A tag with that name already exists.",
     "CATALOG_NAME_INVALID": "The name must contain letters or digits.",
+    "OFFER_NOT_ACCEPTING_APPLICATIONS": "This offer is no longer accepting applications.",
+    "ALREADY_APPLIED": "You already applied to this offer.",
+    "APPLICATION_NOT_PENDING": "Only pending applications can be withdrawn.",
+    "APPLICATION_WITHDRAWN": "The student withdrew this application.",
     "network": "We couldn't reach the server. Check your connection and try again.",
     "unexpected": "Something went wrong. Try again in a few minutes."
   }

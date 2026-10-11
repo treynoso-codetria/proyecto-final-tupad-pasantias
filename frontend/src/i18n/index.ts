@@ -1,6 +1,7 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import enAccount from './locales/en/account.json'
+import enApplications from './locales/en/applications.json'
 import enAuth from './locales/en/auth.json'
 import enCatalog from './locales/en/catalog.json'
 import enCommon from './locales/en/common.json'
@@ -9,6 +10,7 @@ import enHome from './locales/en/home.json'
 import enOffers from './locales/en/offers.json'
 import enProfile from './locales/en/profile.json'
 import esAccount from './locales/es/account.json'
+import esApplications from './locales/es/applications.json'
 import esAuth from './locales/es/auth.json'
 import esCatalog from './locales/es/catalog.json'
 import esCommon from './locales/es/common.json'
@@ -34,6 +36,7 @@ const en = {
   profile: enProfile,
   offers: enOffers,
   catalog: enCatalog,
+  applications: enApplications,
   errors: enErrors,
 }
 
@@ -46,6 +49,7 @@ const es: typeof en = {
   profile: esProfile,
   offers: esOffers,
   catalog: esCatalog,
+  applications: esApplications,
   errors: esErrors,
 }
 

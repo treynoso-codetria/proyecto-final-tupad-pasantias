@@ -44,6 +44,12 @@ export type OfferDetail = OfferSummary & {
   isAcceptingApplications: boolean
   // Only sent to the offer's company and to administrators.
   removalReason: string | null
+  // The signed-in student's application to the offer; null for anyone else.
+  myApplication: {
+    id: string
+    status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'WITHDRAWN'
+    appliedAt: string
+  } | null
   company: OfferSummary['company'] & {
     industry: string | null
     description: string | null

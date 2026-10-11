@@ -108,7 +108,8 @@
     "removedReason": "Dada de baja por un administrador. Motivo: {{reason}}",
     "emptyTitle": "Todavía no publicaste ofertas",
     "emptyDescription": "Publicá tu primera pasantía o empleo para empezar a recibir postulaciones.",
-    "emptyStatus": "No hay ofertas en este estado."
+    "emptyStatus": "No hay ofertas en este estado.",
+    "viewApplicants": "Postulantes"
   },
   "form": {
     "newTitle": "Publicar una oferta",

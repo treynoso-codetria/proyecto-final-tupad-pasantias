@@ -1,6 +1,9 @@
 import { createBrowserRouter } from 'react-router'
 import { AccountPage } from '@/features/account/AccountPage'
 import { ConfirmEmailChangePage } from '@/features/account/ConfirmEmailChangePage'
+import { ApplicantProfilePage } from '@/features/applications/pages/ApplicantProfilePage'
+import { ApplicantsPage } from '@/features/applications/pages/ApplicantsPage'
+import { MyApplicationsPage } from '@/features/applications/pages/MyApplicationsPage'
 import { AuthLayout } from '@/features/auth/components/AuthLayout'
 import type { AuthPanel } from '@/features/auth/components/auth-panel'
 import {
@@ -72,6 +75,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <StudentHomePage /> },
           { path: 'profile', element: <StudentProfilePage /> },
+          { path: 'applications', element: <MyApplicationsPage /> },
         ],
       },
     ],
@@ -88,6 +92,8 @@ export const router = createBrowserRouter([
           { path: 'offers', element: <MyOffersPage /> },
           { path: 'offers/new', element: <NewOfferPage /> },
           { path: 'offers/:id/edit', element: <EditOfferPage /> },
+          { path: 'offers/:id/applications', element: <ApplicantsPage /> },
+          { path: 'students/:id', element: <ApplicantProfilePage /> },
         ],
       },
     ],

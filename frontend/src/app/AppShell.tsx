@@ -20,6 +20,7 @@ type NavItem = {
     | 'studentProfile'
     | 'company'
     | 'catalog'
+    | 'myApplications'
   // Only active on that exact path, not on the pages below it.
   end?: boolean
 }
@@ -30,6 +31,7 @@ const NAVIGATION: Record<Role, NavItem[]> = {
   STUDENT: [
     { to: '/student', label: 'home', end: true },
     { to: '/offers', label: 'offers' },
+    { to: '/student/applications', label: 'myApplications' },
     { to: '/student/profile', label: 'studentProfile' },
   ],
   EMPLOYER: [

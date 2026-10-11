@@ -11,6 +11,7 @@ import { Card } from '@/components/ui/Card'
 import { FullPageLoader } from '@/components/ui/FullPageLoader'
 import { LoadError } from '@/components/ui/LoadError'
 import { NotFoundNotice } from '@/components/ui/NotFoundNotice'
+import { ApplyPanel } from '@/features/applications/components/ApplyPanel'
 import { useAuth } from '@/features/auth/auth-context'
 import { formatDay, formatTimeAgo } from '@/lib/format'
 import { offerKeys, offersApi, type OfferDetail } from '../api'
@@ -107,6 +108,7 @@ function OfferDetailView({ offer }: { offer: OfferDetail }) {
       </article>
 
       <aside className="space-y-6">
+        <ApplyPanel offer={offer} />
         <Card className="p-6">
           <h2 className="font-display text-xl font-extrabold">{t('detail.facts')}</h2>
           <dl className="mt-4 space-y-3 text-sm">

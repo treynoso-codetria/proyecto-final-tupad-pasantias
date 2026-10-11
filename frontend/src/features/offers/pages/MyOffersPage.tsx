@@ -9,18 +9,17 @@ import { Button } from '@/components/ui/Button'
 import { buttonStyles } from '@/components/ui/button-styles'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { FilterTabs } from '@/components/ui/FilterTabs'
 import { FullPageLoader } from '@/components/ui/FullPageLoader'
 import { LoadError } from '@/components/ui/LoadError'
 import { getApiErrorKey } from '@/features/auth/errors'
 import { useErrorText } from '@/features/auth/use-error-text'
-import { cn } from '@/lib/cn'
 import { formatDay, formatTimeAgo } from '@/lib/format'
 import {
   OFFER_STATUSES,
   offerKeys,
   offersApi,
   type MyOffer,
-  type OfferStatus,
 } from '../api'
 import { OfferBadges } from '../components/OfferBadges'
 import type { OfferLinkState } from '../link-state'
@@ -73,25 +72,20 @@ export function MyOffersPage() {
         </Link>
       </div>
 
-      <nav aria-label={t('mine.filterLabel')} className="mb-6 flex flex-wrap gap-2">
-        {([undefined, ...OFFER_STATUSES] as (OfferStatus | undefined)[]).map((item) => (
-          <button
-            key={item ?? 'all'}
-            type="button"
-            aria-pressed={item === status}
-            onClick={() => setSearchParams(item ? { status: item } : {})}
-            className={cn(
-              'cursor-pointer rounded-xl border-2 px-3 py-1.5 font-display text-sm font-bold',
-              'focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ink',
-              item === status
-                ? 'border-ink bg-accent shadow-hard-sm'
-                : 'border-ink/30 bg-surface hover:border-ink hover:bg-accent-soft',
-            )}
-          >
-            {item ? t(`mine.tabs.${item}`) : t('mine.tabs.all')}
-          </button>
-        ))}
-      </nav>
+      <div className="mb-6">
+        <FilterTabs
+          label={t('mine.filterLabel')}
+          value={status}
+          onChange={(item) => setSearchParams(item ? { status: item } : {})}
+          options={[
+            { value: undefined, label: t('mine.tabs.all') },
+            ...OFFER_STATUSES.map((item) => ({
+              value: item,
+              label: t(`mine.tabs.${item}`),
+            })),
+          ]}
+        />
+      </div>
 
       {close.isSuccess && (
         <div className="mb-6">
@@ -145,7 +139,12 @@ export function MyOffersPage() {
                   </p>
                   <p className="flex flex-wrap items-center gap-2 text-sm font-semibold">
                     <Users className="size-4" aria-hidden="true" />
-                    {t('mine.applicants', { count: offer.applicationsCount })}
+                    <Link
+                      to={`/employer/offers/${offer.id}/applications`}
+                      className="underline decoration-2 underline-offset-4 hover:bg-accent"
+                    >
+                      {t('mine.applicants', { count: offer.applicationsCount })}
+                    </Link>
                     {offer.pendingApplicationsCount > 0 && (
                       <Badge tone="accent">
                         {t('mine.pending', { count: offer.pendingApplicationsCount })}

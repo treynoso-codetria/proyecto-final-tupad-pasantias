@@ -90,6 +90,7 @@ Núcleo del portal.
 - **Empleador:** ver los postulantes de cada oferta (con acceso a su perfil y CV), filtrar por estado, **aceptar o rechazar** postulaciones.
 - Validaciones: una sola postulación por estudiante y oferta, solo a ofertas abiertas y vigentes, solo la empresa dueña puede cambiar el estado.
 - Cada cambio de estado dispara una notificación (M8).
+- Implementado: un estudiante que retiró su postulación puede volver a postularse (se reabre la misma fila, respetando la restricción única); solo se retiran postulaciones pendientes; la empresa puede cambiar su respuesta (aceptada ↔ rechazada) y cada cambio notifica al estudiante; las postulaciones retiradas no se le muestran a la empresa ni cuentan como postulantes, y la empresa deja de ver el perfil de un estudiante que retiró su única postulación. Se notifica a la empresa cada postulación nueva. El CV se copia del perfil al postularse (llega con M9).
 
 ### M8 — Notificaciones · Prioridad **Media**
 

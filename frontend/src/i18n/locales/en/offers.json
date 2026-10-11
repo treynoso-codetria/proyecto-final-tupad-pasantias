@@ -108,7 +108,8 @@
     "removedReason": "Removed by an administrator. Reason: {{reason}}",
     "emptyTitle": "You haven't published any offers yet",
     "emptyDescription": "Publish your first internship or job to start receiving applications.",
-    "emptyStatus": "There are no offers in this status."
+    "emptyStatus": "There are no offers in this status.",
+    "viewApplicants": "Applicants"
   },
   "form": {
     "newTitle": "Publish an offer",

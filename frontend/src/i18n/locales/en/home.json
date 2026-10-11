@@ -3,7 +3,7 @@
   "student": {
     "description": "This is your space to find internships and track your applications.",
     "emptyTitle": "Find your next opportunity",
-    "emptyDescription": "Browse the internships and jobs that are open right now. Soon you will also follow your applications here.",
+    "emptyDescription": "Browse the internships and jobs that are open right now, and follow your applications in \"My applications\".",
     "action": "Browse offers"
   },
   "employer": {

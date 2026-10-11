@@ -3,7 +3,7 @@
   "student": {
     "description": "Este es tu espacio para encontrar pasantías y seguir tus postulaciones.",
     "emptyTitle": "Encontrá tu próxima oportunidad",
-    "emptyDescription": "Mirá las pasantías y empleos abiertos en este momento. Pronto también vas a seguir acá tus postulaciones.",
+    "emptyDescription": "Mirá las pasantías y empleos abiertos en este momento, y seguí tus postulaciones en \"Mis postulaciones\".",
     "action": "Ver ofertas"
   },
   "employer": {

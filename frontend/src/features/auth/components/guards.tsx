@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from 'react-router'
+import { Navigate, Outlet, useLocation } from 'react-router'
 import { FullPageLoader } from '@/components/ui/FullPageLoader'
 import { useAuth } from '../auth-context'
 import { ROLE_HOME_PATH } from '../roles'
@@ -6,14 +6,22 @@ import type { Role } from '../types'
 
 // Wraps login/registration: a signed-in user is sent to their own home. This
 // is also what moves the user forward right after a successful login.
+//
+// A screen that sends the user to log in can pass `state={{ from: path }}` to
+// bring them back there afterwards (only paths within the app).
 export function GuestOnly() {
   const auth = useAuth()
+  const from = (useLocation().state as { from?: unknown } | null)?.from
 
   if (auth.status === 'loading') {
     return <FullPageLoader fullPage={false} />
   }
   if (auth.status === 'authenticated') {
-    return <Navigate to={ROLE_HOME_PATH[auth.user.role]} replace />
+    const target =
+      typeof from === 'string' && from.startsWith('/') && !from.startsWith('//')
+        ? from
+        : ROLE_HOME_PATH[auth.user.role]
+    return <Navigate to={target} replace />
   }
   return <Outlet />
 }

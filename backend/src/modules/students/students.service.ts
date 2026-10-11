@@ -6,7 +6,7 @@ import {
 import { toIsoDate } from '../../common/dates.js';
 import { AuthenticatedUser } from '../../common/interfaces/authenticated-user.interface.js';
 import { Prisma } from '../../generated/prisma/client.js';
-import { UserRole } from '../../generated/prisma/enums.js';
+import { ApplicationStatus, UserRole } from '../../generated/prisma/enums.js';
 import { PrismaService } from '../../prisma/prisma.service.js';
 import {
   StudentProfileResponseDto,
@@ -51,7 +51,8 @@ export class StudentsService {
   }
 
   // A student's profile is not public. Besides the student (who uses /me), it
-  // can be read by administrators and by a company the student applied to.
+  // can be read by administrators and by a company the student applied to
+  // (and did not withdraw from).
   async getProfileForViewer(
     profileId: string,
     viewer: AuthenticatedUser,
@@ -69,6 +70,7 @@ export class StudentsService {
         where: {
           studentId: profileId,
           offer: { company: { userId: viewer.id } },
+          status: { not: ApplicationStatus.WITHDRAWN },
         },
         select: { id: true },
       });

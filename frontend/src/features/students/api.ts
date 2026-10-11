@@ -27,12 +27,18 @@ export type UpdateStudentProfileInput = Partial<
   >
 >
 
+// What a company sees of a student who applied to one of its offers.
+export type StudentProfileView = Omit<StudentProfile, 'birthDate'>
+
 export const studentKeys = {
   ownProfile: ['students', 'me'] as const,
 }
 
 export const studentsApi = {
   getOwnProfile: () => apiFetch<StudentProfile>('/students/me'),
+
+  // Only for a company the student applied to, or an administrator.
+  getProfile: (id: string) => apiFetch<StudentProfileView>(`/students/${id}`),
 
   updateOwnProfile: (input: UpdateStudentProfileInput) =>
     apiFetch<StudentProfile>('/students/me', { method: 'PATCH', body: input }),
