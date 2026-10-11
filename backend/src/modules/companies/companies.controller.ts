@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseUUIDPipe,
-  Patch,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -20,6 +13,7 @@ import { Public } from '../../common/decorators/public.decorator.js';
 import { Roles } from '../../common/decorators/roles.decorator.js';
 import { ErrorResponseDto } from '../../common/dto/error-response.dto.js';
 import type { AuthenticatedUser } from '../../common/interfaces/authenticated-user.interface.js';
+import { ParseIdPipe } from '../../common/validation/ids.js';
 import { UserRole } from '../../generated/prisma/enums.js';
 import { CompaniesService } from './companies.service.js';
 import {
@@ -78,7 +72,7 @@ export class CompaniesController {
   @ApiOkResponse({ type: PublicCompanyResponseDto })
   @ApiNotFoundResponse({ type: ErrorResponseDto })
   getPublicCompany(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseIdPipe) id: string,
   ): Promise<PublicCompanyResponseDto> {
     return this.companiesService.getPublicCompany(id);
   }

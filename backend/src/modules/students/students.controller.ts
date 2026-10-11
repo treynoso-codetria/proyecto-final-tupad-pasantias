@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseUUIDPipe,
-  Patch,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -19,6 +12,7 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { Roles } from '../../common/decorators/roles.decorator.js';
 import { ErrorResponseDto } from '../../common/dto/error-response.dto.js';
 import type { AuthenticatedUser } from '../../common/interfaces/authenticated-user.interface.js';
+import { ParseIdPipe } from '../../common/validation/ids.js';
 import { UserRole } from '../../generated/prisma/enums.js';
 import {
   StudentProfileResponseDto,
@@ -77,7 +71,7 @@ export class StudentsController {
   })
   @ApiNotFoundResponse({ type: ErrorResponseDto })
   getProfile(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseIdPipe) id: string,
     @CurrentUser() viewer: AuthenticatedUser,
   ): Promise<StudentProfileViewDto> {
     return this.studentsService.getProfileForViewer(id, viewer);
