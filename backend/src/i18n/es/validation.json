@@ -21,5 +21,9 @@
   "isDate": "{property} debe ser una fecha válida",
   "minDate": "{property} es demasiado antigua",
   "maxDate": "{property} no puede ser una fecha futura",
-  "phoneFormat": "{property} debe ser un teléfono (dígitos, espacios, +, - y paréntesis)"
+  "phoneFormat": "{property} debe ser un teléfono (dígitos, espacios, +, - y paréntesis)",
+  "arrayMaxSize": "{property} puede tener como máximo {constraints.0} elementos",
+  "arrayUnique": "{property} no puede tener valores repetidos",
+  "isArray": "{property} debe ser una lista",
+  "deadlineInPast": "{property} no puede ser anterior a hoy"
 }

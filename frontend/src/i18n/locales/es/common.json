@@ -12,7 +12,9 @@
     "label": "Navegación principal",
     "home": "Inicio",
     "studentProfile": "Mi perfil",
-    "company": "Perfil de la empresa"
+    "company": "Perfil de la empresa",
+    "offers": "Ofertas",
+    "myOffers": "Mis ofertas"
   },
   "account": "Mi cuenta",
   "logout": "Salir",
@@ -27,5 +29,8 @@
     "back": "Volver al inicio"
   },
   "loadFailed": "No pudimos cargar esta información.",
-  "retry": "Reintentar"
+  "retry": "Reintentar",
+  "login": "Iniciar sesión",
+  "register": "Registrarse",
+  "browseOffers": "Ver ofertas sin una cuenta"
 }

@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
-export function Logo() {
+// `to`: where the logo leads; the home of the signed-in user by default.
+export function Logo({ to = '/' }: { to?: string }) {
   const { t } = useTranslation()
 
   return (
     <Link
-      to="/"
+      to={to}
       className="inline-flex items-center gap-2.5 rounded-lg focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-ink"
     >
       <span

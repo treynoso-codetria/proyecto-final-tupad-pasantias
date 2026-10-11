@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { today, toIsoDate } from '../../common/dates.js';
 import { ErrorCode } from '../../common/errors/error-code.js';
 import { Prisma } from '../../generated/prisma/client.js';
 import { OfferStatus } from '../../generated/prisma/enums.js';
@@ -73,14 +74,13 @@ export class CompaniesService {
   // is not shown. Only offers that can still be applied to are listed: open,
   // and with no deadline or one that has not passed.
   async getPublicCompany(id: string): Promise<PublicCompanyResponseDto> {
-    const today = new Date(new Date().toISOString().slice(0, 10));
     const company = await this.prisma.company.findFirst({
       where: { id, user: { isActive: true } },
       include: {
         offers: {
           where: {
             status: OfferStatus.OPEN,
-            OR: [{ deadline: null }, { deadline: { gte: today } }],
+            OR: [{ deadline: null }, { deadline: { gte: today() } }],
           },
           orderBy: { publishedAt: 'desc' },
           select: {
@@ -112,7 +112,7 @@ export class CompaniesService {
       city: company.city,
       openOffers: company.offers.map((offer) => ({
         ...offer,
-        deadline: offer.deadline?.toISOString().slice(0, 10) ?? null,
+        deadline: toIsoDate(offer.deadline),
       })),
     };
   }

@@ -15,6 +15,7 @@ import { useErrorText } from '../use-error-text'
 
 export function LoginPage() {
   const { t } = useTranslation('auth')
+  const { t: tCommon } = useTranslation()
   const errorText = useErrorText()
   const { login } = useAuth()
   const navigate = useNavigate()
@@ -79,6 +80,14 @@ export function LoginPage() {
           className="font-bold underline decoration-2 underline-offset-4 hover:bg-accent"
         >
           {t('login.registerLink')}
+        </Link>
+      </p>
+      <p className="mt-3 text-center text-sm">
+        <Link
+          to="/offers"
+          className="font-bold underline decoration-2 underline-offset-4 hover:bg-accent"
+        >
+          {tCommon('browseOffers')}
         </Link>
       </p>
     </Card>

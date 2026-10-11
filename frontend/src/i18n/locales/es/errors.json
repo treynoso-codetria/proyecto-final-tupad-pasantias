@@ -12,7 +12,13 @@
     "phoneInvalid": "Ingresá un teléfono válido.",
     "urlInvalid": "Ingresá un enlace completo, que empiece con https://",
     "dateInvalid": "Ingresá una fecha válida.",
-    "dateInFuture": "La fecha no puede ser futura."
+    "dateInFuture": "La fecha no puede ser futura.",
+    "provinceRequired": "Elegí una provincia para ofertas presenciales e híbridas.",
+    "salaryRange": "El máximo no puede ser menor que el mínimo.",
+    "amountInvalid": "Ingresá un monto en pesos, sin separadores.",
+    "dateInPast": "La fecha no puede ser anterior a hoy.",
+    "choose": "Elegí una opción.",
+    "vacanciesInvalid": "Ingresá un número del 1 al 100."
   },
   "api": {
     "EMAIL_TAKEN": "Ya existe una cuenta con este email.",
@@ -28,6 +34,11 @@
     "MAIL_DELIVERY_FAILED": "No pudimos enviar el email. Probá de nuevo en unos minutos.",
     "TOO_MANY_REQUESTS": "Demasiados intentos. Esperá un minuto y probá de nuevo.",
     "VALIDATION_FAILED": "Algunos campos no son válidos. Revisalos y probá de nuevo.",
+    "CATEGORY_NOT_AVAILABLE": "Esa categoría ya no está disponible. Elegí otra.",
+    "TAG_NOT_FOUND": "Una de las etiquetas ya no existe. Recargá la página y probá de nuevo.",
+    "OFFER_LOCATION_REQUIRED": "Elegí una provincia para ofertas presenciales e híbridas.",
+    "SALARY_RANGE_INVALID": "El salario máximo no puede ser menor que el mínimo.",
+    "OFFER_NOT_OPEN": "Solo se pueden modificar ofertas abiertas.",
     "network": "No pudimos conectar con el servidor. Revisá tu conexión y probá de nuevo.",
     "unexpected": "Ocurrió un error inesperado. Probá de nuevo en unos minutos."
   }

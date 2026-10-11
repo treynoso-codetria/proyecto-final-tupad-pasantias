@@ -12,7 +12,9 @@ import { RolesGuard } from './common/guards/roles.guard.js';
 import { validateEnv } from './config/env.validation.js';
 import { MailModule } from './mail/mail.module.js';
 import { AuthModule } from './modules/auth/auth.module.js';
+import { CatalogModule } from './modules/catalog/catalog.module.js';
 import { CompaniesModule } from './modules/companies/companies.module.js';
+import { OffersModule } from './modules/offers/offers.module.js';
 import { StudentsModule } from './modules/students/students.module.js';
 import { UsersModule } from './modules/users/users.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
@@ -43,6 +45,8 @@ import { PrismaModule } from './prisma/prisma.module.js';
     UsersModule,
     StudentsModule,
     CompaniesModule,
+    CatalogModule,
+    OffersModule,
   ],
   controllers: [AppController],
   providers: [

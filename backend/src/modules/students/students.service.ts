@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { toIsoDate } from '../../common/dates.js';
 import { AuthenticatedUser } from '../../common/interfaces/authenticated-user.interface.js';
 import { Prisma } from '../../generated/prisma/client.js';
 import { UserRole } from '../../generated/prisma/enums.js';
@@ -88,9 +89,7 @@ function toResponse(profile: ProfileWithEmail): StudentProfileResponseDto {
     firstName: profile.firstName,
     lastName: profile.lastName,
     phone: profile.phone,
-    // Stored as a DATE; sent without a time so it does not shift with the
-    // reader's time zone.
-    birthDate: profile.birthDate?.toISOString().slice(0, 10) ?? null,
+    birthDate: toIsoDate(profile.birthDate),
     career: profile.career,
     institution: profile.institution,
     studyYear: profile.studyYear,

@@ -5,12 +5,14 @@ import enAuth from './locales/en/auth.json'
 import enCommon from './locales/en/common.json'
 import enErrors from './locales/en/errors.json'
 import enHome from './locales/en/home.json'
+import enOffers from './locales/en/offers.json'
 import enProfile from './locales/en/profile.json'
 import esAccount from './locales/es/account.json'
 import esAuth from './locales/es/auth.json'
 import esCommon from './locales/es/common.json'
 import esErrors from './locales/es/errors.json'
 import esHome from './locales/es/home.json'
+import esOffers from './locales/es/offers.json'
 import esProfile from './locales/es/profile.json'
 
 export const LANGUAGES = ['en', 'es'] as const
@@ -28,6 +30,7 @@ const en = {
   account: enAccount,
   home: enHome,
   profile: enProfile,
+  offers: enOffers,
   errors: enErrors,
 }
 
@@ -38,6 +41,7 @@ const es: typeof en = {
   account: esAccount,
   home: esHome,
   profile: esProfile,
+  offers: esOffers,
   errors: esErrors,
 }
 

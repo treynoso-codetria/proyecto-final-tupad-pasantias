@@ -2,13 +2,15 @@
   "greeting": "Hi, {{name}}!",
   "student": {
     "description": "This is your space to find internships and track your applications.",
-    "emptyTitle": "There are no offers to show yet",
-    "emptyDescription": "Soon you'll be able to search offers, apply and see the status of each application here."
+    "emptyTitle": "Find your next opportunity",
+    "emptyDescription": "Browse the internships and jobs that are open right now. Soon you will also follow your applications here.",
+    "action": "Browse offers"
   },
   "employer": {
-    "description": "From here you'll post offers and manage the people who apply.",
-    "emptyTitle": "You haven't posted any offers yet",
-    "emptyDescription": "Soon you'll be able to post internships and jobs, and review the applicants for each one here."
+    "description": "From here you post offers and manage the people who apply.",
+    "emptyTitle": "Publish and manage your offers",
+    "emptyDescription": "Publish internships and jobs, and follow the applications each one receives.",
+    "action": "Go to my offers"
   },
   "admin": {
     "title": "Administration panel",

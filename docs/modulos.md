@@ -75,11 +75,12 @@ Núcleo del portal.
 - **Estudiante / visitante:** listado público de ofertas abiertas con **búsqueda por texto** (título/descripción) y **filtros** por categoría, etiquetas, tipo (pasantía/empleo), modalidad, carga horaria y ubicación; paginación y orden por fecha.
 - Detalle de oferta con datos de la empresa.
 - Las ofertas dadas de baja por un administrador (`REMOVED`) no aparecen en el listado público.
+- Reglas implementadas: el listado público muestra solo ofertas abiertas, con fecha límite vigente (en hora de Argentina) y de empresas activas; las ofertas presenciales e híbridas requieren provincia; `salary_min <= salary_max`; solo se editan y cierran ofertas abiertas, y una oferta cerrada no se reabre; una categoría inactiva no se puede elegir al publicar, pero las ofertas que ya la tenían la conservan. Las etiquetas filtran por coincidencia con cualquiera de las elegidas.
 
 ### M6 — Categorías y etiquetas · Prioridad **Alta**
 
 - ABM de categorías (alta, edición, activar/desactivar) y de etiquetas, reservado al administrador.
-- Endpoints públicos de lectura para poblar los filtros y formularios del frontend.
+- Endpoints públicos de lectura para poblar los filtros y formularios del frontend (implementados junto con M5: `GET /categories` con las activas y `GET /tags`).
 - Se considera de prioridad alta porque M5 depende de que existan categorías; el seed carga un conjunto inicial.
 
 ### M7 — Postulaciones · Prioridad **Alta**

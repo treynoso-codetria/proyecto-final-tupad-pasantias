@@ -102,9 +102,26 @@ export async function createTestApp() {
     http: () => request(app.getHttpServer()),
 
     // Offers need a category; its slug carries the run id so close() finds it.
-    createCategory(name: string) {
+    createCategory(name: string, isActive = true) {
       return prisma.category.create({
+        data: { name: `${name} ${runId}`, slug: `${name}-${runId}`, isActive },
+      });
+    },
+
+    createTag(name: string) {
+      return prisma.tag.create({
         data: { name: `${name} ${runId}`, slug: `${name}-${runId}` },
+      });
+    },
+
+    async createAdmin(name: string) {
+      return prisma.user.create({
+        data: {
+          email: email(name),
+          passwordHash: await hashPassword(password),
+          role: UserRole.ADMIN,
+          emailVerifiedAt: new Date(),
+        },
       });
     },
 
@@ -160,11 +177,14 @@ export async function createTestApp() {
 
     async close() {
       // Deleting the users cascades to their profiles, companies, offers and
-      // applications; categories are not owned by a user.
+      // applications; categories and tags are not owned by a user.
       await prisma.user.deleteMany({
         where: { email: { endsWith: `@${emailDomain}` } },
       });
       await prisma.category.deleteMany({
+        where: { slug: { endsWith: `-${runId}` } },
+      });
+      await prisma.tag.deleteMany({
         where: { slug: { endsWith: `-${runId}` } },
       });
       await app.close();

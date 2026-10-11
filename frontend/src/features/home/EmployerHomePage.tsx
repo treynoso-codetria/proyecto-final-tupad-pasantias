@@ -1,5 +1,7 @@
 import { Megaphone } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
+import { buttonStyles } from '@/components/ui/button-styles'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { useAuth } from '@/features/auth/auth-context'
 import { getDisplayName } from '@/features/auth/roles'
@@ -23,6 +25,11 @@ export function EmployerHomePage() {
         icon={Megaphone}
         title={t('employer.emptyTitle')}
         description={t('employer.emptyDescription')}
+        action={
+          <Link to="/employer/offers" className={buttonStyles()}>
+            {t('employer.action')}
+          </Link>
+        }
       />
     </>
   )

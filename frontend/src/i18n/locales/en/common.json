@@ -12,7 +12,9 @@
     "label": "Main navigation",
     "home": "Home",
     "studentProfile": "My profile",
-    "company": "Company profile"
+    "company": "Company profile",
+    "offers": "Offers",
+    "myOffers": "My offers"
   },
   "account": "My account",
   "logout": "Log out",
@@ -27,5 +29,8 @@
     "back": "Back to home"
   },
   "loadFailed": "We couldn't load this information.",
-  "retry": "Try again"
+  "retry": "Try again",
+  "login": "Log in",
+  "register": "Sign up",
+  "browseOffers": "Browse offers without an account"
 }

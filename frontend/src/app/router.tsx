@@ -16,9 +16,17 @@ import { RegisterEmployerPage } from '@/features/auth/pages/RegisterEmployerPage
 import { RegisterStudentPage } from '@/features/auth/pages/RegisterStudentPage'
 import { VerifyEmailPage } from '@/features/auth/pages/VerifyEmailPage'
 import { CompanyProfilePage } from '@/features/companies/CompanyProfilePage'
+import { PublicCompanyPage } from '@/features/companies/PublicCompanyPage'
 import { AdminHomePage } from '@/features/home/AdminHomePage'
 import { EmployerHomePage } from '@/features/home/EmployerHomePage'
 import { StudentHomePage } from '@/features/home/StudentHomePage'
+import { MyOffersPage } from '@/features/offers/pages/MyOffersPage'
+import { OfferDetailPage } from '@/features/offers/pages/OfferDetailPage'
+import {
+  EditOfferPage,
+  NewOfferPage,
+} from '@/features/offers/pages/OfferFormPage'
+import { OffersPage } from '@/features/offers/pages/OffersPage'
 import { StudentProfilePage } from '@/features/students/StudentProfilePage'
 import { AppShell } from './AppShell'
 import { NotFoundPage } from './NotFoundPage'
@@ -76,6 +84,9 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <EmployerHomePage /> },
           { path: 'company', element: <CompanyProfilePage /> },
+          { path: 'offers', element: <MyOffersPage /> },
+          { path: 'offers/new', element: <NewOfferPage /> },
+          { path: 'offers/:id/edit', element: <EditOfferPage /> },
         ],
       },
     ],
@@ -88,6 +99,15 @@ export const router = createBrowserRouter([
         element: <AppShell />,
         children: [{ index: true, element: <AdminHomePage /> }],
       },
+    ],
+  },
+  // Public pages: anyone can browse the offers and the companies.
+  {
+    element: <AppShell />,
+    children: [
+      { path: '/offers', element: <OffersPage /> },
+      { path: '/offers/:id', element: <OfferDetailPage /> },
+      { path: '/companies/:id', element: <PublicCompanyPage /> },
     ],
   },
   {

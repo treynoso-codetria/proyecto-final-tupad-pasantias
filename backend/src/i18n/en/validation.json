@@ -21,5 +21,9 @@
   "isDate": "{property} must be a valid date",
   "minDate": "{property} is too far in the past",
   "maxDate": "{property} cannot be in the future",
-  "phoneFormat": "{property} must be a phone number (digits, spaces, +, - and parentheses)"
+  "phoneFormat": "{property} must be a phone number (digits, spaces, +, - and parentheses)",
+  "arrayMaxSize": "{property} can have at most {constraints.0} items",
+  "arrayUnique": "{property} cannot have repeated values",
+  "isArray": "{property} must be a list",
+  "deadlineInPast": "{property} cannot be before today"
 }
