@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { FileDown, Mail, Phone, Users } from 'lucide-react'
+import { FileDown, Mail, MessageSquare, Phone, Users } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link, useParams, useSearchParams } from 'react-router'
 import { Alert } from '@/components/ui/Alert'
@@ -228,6 +228,13 @@ function ApplicantCard({
           className={buttonStyles('secondary', 'sm')}
         >
           {t('applicants.profile')}
+        </Link>
+        <Link
+          to={`/messages/${applicant.id}`}
+          className={buttonStyles('secondary', 'sm')}
+        >
+          <MessageSquare className="size-4" aria-hidden="true" />
+          {t('applicants.message')}
         </Link>
         {applicant.cvUrl && (
           <a

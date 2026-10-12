@@ -15,6 +15,10 @@ export type NotificationContent =
         companyName: string;
         status: 'ACCEPTED' | 'REJECTED';
       };
+    }
+  | {
+      type: typeof NotificationType.NEW_MESSAGE;
+      data: { applicationId: string; offerTitle: string; senderName: string };
     };
 
 // Key of the texts of a notification in notifications.json. Some types have

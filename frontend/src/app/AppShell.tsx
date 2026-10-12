@@ -8,6 +8,7 @@ import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { Logo } from '@/components/ui/Logo'
 import { useAuth } from '@/features/auth/auth-context'
 import { getDisplayName } from '@/features/auth/roles'
+import { UnreadMessagesBadge } from '@/features/messages/UnreadMessagesBadge'
 import { NotificationBell } from '@/features/notifications/NotificationBell'
 import type { Role } from '@/features/auth/types'
 import { cn } from '@/lib/cn'
@@ -22,6 +23,7 @@ type NavItem = {
     | 'company'
     | 'catalog'
     | 'myApplications'
+    | 'messages'
   // Only active on that exact path, not on the pages below it.
   end?: boolean
 }
@@ -33,11 +35,13 @@ const NAVIGATION: Record<Role, NavItem[]> = {
     { to: '/student', label: 'home', end: true },
     { to: '/offers', label: 'offers' },
     { to: '/student/applications', label: 'myApplications' },
+    { to: '/messages', label: 'messages' },
     { to: '/student/profile', label: 'studentProfile' },
   ],
   EMPLOYER: [
     { to: '/employer', label: 'home', end: true },
     { to: '/employer/offers', label: 'myOffers' },
+    { to: '/messages', label: 'messages' },
     { to: '/employer/company', label: 'company' },
   ],
   ADMIN: [
@@ -135,6 +139,7 @@ export function AppShell() {
                 }
               >
                 {t(`nav.${label}`)}
+                {label === 'messages' && <UnreadMessagesBadge />}
               </NavLink>
             ))}
           </nav>

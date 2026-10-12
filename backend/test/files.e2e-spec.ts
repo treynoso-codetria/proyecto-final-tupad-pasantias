@@ -245,11 +245,10 @@ describe('Files (e2e)', () => {
         'logo.png',
       ).expect(200);
 
+      // On the API's public URL (PUBLIC_API_URL), whatever it is here.
       const logoUrl: string = response.body.logoUrl;
-      expect(logoUrl).toMatch(
-        new RegExp(
-          `^http://localhost:3000/api/companies/${companyId}/logo\\?v=[0-9a-f]{8}$`,
-        ),
+      expect(pathOf(logoUrl)).toMatch(
+        new RegExp(`^/api/companies/${companyId}/logo\\?v=[0-9a-f]{8}$`),
       );
 
       // Public: no session needed.

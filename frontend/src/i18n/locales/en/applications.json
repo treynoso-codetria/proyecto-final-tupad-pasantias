@@ -41,7 +41,8 @@
     "emptyTitle": "You haven't applied to any offers yet",
     "emptyDescription": "Find an internship or a job and apply in one step.",
     "emptyStatus": "You have no applications in this status.",
-    "browse": "Browse offers"
+    "browse": "Browse offers",
+    "messages": "Messages"
   },
   "applicants": {
     "title": "Applicants",
@@ -61,7 +62,8 @@
     "emptyTitle": "No applications yet",
     "emptyDescription": "When students apply to this offer, you will see them here.",
     "emptyStatus": "There are no applicants in this status.",
-    "notOwn": "You can only see the applicants of your company's offers."
+    "notOwn": "You can only see the applicants of your company's offers.",
+    "message": "Message"
   },
   "profile": {
     "back": "Back to the applicants",

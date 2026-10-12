@@ -115,6 +115,7 @@ Notificaciones **internas** de la plataforma (no push, fuera de alcance).
 - Bandeja con las conversaciones del usuario y cantidad de mensajes no leídos.
 - Solo participan el estudiante de la postulación y la empresa dueña de la oferta.
 - Actualización por polling (no se usan WebSockets en esta versión).
+- Implementado: la conversación se identifica por la postulación (`GET /conversations`, `GET /conversations/unread-count`, `GET /conversations/:applicationId`, `POST /conversations/:applicationId/messages`, `POST /conversations/:applicationId/read`). Cualquiera de las dos partes puede escribir primero; la conversación se cierra (sigue legible) si la postulación se retira o la oferta se da de baja. Cada mensaje genera una notificación `NEW_MESSAGE` para el destinatario, salvo que ya tenga una sin leer de esa conversación; leer la conversación marca leídos sus mensajes y esas notificaciones. En el frontend: bandeja `/messages` con contador en la navegación, hilo `/messages/:applicationId` (consulta cada 10 s, muestra el mensaje de la postulación al inicio y "Visto") y accesos desde "Mis postulaciones" y los postulantes de cada oferta.
 
 ### M11 — Panel de administración y moderación · Prioridad **Media**
 

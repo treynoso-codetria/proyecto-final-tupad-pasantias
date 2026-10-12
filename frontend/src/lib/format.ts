@@ -15,6 +15,14 @@ export function formatDay(isoDate: string): string {
   }).format(new Date(isoDate))
 }
 
+// "Oct 12, 2026, 3:45 PM" / "12 oct 2026, 15:45".
+export function formatDateTime(isoDateTime: string): string {
+  return new Intl.DateTimeFormat(locale(), {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(new Date(isoDateTime))
+}
+
 // "3 days ago", "hace 3 días"; past moments only.
 export function formatTimeAgo(isoDateTime: string): string {
   const seconds = (Date.now() - new Date(isoDateTime).getTime()) / 1000

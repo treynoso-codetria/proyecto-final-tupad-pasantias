@@ -16,6 +16,7 @@ import { ApplicationsModule } from './modules/applications/applications.module.j
 import { AuthModule } from './modules/auth/auth.module.js';
 import { CatalogModule } from './modules/catalog/catalog.module.js';
 import { CompaniesModule } from './modules/companies/companies.module.js';
+import { MessagesModule } from './modules/messages/messages.module.js';
 import { NotificationsModule } from './modules/notifications/notifications.module.js';
 import { OffersModule } from './modules/offers/offers.module.js';
 import { StudentsModule } from './modules/students/students.module.js';
@@ -52,6 +53,7 @@ import { PrismaModule } from './prisma/prisma.module.js';
     CatalogModule,
     OffersModule,
     NotificationsModule,
+    MessagesModule,
     ApplicationsModule,
   ],
   controllers: [AppController],

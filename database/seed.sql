@@ -95,17 +95,19 @@ INSERT INTO job_offer_tags (offer_id, tag_id) VALUES
 
 -- ─── Applications, messages and notifications ───────────────
 
-INSERT INTO applications (id, offer_id, student_id, status, cover_letter, reviewed_at) VALUES
+-- Explicit times, so that the story is in order: applied, accepted, then the
+-- conversation.
+INSERT INTO applications (id, offer_id, student_id, status, cover_letter, applied_at, reviewed_at) VALUES
   ('60000000-0000-0000-0000-000000000001', '50000000-0000-0000-0000-000000000001', '40000000-0000-0000-0000-000000000001',
-   'ACCEPTED', 'Me gustaría sumarme al equipo de frontend.', now()),
+   'ACCEPTED', 'Me gustaría sumarme al equipo de frontend.', now() - interval '3 days', now() - interval '2 days'),
   ('60000000-0000-0000-0000-000000000002', '50000000-0000-0000-0000-000000000003', '40000000-0000-0000-0000-000000000002',
-   'PENDING', 'Tengo experiencia con SQL en proyectos de la facultad.', NULL);
+   'PENDING', 'Tengo experiencia con SQL en proyectos de la facultad.', now() - interval '1 day', NULL);
 
-INSERT INTO messages (application_id, sender_id, body) VALUES
+INSERT INTO messages (application_id, sender_id, body, created_at) VALUES
   ('60000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000002',
-   '¡Hola Ana! Queremos coordinar una entrevista. ¿Tenés disponibilidad esta semana?'),
+   '¡Hola Ana! Queremos coordinar una entrevista. ¿Tenés disponibilidad esta semana?', now() - interval '1 day 22 hours'),
   ('60000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000004',
-   '¡Hola! Sí, el jueves por la tarde me queda bien.');
+   '¡Hola! Sí, el jueves por la tarde me queda bien.', now() - interval '1 day 20 hours');
 
 -- title/body are the English version; the API shows the notification in the
 -- reader's language from `data`.

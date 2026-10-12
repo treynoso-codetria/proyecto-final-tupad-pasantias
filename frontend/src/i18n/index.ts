@@ -7,6 +7,7 @@ import enCatalog from './locales/en/catalog.json'
 import enCommon from './locales/en/common.json'
 import enErrors from './locales/en/errors.json'
 import enHome from './locales/en/home.json'
+import enMessages from './locales/en/messages.json'
 import enNotifications from './locales/en/notifications.json'
 import enOffers from './locales/en/offers.json'
 import enProfile from './locales/en/profile.json'
@@ -17,6 +18,7 @@ import esCatalog from './locales/es/catalog.json'
 import esCommon from './locales/es/common.json'
 import esErrors from './locales/es/errors.json'
 import esHome from './locales/es/home.json'
+import esMessages from './locales/es/messages.json'
 import esNotifications from './locales/es/notifications.json'
 import esOffers from './locales/es/offers.json'
 import esProfile from './locales/es/profile.json'
@@ -40,6 +42,7 @@ const en = {
   catalog: enCatalog,
   applications: enApplications,
   notifications: enNotifications,
+  messages: enMessages,
   errors: enErrors,
 }
 
@@ -54,6 +57,7 @@ const es: typeof en = {
   catalog: esCatalog,
   applications: esApplications,
   notifications: esNotifications,
+  messages: esMessages,
   errors: esErrors,
 }
 

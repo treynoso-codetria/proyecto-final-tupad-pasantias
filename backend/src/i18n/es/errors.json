@@ -27,6 +27,7 @@
   "FILE_TOO_LARGE": "El archivo es demasiado grande",
   "FILE_TYPE_NOT_ALLOWED": "Este tipo de archivo no está permitido",
   "STORAGE_UNAVAILABLE": "No se pudo guardar el archivo, probá de nuevo más tarde",
+  "CONVERSATION_CLOSED": "Esta conversación está cerrada: la postulación se retiró o la oferta se dio de baja",
   "BAD_REQUEST": "La solicitud no es válida",
   "UNAUTHORIZED": "Se requiere autenticación",
   "FORBIDDEN": "No tenés permiso para realizar esta acción",

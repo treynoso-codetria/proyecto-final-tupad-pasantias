@@ -27,6 +27,7 @@
   "FILE_TOO_LARGE": "The file is too large",
   "FILE_TYPE_NOT_ALLOWED": "This type of file is not allowed",
   "STORAGE_UNAVAILABLE": "The file could not be saved, try again later",
+  "CONVERSATION_CLOSED": "This conversation is closed: the application was withdrawn or the offer was removed",
   "BAD_REQUEST": "The request is not valid",
   "UNAUTHORIZED": "Authentication is required",
   "FORBIDDEN": "You do not have permission to perform this action",

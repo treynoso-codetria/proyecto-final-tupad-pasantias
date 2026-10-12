@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { FileText } from 'lucide-react'
+import { FileText, MessageSquare } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useSearchParams } from 'react-router'
@@ -145,18 +145,27 @@ export function MyApplicationsPage() {
                       <p className="text-sm font-semibold">{t('mine.offerClosed')}</p>
                     )}
                   </div>
-                  {application.status === 'PENDING' && (
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => {
-                        withdraw.reset()
-                        setToWithdraw(application)
-                      }}
+                  <div className="flex flex-wrap gap-2">
+                    <Link
+                      to={`/messages/${application.id}`}
+                      className={buttonStyles('secondary', 'sm')}
                     >
-                      {t('mine.withdraw')}
-                    </Button>
-                  )}
+                      <MessageSquare className="size-4" aria-hidden="true" />
+                      {t('mine.messages')}
+                    </Link>
+                    {application.status === 'PENDING' && (
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => {
+                          withdraw.reset()
+                          setToWithdraw(application)
+                        }}
+                      >
+                        {t('mine.withdraw')}
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </li>
             )

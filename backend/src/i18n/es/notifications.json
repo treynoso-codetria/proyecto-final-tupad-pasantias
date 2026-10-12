@@ -12,5 +12,9 @@
       "title": "Tu postulación no fue seleccionada",
       "body": "{companyName} no seleccionó tu postulación a \"{offerTitle}\"."
     }
+  },
+  "NEW_MESSAGE": {
+    "title": "Nuevo mensaje de {senderName}",
+    "body": "Sobre \"{offerTitle}\"."
   }
 }

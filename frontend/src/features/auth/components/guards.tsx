@@ -39,9 +39,10 @@ export function RequireAuth() {
   return <Outlet />
 }
 
-// Wraps the private area of one role. The API enforces the same rule; this
-// only keeps users from landing on screens that are not theirs.
-export function RequireRole({ role }: { role: Role }) {
+// Wraps the private area of one role (or of several). The API enforces the
+// same rule; this only keeps users from landing on screens that are not
+// theirs.
+export function RequireRole({ role }: { role: Role | readonly Role[] }) {
   const auth = useAuth()
 
   if (auth.status === 'loading') {
@@ -50,7 +51,8 @@ export function RequireRole({ role }: { role: Role }) {
   if (auth.status === 'anonymous') {
     return <Navigate to="/login" replace />
   }
-  if (auth.user.role !== role) {
+  const allowed: readonly Role[] = typeof role === 'string' ? [role] : role
+  if (!allowed.includes(auth.user.role)) {
     return <Navigate to={ROLE_HOME_PATH[auth.user.role]} replace />
   }
   return <Outlet />

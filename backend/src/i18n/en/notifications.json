@@ -12,5 +12,9 @@
       "title": "Your application was not selected",
       "body": "{companyName} did not select your application to \"{offerTitle}\"."
     }
+  },
+  "NEW_MESSAGE": {
+    "title": "New message from {senderName}",
+    "body": "About \"{offerTitle}\"."
   }
 }

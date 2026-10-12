@@ -24,6 +24,8 @@ import { PublicCompanyPage } from '@/features/companies/PublicCompanyPage'
 import { AdminHomePage } from '@/features/home/AdminHomePage'
 import { EmployerHomePage } from '@/features/home/EmployerHomePage'
 import { StudentHomePage } from '@/features/home/StudentHomePage'
+import { ConversationPage } from '@/features/messages/ConversationPage'
+import { MessagesPage } from '@/features/messages/MessagesPage'
 import { NotificationsPage } from '@/features/notifications/NotificationsPage'
 import { MyOffersPage } from '@/features/offers/pages/MyOffersPage'
 import { OfferDetailPage } from '@/features/offers/pages/OfferDetailPage'
@@ -108,6 +110,19 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <AdminHomePage /> },
           { path: 'catalog', element: <CatalogAdminPage /> },
+        ],
+      },
+    ],
+  },
+  // Conversations about an application, between the student and the company.
+  {
+    element: <RequireRole role={['STUDENT', 'EMPLOYER']} />,
+    children: [
+      {
+        element: <AppShell />,
+        children: [
+          { path: '/messages', element: <MessagesPage /> },
+          { path: '/messages/:applicationId', element: <ConversationPage /> },
         ],
       },
     ],

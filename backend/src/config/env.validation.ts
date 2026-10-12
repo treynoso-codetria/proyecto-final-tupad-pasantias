@@ -20,9 +20,9 @@ const mailIsRequired = (env: EnvironmentVariables) =>
 
 // Same for file storage: production needs object storage (Render's disk is
 // wiped on every deploy); elsewhere files go to the local disk unless a
-// bucket is configured.
+// bucket is configured (an empty S3_BUCKET counts as none).
 const objectStorageIsRequired = (env: EnvironmentVariables) =>
-  env.NODE_ENV === 'production' || env.S3_BUCKET !== undefined;
+  env.NODE_ENV === 'production' || Boolean(env.S3_BUCKET);
 
 export class EnvironmentVariables {
   @IsString()

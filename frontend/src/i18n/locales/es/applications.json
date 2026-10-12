@@ -41,7 +41,8 @@
     "emptyTitle": "Todavía no te postulaste a ninguna oferta",
     "emptyDescription": "Encontrá una pasantía o un empleo y postulate en un paso.",
     "emptyStatus": "No tenés postulaciones en este estado.",
-    "browse": "Ver ofertas"
+    "browse": "Ver ofertas",
+    "messages": "Mensajes"
   },
   "applicants": {
     "title": "Postulantes",
@@ -61,7 +62,8 @@
     "emptyTitle": "Todavía no hay postulaciones",
     "emptyDescription": "Cuando los estudiantes se postulen a esta oferta, los vas a ver acá.",
     "emptyStatus": "No hay postulantes en este estado.",
-    "notOwn": "Solo podés ver los postulantes de las ofertas de tu empresa."
+    "notOwn": "Solo podés ver los postulantes de las ofertas de tu empresa.",
+    "message": "Mensaje"
   },
   "profile": {
     "back": "Volver a los postulantes",
