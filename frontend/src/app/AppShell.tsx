@@ -8,6 +8,7 @@ import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher'
 import { Logo } from '@/components/ui/Logo'
 import { useAuth } from '@/features/auth/auth-context'
 import { getDisplayName } from '@/features/auth/roles'
+import { NotificationBell } from '@/features/notifications/NotificationBell'
 import type { Role } from '@/features/auth/types'
 import { cn } from '@/lib/cn'
 
@@ -89,6 +90,7 @@ export function AppShell() {
                 </span>
               </Link>
             )}
+            {user && <NotificationBell />}
             <LanguageSwitcher />
             {user && (
               // Icon-only on small screens; the label stays for screen readers.

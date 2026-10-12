@@ -107,12 +107,16 @@ INSERT INTO messages (application_id, sender_id, body) VALUES
   ('60000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000004',
    '¡Hola! Sí, el jueves por la tarde me queda bien.');
 
-INSERT INTO notifications (user_id, type, title, body, link) VALUES
+-- title/body are the English version; the API shows the notification in the
+-- reader's language from `data`.
+INSERT INTO notifications (user_id, type, title, body, link, data) VALUES
   ('00000000-0000-0000-0000-000000000004', 'APPLICATION_STATUS_CHANGED',
-   'Tu postulación fue aceptada', 'TechSur S.A. aceptó tu postulación a "Pasante Desarrollador Frontend".',
-   '/postulaciones/60000000-0000-0000-0000-000000000001'),
+   'Your application was accepted', 'TechSur S.A. accepted your application to "Pasante Desarrollador Frontend".',
+   '/student/applications',
+   '{"offerId": "50000000-0000-0000-0000-000000000001", "offerTitle": "Pasante Desarrollador Frontend", "companyName": "TechSur S.A.", "status": "ACCEPTED"}'),
   ('00000000-0000-0000-0000-000000000003', 'APPLICATION_RECEIVED',
-   'Nueva postulación', 'Lucas Pérez se postuló a "Pasante Analista de Datos".',
-   '/ofertas/50000000-0000-0000-0000-000000000003/postulantes');
+   'New application for "Pasante Analista de Datos"', 'Lucas Pérez applied to your offer.',
+   '/employer/offers/50000000-0000-0000-0000-000000000003/applications',
+   '{"offerId": "50000000-0000-0000-0000-000000000003", "offerTitle": "Pasante Analista de Datos", "studentName": "Lucas Pérez"}');
 
 COMMIT;

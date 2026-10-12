@@ -273,6 +273,9 @@ model Notification {
   title     String           @db.VarChar(150)
   body      String?          @db.Text
   link      String?          @db.VarChar(500)
+  // Values the text is built from (offer title, names...), so that it can be
+  // shown in the reader's language. title/body keep an English version.
+  data      Json?            @db.JsonB
   readAt    DateTime?        @map("read_at") @db.Timestamptz(3)
   createdAt DateTime         @default(now()) @map("created_at") @db.Timestamptz(3)
 

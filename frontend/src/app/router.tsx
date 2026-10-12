@@ -24,6 +24,7 @@ import { PublicCompanyPage } from '@/features/companies/PublicCompanyPage'
 import { AdminHomePage } from '@/features/home/AdminHomePage'
 import { EmployerHomePage } from '@/features/home/EmployerHomePage'
 import { StudentHomePage } from '@/features/home/StudentHomePage'
+import { NotificationsPage } from '@/features/notifications/NotificationsPage'
 import { MyOffersPage } from '@/features/offers/pages/MyOffersPage'
 import { OfferDetailPage } from '@/features/offers/pages/OfferDetailPage'
 import {
@@ -125,7 +126,10 @@ export const router = createBrowserRouter([
     children: [
       {
         element: <AppShell />,
-        children: [{ path: '/account', element: <AccountPage /> }],
+        children: [
+          { path: '/account', element: <AccountPage /> },
+          { path: '/notifications', element: <NotificationsPage /> },
+        ],
       },
     ],
   },

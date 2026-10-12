@@ -1,0 +1,16 @@
+{
+  "APPLICATION_RECEIVED": {
+    "title": "New application for \"{offerTitle}\"",
+    "body": "{studentName} applied to your offer."
+  },
+  "APPLICATION_STATUS_CHANGED": {
+    "ACCEPTED": {
+      "title": "Your application was accepted",
+      "body": "{companyName} accepted your application to \"{offerTitle}\"."
+    },
+    "REJECTED": {
+      "title": "Your application was not selected",
+      "body": "{companyName} did not select your application to \"{offerTitle}\"."
+    }
+  }
+}

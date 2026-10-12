@@ -1,0 +1,15 @@
+{
+  "title": "Notificaciones",
+  "description": "Novedades sobre tus postulaciones, ofertas y cuenta.",
+  "filterLabel": "Mostrar",
+  "all": "Todas",
+  "unread": "No leídas",
+  "markAll": "Marcar todas como leídas",
+  "unreadMark": "No leída",
+  "emptyTitle": "Todavía no tenés notificaciones",
+  "emptyDescription": "Acá vas a ver las novedades sobre tus postulaciones, ofertas y cuenta.",
+  "emptyUnread": "Estás al día.",
+  "bell": "Notificaciones",
+  "bellUnread_one": "Notificaciones: {{count}} sin leer",
+  "bellUnread_other": "Notificaciones: {{count}} sin leer"
+}

@@ -115,8 +115,11 @@ export class ApplicationsService {
         {
           userId: offer.company.userId,
           type: NotificationType.APPLICATION_RECEIVED,
-          title: `New application for "${offer.title}"`,
-          body: `${student.firstName} ${student.lastName} applied to your offer.`,
+          data: {
+            offerId,
+            offerTitle: offer.title,
+            studentName: `${student.firstName} ${student.lastName}`,
+          },
           link: `/employer/offers/${offerId}/applications`,
         },
         tx,
@@ -258,11 +261,12 @@ export class ApplicationsService {
         {
           userId: application.student.userId,
           type: NotificationType.APPLICATION_STATUS_CHANGED,
-          title:
-            decision === ApplicationStatus.ACCEPTED
-              ? 'Your application was accepted'
-              : 'Your application was not selected',
-          body: `${offer.company.name} answered your application to "${offer.title}".`,
+          data: {
+            offerId: offer.id,
+            offerTitle: offer.title,
+            companyName: offer.company.name,
+            status: decision,
+          },
           link: '/student/applications',
         },
         tx,

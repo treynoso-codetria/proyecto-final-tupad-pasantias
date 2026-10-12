@@ -183,6 +183,7 @@ CREATE TABLE "notifications" (
     "title" VARCHAR(150) NOT NULL,
     "body" TEXT,
     "link" VARCHAR(500),
+    "data" JSONB,
     "read_at" TIMESTAMPTZ(3),
     "created_at" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

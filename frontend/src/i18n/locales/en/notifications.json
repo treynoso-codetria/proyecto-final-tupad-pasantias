@@ -1,0 +1,15 @@
+{
+  "title": "Notifications",
+  "description": "News about your applications, offers and account.",
+  "filterLabel": "Show",
+  "all": "All",
+  "unread": "Unread",
+  "markAll": "Mark all as read",
+  "unreadMark": "Unread",
+  "emptyTitle": "No notifications yet",
+  "emptyDescription": "You will see news about your applications, offers and account here.",
+  "emptyUnread": "You are all caught up.",
+  "bell": "Notifications",
+  "bellUnread_one": "Notifications: {{count}} unread",
+  "bellUnread_other": "Notifications: {{count}} unread"
+}

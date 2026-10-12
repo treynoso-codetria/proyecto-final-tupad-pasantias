@@ -153,6 +153,7 @@ erDiagram
         varchar title
         text body
         varchar link
+        jsonb data
         timestamptz read_at
         timestamptz created_at
     }
@@ -337,6 +338,7 @@ erDiagram
 | `title` | `VARCHAR(150)` | No | Título breve. |
 | `body` | `TEXT` | Sí | Detalle. |
 | `link` | `VARCHAR(500)` | Sí | Ruta del frontend a la que lleva la notificación. |
+| `data` | `JSONB` | Sí | Valores con los que se arma el texto (título de la oferta, nombres, estado), para mostrarla en el idioma de quien la lee. `title`/`body` guardan la versión en inglés. |
 | `read_at` | `TIMESTAMPTZ` | Sí | Nulo = no leída. |
 | `created_at` | `TIMESTAMPTZ` | No | Fecha. |
 

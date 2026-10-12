@@ -99,6 +99,7 @@ Notificaciones **internas** de la plataforma (no push, fuera de alcance).
 - Se generan ante: nueva postulación (al empleador), cambio de estado de una postulación (al estudiante), nuevo mensaje, baja de una oferta por moderación (al empleador) y cambio de estado de la cuenta.
 - Bandeja de notificaciones, contador de no leídas, marcar como leída / marcar todas.
 - **Frontend:** ícono con contador en la barra de navegación, consultado periódicamente (polling).
+- Implementado: bandeja paginada con filtro de no leídas, marcar una (al abrirla) o todas como leídas, contador consultado cada 30 segundos. Cada notificación guarda en `data` los valores de su texto, y la API la muestra en el idioma de quien la lee (inglés o español). Por ahora se generan al recibir una postulación (a la empresa) y al aceptarla o rechazarla (al estudiante); las de mensajes (M10) y moderación (M11) se suman con esos módulos.
 
 ### M9 — Almacenamiento de archivos · Prioridad **Media**
 
