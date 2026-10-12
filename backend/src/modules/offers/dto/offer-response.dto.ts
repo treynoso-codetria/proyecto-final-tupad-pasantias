@@ -15,7 +15,11 @@ export class OfferCompanyDto {
   @ApiProperty({ example: 'TechSur S.A.' })
   name: string;
 
-  @ApiProperty({ type: String, nullable: true })
+  @ApiProperty({
+    type: String,
+    nullable: true,
+    description: 'Link to the logo image',
+  })
   logoUrl: string | null;
 }
 

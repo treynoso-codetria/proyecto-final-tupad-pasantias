@@ -18,7 +18,9 @@
     "amountInvalid": "Enter an amount in pesos, without separators.",
     "dateInPast": "The date cannot be before today.",
     "choose": "Choose an option.",
-    "vacanciesInvalid": "Enter a number from 1 to 100."
+    "vacanciesInvalid": "Enter a number from 1 to 100.",
+    "cvFile": "Choose a PDF of up to 5 MB.",
+    "logoFile": "Choose a PNG, JPG or WebP image of up to 2 MB."
   },
   "api": {
     "EMAIL_TAKEN": "An account with this email already exists.",
@@ -46,6 +48,10 @@
     "ALREADY_APPLIED": "You already applied to this offer.",
     "APPLICATION_NOT_PENDING": "Only pending applications can be withdrawn.",
     "APPLICATION_WITHDRAWN": "The student withdrew this application.",
+    "FILE_REQUIRED": "Choose a file to upload.",
+    "FILE_TOO_LARGE": "The file is too large.",
+    "FILE_TYPE_NOT_ALLOWED": "This type of file is not allowed.",
+    "STORAGE_UNAVAILABLE": "We couldn't save the file. Try again in a few minutes.",
     "network": "We couldn't reach the server. Check your connection and try again.",
     "unexpected": "Something went wrong. Try again in a few minutes."
   }

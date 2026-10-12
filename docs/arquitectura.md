@@ -188,9 +188,14 @@ Las migraciones se aplican en Render con `prisma migrate deploy` como parte del 
 
 ## 6. Almacenamiento de archivos
 
-- Los CV (PDF) y logos se suben **a través del backend** (`multipart/form-data`), que valida tipo y tamaño antes de enviarlos a Cloudinary.
-- En la base se guarda solo la URL resultante (`student_profiles.cv_url`, `companies.logo_url`) y, para el CV, el nombre original del archivo.
-- Al postularse se copia la URL del CV vigente a `applications.cv_url`, para que la empresa vea el CV con el que se postuló el estudiante.
+- Los archivos viven en un bucket **privado** de [Backblaze B2](https://www.backblaze.com/cloud-storage), accedido con su API compatible con S3 (`@aws-sdk/client-s3`), así que cambiar a otro servicio S3 (Cloudflare R2, AWS) es cuestión de configuración. Se eligió frente a Cloudinary (previsto al principio) porque su plan gratuito bloquea la entrega de PDF y publica los archivos en URLs abiertas, y un CV tiene datos personales. En desarrollo y tests el backend guarda en disco local (`LocalStorage`), con el mismo comportamiento.
+- Los CV (PDF) y logos se suben **a través del backend** (`multipart/form-data`, campo `file`), que valida el tamaño (CV hasta 5 MB, logo hasta 2 MB) y el tipo **por el contenido** del archivo (sus primeros bytes), no por el nombre ni por el tipo que declara el navegador.
+- En la base se guarda la **clave** del archivo en el almacenamiento (`cvs/<perfil>/<uuid>.pdf`, `logos/<empresa>/<uuid>.png`) en `student_profiles.cv_url` y `companies.logo_url`, y para el CV también su nombre original. Cada archivo nuevo usa una clave nueva: reemplazar nunca pisa el anterior.
+- La API convierte las claves en enlaces al armar cada respuesta:
+  - **CV**: enlace firmado que vence (al menos una hora). Solo lo reciben quienes pueden ver ese perfil o postulación, así que el control de acceso es el de la API.
+  - **Logo**: es público, así que su enlace es una ruta fija de la API (`/api/companies/:id/logo?v=…`) que redirige a un enlace firmado. El parámetro `v` cambia con cada logo nuevo para que el navegador no muestre uno viejo.
+  - Los enlaces se firman por ventanas de una hora, así que el mismo archivo conserva el mismo enlace un rato y el navegador lo aprovecha desde su caché.
+- Al postularse se copia la clave del CV vigente a `applications.cv_url`, para que la empresa vea el CV con el que se postuló el estudiante. Por eso, al reemplazar o borrar un CV, el archivo anterior solo se elimina si ninguna postulación lo usa.
 
 ---
 

@@ -103,9 +103,10 @@ Notificaciones **internas** de la plataforma (no push, fuera de alcance).
 
 ### M9 — Almacenamiento de archivos · Prioridad **Media**
 
-- Carga de archivos a un servicio externo de almacenamiento (ver [arquitectura](arquitectura.md#6-almacenamiento-de-archivos)); en la base solo se guarda la URL.
+- Carga de archivos a un servicio externo de almacenamiento (ver [arquitectura](arquitectura.md#6-almacenamiento-de-archivos)); en la base solo se guarda la clave del archivo.
 - Validación de tipo y tamaño: CV solo PDF (máx. 5 MB); logo JPG/PNG/WebP (máx. 2 MB).
 - Reemplazo y eliminación del archivo anterior.
+- Implementado: Backblaze B2 (bucket privado, API S3) en producción y disco local en desarrollo. Endpoints `PUT`/`DELETE /students/me/cv`, `PUT`/`DELETE /companies/me/logo` y `GET /companies/:id/logo` (público, redirige a la imagen). El tipo se valida por el contenido del archivo. Los CV se entregan con enlaces firmados que vencen; el CV con el que se postuló un estudiante se conserva aunque después lo reemplace o lo borre. En el frontend: tarjetas de CV y logo en los perfiles, y logo de la empresa en las ofertas y en su página pública.
 
 ### M10 — Mensajería interna · Prioridad **Media**
 

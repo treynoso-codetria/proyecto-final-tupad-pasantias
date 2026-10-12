@@ -8,6 +8,9 @@ import { ErrorCode } from '../../common/errors/error-code.js';
 import { Prisma } from '../../generated/prisma/client.js';
 import { OfferStatus } from '../../generated/prisma/enums.js';
 import { PrismaService } from '../../prisma/prisma.service.js';
+import type { UploadedFile } from '../../storage/file-types.js';
+import { StorageService } from '../../storage/storage.service.js';
+import { checkUpload, UPLOAD_RULES } from '../../storage/uploads.js';
 import {
   CompanyResponseDto,
   PublicCompanyResponseDto,
@@ -22,7 +25,10 @@ type CompanyWithEmail = Prisma.CompanyGetPayload<{ include: typeof withEmail }>;
 
 @Injectable()
 export class CompaniesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly storage: StorageService,
+  ) {}
 
   async getOwnCompany(userId: string): Promise<CompanyResponseDto> {
     const company = await this.prisma.company.findUnique({
@@ -32,7 +38,7 @@ export class CompaniesService {
     if (!company) {
       throw new NotFoundException();
     }
-    return toResponse(company);
+    return this.toResponse(company);
   }
 
   async updateOwnCompany(
@@ -57,7 +63,7 @@ export class CompaniesService {
         data: dto,
         include: withEmail,
       });
-      return toResponse(company);
+      return this.toResponse(company);
     } catch (error) {
       // Another company took the CUIT between the check and the update.
       if (
@@ -68,6 +74,71 @@ export class CompaniesService {
       }
       throw error;
     }
+  }
+
+  // Uploads a new logo (PNG, JPG or WebP) or replaces the current one.
+  async uploadLogo(
+    userId: string,
+    file: UploadedFile | undefined,
+  ): Promise<CompanyResponseDto> {
+    const kind = checkUpload(file, UPLOAD_RULES.logo);
+    const current = await this.prisma.company.findUniqueOrThrow({
+      where: { userId },
+      select: { id: true, logoUrl: true },
+    });
+
+    const key = await this.storage.store(
+      'logos',
+      current.id,
+      file!.buffer,
+      kind,
+    );
+    let company: CompanyWithEmail;
+    try {
+      company = await this.prisma.company.update({
+        where: { userId },
+        data: { logoUrl: key },
+        include: withEmail,
+      });
+    } catch (error) {
+      await this.storage.deleteQuietly(key);
+      throw error;
+    }
+
+    if (current.logoUrl) {
+      await this.storage.deleteQuietly(current.logoUrl);
+    }
+    return this.toResponse(company);
+  }
+
+  async deleteLogo(userId: string): Promise<CompanyResponseDto> {
+    const current = await this.prisma.company.findUniqueOrThrow({
+      where: { userId },
+      select: { logoUrl: true },
+    });
+    const company = await this.prisma.company.update({
+      where: { userId },
+      data: { logoUrl: null },
+      include: withEmail,
+    });
+    if (current.logoUrl) {
+      await this.storage.deleteQuietly(current.logoUrl);
+    }
+    return this.toResponse(company);
+  }
+
+  // A signed link to the logo of a company shown publicly (same rule as the
+  // public page).
+  async getLogoUrl(id: string): Promise<string> {
+    const company = await this.prisma.company.findFirst({
+      where: { id, user: { isActive: true } },
+      select: { logoUrl: true },
+    });
+    const url = await this.storage.signedUrl(company?.logoUrl ?? null);
+    if (!url) {
+      throw new NotFoundException();
+    }
+    return url;
   }
 
   // Public page. A company whose account was deactivated by an administrator
@@ -107,7 +178,7 @@ export class CompaniesService {
       industry: company.industry,
       description: company.description,
       website: company.website,
-      logoUrl: company.logoUrl,
+      logoUrl: this.storage.logoUrl(company.id, company.logoUrl),
       province: company.province,
       city: company.city,
       openOffers: company.offers.map((offer) => ({
@@ -116,21 +187,21 @@ export class CompaniesService {
       })),
     };
   }
-}
 
-function toResponse(company: CompanyWithEmail): CompanyResponseDto {
-  return {
-    id: company.id,
-    email: company.user.email,
-    name: company.name,
-    cuit: company.cuit,
-    industry: company.industry,
-    description: company.description,
-    website: company.website,
-    logoUrl: company.logoUrl,
-    phone: company.phone,
-    province: company.province,
-    city: company.city,
-    updatedAt: company.updatedAt,
-  };
+  private toResponse(company: CompanyWithEmail): CompanyResponseDto {
+    return {
+      id: company.id,
+      email: company.user.email,
+      name: company.name,
+      cuit: company.cuit,
+      industry: company.industry,
+      description: company.description,
+      website: company.website,
+      logoUrl: this.storage.logoUrl(company.id, company.logoUrl),
+      phone: company.phone,
+      province: company.province,
+      city: company.city,
+      updatedAt: company.updatedAt,
+    };
+  }
 }

@@ -72,7 +72,7 @@ export function AppShell() {
     <div data-role={user?.role} className="min-h-dvh">
       <header className="border-b-2 border-ink bg-surface">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-5 py-3 sm:px-8">
-          <Logo to={user ? '/' : '/offers'} />
+          <Logo to={user ? '/' : '/offers'} compact={Boolean(user)} />
           <div className="flex items-center gap-2 sm:gap-3">
             {user && (
               <Link

@@ -25,7 +25,18 @@
     "bio": "Introduction",
     "bioHint": "A few lines about what you are studying and what you are looking for.",
     "portfolioUrl": "Portfolio or profile link",
-    "portfolioUrlPlaceholder": "https://github.com/your-user"
+    "portfolioUrlPlaceholder": "https://github.com/your-user",
+    "cv": {
+      "title": "CV",
+      "hint": "A PDF of up to 5 MB. Each company sees the CV you had when you applied to its offer.",
+      "none": "You haven't uploaded a CV yet.",
+      "upload": "Upload PDF",
+      "open": "Open {{name}}",
+      "uploaded": "Your CV was uploaded.",
+      "deleted": "Your CV was deleted.",
+      "confirmTitle": "Delete your CV?",
+      "confirmBody": "Companies you already applied to keep the CV you sent them."
+    }
   },
   "company": {
     "title": "Company profile",
@@ -45,6 +56,21 @@
     "phone": "Phone",
     "phonePlaceholder": "+54 261 555-0100",
     "province": "Province",
-    "city": "City"
+    "city": "City",
+    "logo": {
+      "title": "Logo",
+      "hint": "A PNG, JPG or WebP image of up to 2 MB, square if possible. It is shown on your offers and on your company page.",
+      "none": "Your company has no logo yet: the initial of its name is shown instead.",
+      "upload": "Upload image",
+      "uploaded": "The logo was updated.",
+      "deleted": "The logo was deleted.",
+      "confirmTitle": "Delete the logo?",
+      "confirmBody": "Your offers will show the initial of the company instead."
+    }
+  },
+  "files": {
+    "replace": "Replace",
+    "delete": "Delete",
+    "cancel": "Cancel"
   }
 }

@@ -11,6 +11,7 @@ import { Card } from '@/components/ui/Card'
 import { FullPageLoader } from '@/components/ui/FullPageLoader'
 import { LoadError } from '@/components/ui/LoadError'
 import { NotFoundNotice } from '@/components/ui/NotFoundNotice'
+import { CompanyLogo } from '@/features/companies/CompanyLogo'
 import { ApplyPanel } from '@/features/applications/components/ApplyPanel'
 import { useAuth } from '@/features/auth/auth-context'
 import { formatDay, formatTimeAgo } from '@/lib/format'
@@ -124,10 +125,15 @@ function OfferDetailView({ offer }: { offer: OfferDetail }) {
         </Card>
         <Card className="p-6">
           <h2 className="font-display text-xl font-extrabold">{t('detail.company')}</h2>
-          <p className="mt-3 font-bold">{offer.company.name}</p>
-          {offer.company.industry && (
-            <p className="text-sm text-muted">{offer.company.industry}</p>
-          )}
+          <div className="mt-3 flex items-center gap-3">
+            <CompanyLogo company={offer.company} />
+            <div className="min-w-0">
+              <p className="font-bold">{offer.company.name}</p>
+              {offer.company.industry && (
+                <p className="text-sm text-muted">{offer.company.industry}</p>
+              )}
+            </div>
+          </div>
           {offer.company.description && (
             <p className="mt-3 line-clamp-4 text-sm">{offer.company.description}</p>
           )}

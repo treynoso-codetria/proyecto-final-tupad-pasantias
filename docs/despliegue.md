@@ -6,10 +6,11 @@
 | Backend | [Render](https://render.com) | `backend/` (API NestJS) | [`render.yaml`](../render.yaml) |
 | Frontend | [Vercel](https://vercel.com) | `frontend/` (SPA React) | [`frontend/vercel.json`](../frontend/vercel.json) |
 | Emails | [Brevo](https://www.brevo.com) | Envío de emails de la cuenta (verificación, cambio de email) | — |
+| Archivos | [Backblaze B2](https://www.backblaze.com/cloud-storage) | CV (PDF) y logos de las empresas | — |
 
-Las tres se usan en su plan gratuito. Render y Vercel despliegan solos en cada push a `main`.
+Todas se usan en su plan gratuito. Render y Vercel despliegan solos en cada push a `main`.
 
-El orden importa, porque cada paso necesita un dato del anterior: **Neon → Brevo → Render → Vercel → volver a Render**.
+El orden importa, porque cada paso necesita un dato del anterior: **Neon → Brevo → Backblaze B2 → Render → Vercel → volver a Render**.
 
 ---
 
@@ -38,6 +39,26 @@ Esos dos datos son las variables `MAIL_FROM_EMAIL` y `BREVO_API_KEY` del backend
 
 Como el remitente es una dirección de Gmail y no un dominio propio, Brevo reemplaza el dominio visible por uno suyo (`…@NNNN.brevosend.com`); el nombre que ve el destinatario es `MAIL_FROM_NAME`.
 
+## 1 ter. Archivos en Backblaze B2
+
+Los CV y los logos se guardan en un bucket **privado** de Backblaze B2 (10 GB gratis, sin tarjeta). El backend los sube por la API compatible con S3 y los entrega con enlaces firmados que vencen: un CV solo lo puede abrir quien recibió el enlace de la API (el estudiante, una empresa a la que se postuló o un administrador). No se usa el disco de Render porque se borra en cada despliegue.
+
+1. Crear una cuenta en Backblaze y entrar a *B2 Cloud Storage*. La región se elige al registrarse; conviene **US East**, cerca de Render y Neon.
+2. *Buckets → Create a Bucket*: un nombre único (por ejemplo `pasantias-archivos-<algo>`), **Files in Bucket: Private**, sin cifrado ni bloqueo de objetos. En el detalle del bucket queda su **Endpoint**, del estilo `s3.us-east-005.backblazeb2.com`.
+3. *Application Keys → Add a New Application Key*: acceso solo a ese bucket, tipo *Read and Write*. Copiar el `keyID` y el `applicationKey` (se muestra una sola vez).
+
+| Variable del backend | Valor |
+| --- | --- |
+| `S3_BUCKET` | El nombre del bucket. |
+| `S3_ENDPOINT` | `https://` + el endpoint del bucket, por ejemplo `https://s3.us-east-005.backblazeb2.com`. |
+| `S3_REGION` | La parte del endpoint entre `s3.` y `.backblazeb2.com`, por ejemplo `us-east-005`. |
+| `S3_ACCESS_KEY_ID` | El `keyID` de la clave. |
+| `S3_SECRET_ACCESS_KEY` | El `applicationKey` de la clave. |
+
+**En producción son obligatorias**, junto con `PUBLIC_API_URL` (la URL pública de la API, que se usa en los enlaces a los logos): sin ellas el backend no arranca. El bucket no necesita reglas de CORS, porque el navegador solo abre los enlaces (no los pide con `fetch`).
+
+En desarrollo no hace falta nada de esto: sin `S3_BUCKET`, el backend guarda los archivos en `backend/uploads/` (ignorada por git) y los sirve él mismo con enlaces firmados de la misma forma. Para probar contra B2 desde local, alcanza con definir las cinco variables en `backend/.env`.
+
 ## 2. Backend en Render
 
 1. *New → Blueprint* y elegir este repositorio. Render lee `render.yaml` y propone el servicio `pasantias-api`.
@@ -49,6 +70,8 @@ Como el remitente es una dirección de Gmail y no un dominio propio, Brevo reemp
    | `CORS_ORIGIN` | Por ahora `http://localhost:5173`; se corrige en el paso 4. |
    | `BREVO_API_KEY` | La clave de API de Brevo (paso 1 bis). |
    | `MAIL_FROM_EMAIL` | La dirección verificada como remitente en Brevo. |
+   | `S3_BUCKET`, `S3_ENDPOINT`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | Los datos del bucket de B2 (paso 1 ter). |
+   | `PUBLIC_API_URL` | La URL del servicio en Render, por ejemplo `https://pasantias-api.onrender.com` (sin `/api`). |
 
    `JWT_SECRET` se genera solo; `JWT_EXPIRES_IN`, `NODE_ENV`, `NODE_VERSION`, `FRONTEND_URL` y `MAIL_FROM_NAME` ya vienen definidas en `render.yaml`.
 
@@ -82,7 +105,7 @@ Si una migración falla, el build falla y sigue en línea la versión anterior.
 | Build Command | `npm ci --include=dev --workspace=backend --include-workspace-root && npm run build --workspace=backend && npm run db:deploy --workspace=backend` |
 | Start Command | `npm run start:prod --workspace=backend` |
 | Health Check Path | `/api` |
-| Variables | `NODE_VERSION=24`, `NODE_ENV=production`, `DATABASE_URL`, `JWT_SECRET` (mínimo 32 caracteres), `JWT_EXPIRES_IN=1d`, `CORS_ORIGIN`, `FRONTEND_URL` (URL de Vercel), `BREVO_API_KEY`, `MAIL_FROM_EMAIL`, `MAIL_FROM_NAME` |
+| Variables | `NODE_VERSION=24`, `NODE_ENV=production`, `DATABASE_URL`, `JWT_SECRET` (mínimo 32 caracteres), `JWT_EXPIRES_IN=1d`, `CORS_ORIGIN`, `FRONTEND_URL` (URL de Vercel), `BREVO_API_KEY`, `MAIL_FROM_EMAIL`, `MAIL_FROM_NAME`, `S3_BUCKET`, `S3_ENDPOINT`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `PUBLIC_API_URL` |
 
 </details>
 
@@ -145,6 +168,8 @@ El seed solo se puede cargar una vez: usa identificadores y emails fijos, así q
 | Recargar la página estando en `/student` | Sigue en `/student` (no da 404) |
 | Registrar una cuenta nueva con un email real | Muestra "revisá tu correo" y llega el email de verificación |
 | Abrir el enlace del email | Entra a la home del rol; la cuenta aparece en Neon con `email_verified_at` |
+| Subir un CV desde "Mi perfil" y abrirlo | Se abre el PDF; en B2 aparece en `cvs/<id del perfil>/` |
+| Subir un logo desde "Perfil de la empresa" | Se ve en el perfil, en las ofertas y en la página pública de la empresa |
 
 Si el login falla con un error de red y en la consola del navegador aparece un error de CORS, revisar que `CORS_ORIGIN` coincida exactamente con la URL de Vercel (paso 4).
 
@@ -156,4 +181,5 @@ Si el login falla con un error de red y en la consola del navegador aparece un e
 - **Suspensión de la base:** Neon suspende la base cuando no se usa y la reactiva sola con la primera consulta (uno o dos segundos).
 - **Despliegues de vista previa de Vercel:** cada rama o pull request obtiene una URL distinta, que no está en `CORS_ORIGIN`; desde esas URL el frontend carga pero no puede llamar a la API.
 - **Redespliegue selectivo del backend:** Render solo redespliega cuando cambian `backend/`, `package.json`, `package-lock.json` o `render.yaml`.
+- **Límites de Backblaze B2:** además de los 10 GB, el plan gratuito incluye una cantidad diaria de descargas y listados; si se supera, las descargas fallan hasta el día siguiente (no se cobra nada sin tarjeta cargada). Con el uso de este proyecto no se llega: los enlaces se repiten durante una hora y el navegador los guarda en caché. En *Caps & Alerts* se ve el consumo.
 - **Versión de Node:** fijada en 24 (`engines` de `package.json` y `NODE_VERSION` en Render).

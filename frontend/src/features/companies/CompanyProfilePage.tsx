@@ -17,6 +17,7 @@ import { formatCuit } from '@/features/auth/schemas'
 import { useErrorText } from '@/features/auth/use-error-text'
 import { PROVINCES } from '@/lib/provinces'
 import { companiesApi, companyKeys, type Company } from './api'
+import { LogoCard } from './LogoCard'
 import { companySchema, toFormValues, toPayload } from './schemas'
 
 export function CompanyProfilePage() {
@@ -34,7 +35,12 @@ export function CompanyProfilePage() {
       />
       {company.isPending && <FullPageLoader fullPage={false} />}
       {company.isError && <LoadError onRetry={() => void company.refetch()} />}
-      {company.isSuccess && <CompanyForm company={company.data} />}
+      {company.isSuccess && (
+        <div className="space-y-8">
+          <LogoCard company={company.data} />
+          <CompanyForm company={company.data} />
+        </div>
+      )}
     </>
   )
 }

@@ -13,6 +13,8 @@ import { OfferBadges } from '@/features/offers/components/OfferBadges'
 import { formatLocation } from '@/features/offers/format'
 import { formatDay } from '@/lib/format'
 import { companiesApi, companyKeys, type PublicCompany } from './api'
+import { cn } from '@/lib/cn'
+import { CompanyLogo } from './CompanyLogo'
 
 // Public page of a company with its open offers. Anyone can see it.
 export function PublicCompanyPage() {
@@ -51,10 +53,20 @@ function CompanyView({ company }: { company: PublicCompany }) {
   return (
     <div className="space-y-10">
       <Card className="p-6 sm:p-8">
-        {company.industry && <Badge tone="accent">{company.industry}</Badge>}
-        <h1 className="mt-4 font-display text-4xl leading-none font-extrabold tracking-tight sm:text-5xl">
-          {company.name}
-        </h1>
+        <div className="flex items-center gap-5">
+          <CompanyLogo company={company} size="lg" />
+          <div className="min-w-0">
+            {company.industry && <Badge tone="accent">{company.industry}</Badge>}
+            <h1
+              className={cn(
+                'font-display text-4xl leading-none font-extrabold tracking-tight break-words sm:text-5xl',
+                company.industry && 'mt-3',
+              )}
+            >
+              {company.name}
+            </h1>
+          </div>
+        </div>
         <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm">
           {location && (
             <li className="flex items-center gap-2">

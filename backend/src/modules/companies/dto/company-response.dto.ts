@@ -22,7 +22,11 @@ class CompanyPublicFieldsDto {
   @ApiProperty({ type: String, nullable: true })
   website: string | null;
 
-  @ApiProperty({ type: String, nullable: true })
+  @ApiProperty({
+    type: String,
+    nullable: true,
+    description: 'Link to the logo image',
+  })
   logoUrl: string | null;
 
   @ApiProperty({ type: String, example: 'Mendoza', nullable: true })

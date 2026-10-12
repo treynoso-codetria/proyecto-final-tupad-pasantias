@@ -12,6 +12,8 @@ import {
   OfferStatus,
 } from '../../generated/prisma/enums.js';
 import { PrismaService } from '../../prisma/prisma.service.js';
+import { StorageService } from '../../storage/storage.service.js';
+import { deleteCvIfUnused } from '../students/cv-files.js';
 import { NotificationsService } from '../notifications/notifications.service.js';
 import { acceptsApplications } from '../offers/offer-availability.js';
 import {
@@ -38,7 +40,20 @@ export class ApplicationsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notifications: NotificationsService,
+    private readonly storage: StorageService,
   ) {}
+
+  // The CV of an application, as a signed link named after the student.
+  private async withCvLink<T extends { cvUrl: string | null }>(
+    application: T,
+    student: { firstName: string; lastName: string },
+  ): Promise<T> {
+    const name = `CV ${student.firstName} ${student.lastName}.pdf`;
+    return {
+      ...application,
+      cvUrl: await this.storage.signedUrl(application.cvUrl, name),
+    };
+  }
 
   // One application per student and offer (unique (offer_id, student_id)).
   // A student who withdrew can apply again: the same application is reopened.
@@ -73,7 +88,7 @@ export class ApplicationsService {
 
     const existing = await this.prisma.application.findUnique({
       where: { offerId_studentId: { offerId, studentId: student.id } },
-      select: { id: true, status: true },
+      select: { id: true, status: true, cvUrl: true },
     });
     if (existing && existing.status !== ApplicationStatus.WITHDRAWN) {
       throw new ConflictException(ErrorCode.ALREADY_APPLIED);
@@ -88,7 +103,7 @@ export class ApplicationsService {
       reviewedAt: null,
     };
 
-    return this.prisma.$transaction(async (tx) => {
+    const application = await this.prisma.$transaction(async (tx) => {
       const application = existing
         ? await tx.application.update({
             where: { id: existing.id },
@@ -126,13 +141,19 @@ export class ApplicationsService {
       );
       return application;
     });
+
+    // Reapplying replaced the CV of the withdrawn application.
+    if (existing?.cvUrl && existing.cvUrl !== student.cvUrl) {
+      await deleteCvIfUnused(this.prisma, this.storage, existing.cvUrl);
+    }
+    return this.withCvLink(application, student);
   }
 
   async listMine(
     userId: string,
     status: ApplicationStatus | undefined,
   ): Promise<MyApplicationDto[]> {
-    return this.prisma.application.findMany({
+    const applications = await this.prisma.application.findMany({
       where: { student: { userId }, status },
       orderBy: [{ appliedAt: 'desc' }, { id: 'asc' }],
       select: {
@@ -149,8 +170,14 @@ export class ApplicationsService {
             company: { select: { id: true, name: true } },
           },
         },
+        student: { select: { firstName: true, lastName: true } },
       },
     });
+    return Promise.all(
+      applications.map(({ student, ...application }) =>
+        this.withCvLink(application, student),
+      ),
+    );
   }
 
   // Only a pending application can be withdrawn: once the company decided,
@@ -161,7 +188,10 @@ export class ApplicationsService {
   ): Promise<ApplicationDto> {
     const application = await this.prisma.application.findUnique({
       where: { id: applicationId },
-      select: { status: true, student: { select: { userId: true } } },
+      select: {
+        status: true,
+        student: { select: { userId: true, firstName: true, lastName: true } },
+      },
     });
     if (!application) {
       throw new NotFoundException();
@@ -172,11 +202,12 @@ export class ApplicationsService {
     if (application.status !== ApplicationStatus.PENDING) {
       throw new ConflictException(ErrorCode.APPLICATION_NOT_PENDING);
     }
-    return this.prisma.application.update({
+    const withdrawn = await this.prisma.application.update({
       where: { id: applicationId },
       data: { status: ApplicationStatus.WITHDRAWN },
       select: applicationFields,
     });
+    return this.withCvLink(withdrawn, application.student);
   }
 
   async listApplicants(
@@ -207,10 +238,12 @@ export class ApplicationsService {
       },
     });
 
-    return applications.map(({ student: { user, ...student }, ...rest }) => ({
-      ...rest,
-      student: { ...student, email: user.email },
-    }));
+    return Promise.all(
+      applications.map(async ({ student: { user, ...student }, ...rest }) => ({
+        ...(await this.withCvLink(rest, student)),
+        student: { ...student, email: user.email },
+      })),
+    );
   }
 
   // The company may change its answer (accepted ↔ rejected); every change
@@ -231,7 +264,7 @@ export class ApplicationsService {
             company: { select: { userId: true, name: true } },
           },
         },
-        student: { select: { userId: true } },
+        student: { select: { userId: true, firstName: true, lastName: true } },
       },
     });
     if (!application) {
@@ -244,14 +277,15 @@ export class ApplicationsService {
       throw new ConflictException(ErrorCode.APPLICATION_WITHDRAWN);
     }
     if (application.status === decision) {
-      return this.prisma.application.findUniqueOrThrow({
+      const unchanged = await this.prisma.application.findUniqueOrThrow({
         where: { id: applicationId },
         select: applicationFields,
       });
+      return this.withCvLink(unchanged, application.student);
     }
 
     const { offer } = application;
-    return this.prisma.$transaction(async (tx) => {
+    const updated = await this.prisma.$transaction(async (tx) => {
       const updated = await tx.application.update({
         where: { id: applicationId },
         data: { status: decision, reviewedAt: new Date() },
@@ -273,6 +307,7 @@ export class ApplicationsService {
       );
       return updated;
     });
+    return this.withCvLink(updated, application.student);
   }
 
   private async assertOwnOffer(userId: string, offerId: string) {

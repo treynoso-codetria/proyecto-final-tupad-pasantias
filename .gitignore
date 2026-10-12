@@ -44,3 +44,6 @@ lerna-debug.log*
 
 # Coverage
 coverage/
+
+# Uploaded files in development (LocalStorage, when S3_BUCKET is not set)
+backend/uploads/

@@ -16,6 +16,7 @@ import {
   WorkModality,
 } from '../../generated/prisma/enums.js';
 import { PrismaService } from '../../prisma/prisma.service.js';
+import { StorageService } from '../../storage/storage.service.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { ListOffersQueryDto } from './dto/list-offers-query.dto.js';
 import {
@@ -68,7 +69,10 @@ type OfferWithDetail = Prisma.JobOfferGetPayload<{
 
 @Injectable()
 export class OffersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly storage: StorageService,
+  ) {}
 
   async listPublic(query: ListOffersQueryDto): Promise<OfferPageDto> {
     const filters: Prisma.JobOfferWhereInput[] = [acceptingApplications()];
@@ -119,7 +123,7 @@ export class OffersService {
     ]);
 
     return {
-      items: offers.map(toSummary),
+      items: offers.map((offer) => toSummary(offer, this.storage)),
       total,
       page: query.page,
       limit: query.limit,
@@ -161,7 +165,7 @@ export class OffersService {
           })
         : null;
 
-    return { ...toDetail(offer, privileged), myApplication };
+    return { ...toDetail(offer, privileged, this.storage), myApplication };
   }
 
   async listMine(
@@ -192,7 +196,7 @@ export class OffersService {
         .reduce((sum, row) => sum + row._count._all, 0);
 
     return offers.map((offer) => ({
-      ...toSummary(offer),
+      ...toSummary(offer, this.storage),
       applicationsCount: countFor(offer.id, false),
       pendingApplicationsCount: countFor(offer.id, true),
       closedAt: offer.closedAt,
@@ -223,7 +227,7 @@ export class OffersService {
       },
       include: detailInclude,
     });
-    return { ...toDetail(offer, true), myApplication: null };
+    return { ...toDetail(offer, true, this.storage), myApplication: null };
   }
 
   async update(
@@ -264,7 +268,7 @@ export class OffersService {
       },
       include: detailInclude,
     });
-    return { ...toDetail(updated, true), myApplication: null };
+    return { ...toDetail(updated, true, this.storage), myApplication: null };
   }
 
   // Closing stops new applications; the offer and its applications are kept.
@@ -275,7 +279,7 @@ export class OffersService {
       data: { status: OfferStatus.CLOSED, closedAt: new Date() },
       include: detailInclude,
     });
-    return { ...toDetail(closed, true), myApplication: null };
+    return { ...toDetail(closed, true, this.storage), myApplication: null };
   }
 
   // Only the company that published an offer changes it, and only while it is
@@ -339,7 +343,10 @@ function assertConsistent(offer: {
   }
 }
 
-function toSummary(offer: OfferWithSummary): OfferSummaryDto {
+function toSummary(
+  offer: OfferWithSummary,
+  storage: StorageService,
+): OfferSummaryDto {
   return {
     id: offer.id,
     title: offer.title,
@@ -356,7 +363,7 @@ function toSummary(offer: OfferWithSummary): OfferSummaryDto {
     company: {
       id: offer.company.id,
       name: offer.company.name,
-      logoUrl: offer.company.logoUrl,
+      logoUrl: storage.logoUrl(offer.company.id, offer.company.logoUrl),
     },
     category: offer.category,
     tags: offer.tags.map(({ tag }) => tag),
@@ -366,10 +373,11 @@ function toSummary(offer: OfferWithSummary): OfferSummaryDto {
 function toDetail(
   offer: OfferWithDetail,
   privileged: boolean,
+  storage: StorageService,
 ): Omit<OfferDetailDto, 'myApplication'> {
   const { company } = offer;
   return {
-    ...toSummary(offer),
+    ...toSummary(offer, storage),
     description: offer.description,
     requirements: offer.requirements,
     vacancies: offer.vacancies,
@@ -380,7 +388,7 @@ function toDetail(
     company: {
       id: company.id,
       name: company.name,
-      logoUrl: company.logoUrl,
+      logoUrl: storage.logoUrl(company.id, company.logoUrl),
       industry: company.industry,
       description: company.description,
       website: company.website,

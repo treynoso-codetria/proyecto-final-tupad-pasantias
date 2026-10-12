@@ -1,6 +1,7 @@
 import { Building2, CalendarClock, MapPin, Wallet } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
+import { CompanyLogo } from '@/features/companies/CompanyLogo'
 import { formatDay, formatTimeAgo } from '@/lib/format'
 import type { OfferSummary } from '../api'
 import type { OfferLinkState } from '../link-state'
@@ -34,7 +35,11 @@ export function OfferCard({ offer, backTo }: OfferCardProps) {
       </h3>
       <ul className="mt-3 space-y-1.5 text-sm">
         <li className="flex items-center gap-2 font-semibold">
-          <Building2 className="size-4 shrink-0" aria-hidden="true" />
+          {offer.company.logoUrl ? (
+            <CompanyLogo company={offer.company} size="xs" />
+          ) : (
+            <Building2 className="size-4 shrink-0" aria-hidden="true" />
+          )}
           {offer.company.name}
         </li>
         <li className="flex items-center gap-2">

@@ -1,8 +1,16 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
+import { cn } from '@/lib/cn'
 
-// `to`: where the logo leads; the home of the signed-in user by default.
-export function Logo({ to = '/' }: { to?: string }) {
+type LogoProps = {
+  // Where the logo leads; the home of the signed-in user by default.
+  to?: string
+  // Only the mark on small screens, to leave room for other controls (the
+  // name stays for screen readers).
+  compact?: boolean
+}
+
+export function Logo({ to = '/', compact = false }: LogoProps) {
   const { t } = useTranslation()
 
   return (
@@ -16,7 +24,12 @@ export function Logo({ to = '/' }: { to?: string }) {
       >
         P
       </span>
-      <span className="font-display text-lg leading-none font-extrabold tracking-tight">
+      <span
+        className={cn(
+          'font-display text-lg leading-none font-extrabold tracking-tight',
+          compact && 'sr-only sm:not-sr-only',
+        )}
+      >
         {t('appName')}
       </span>
     </Link>

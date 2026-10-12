@@ -76,7 +76,9 @@ export class ApplicationDto {
   @ApiProperty({
     type: String,
     nullable: true,
-    description: "Copy of the student's CV link when they applied",
+    description:
+      'Signed link (valid for at least an hour) to the CV the student ' +
+      'applied with',
   })
   cvUrl: string | null;
 

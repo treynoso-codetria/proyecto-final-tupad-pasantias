@@ -1,4 +1,5 @@
 import { apiFetch } from '@/api/client'
+import { toFormData } from '@/lib/uploads'
 
 export type Company = {
   id: string
@@ -43,6 +44,7 @@ export type PublicCompany = {
 
 export const companyKeys = {
   ownCompany: ['companies', 'me'] as const,
+  allPublic: ['companies', 'public'] as const,
   public: (id: string) => ['companies', 'public', id] as const,
 }
 
@@ -53,4 +55,14 @@ export const companiesApi = {
 
   updateOwnCompany: (input: UpdateCompanyInput) =>
     apiFetch<Company>('/companies/me', { method: 'PATCH', body: input }),
+
+  // Uploads an image, replacing the current logo.
+  uploadLogo: (file: File) =>
+    apiFetch<Company>('/companies/me/logo', {
+      method: 'PUT',
+      body: toFormData(file),
+    }),
+
+  deleteLogo: () =>
+    apiFetch<Company>('/companies/me/logo', { method: 'DELETE' }),
 }

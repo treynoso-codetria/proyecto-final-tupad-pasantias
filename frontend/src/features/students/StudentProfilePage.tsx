@@ -17,6 +17,7 @@ import { useErrorText } from '@/features/auth/use-error-text'
 import { todayIsoDate } from '@/lib/form-schemas'
 import { PROVINCES } from '@/lib/provinces'
 import { studentKeys, studentsApi, type StudentProfile } from './api'
+import { CvCard } from './CvCard'
 import {
   STUDY_YEARS,
   studentProfileSchema,
@@ -39,7 +40,12 @@ export function StudentProfilePage() {
       />
       {profile.isPending && <FullPageLoader fullPage={false} />}
       {profile.isError && <LoadError onRetry={() => void profile.refetch()} />}
-      {profile.isSuccess && <StudentProfileForm profile={profile.data} />}
+      {profile.isSuccess && (
+        <div className="space-y-8">
+          <CvCard profile={profile.data} />
+          <StudentProfileForm profile={profile.data} />
+        </div>
+      )}
     </>
   )
 }

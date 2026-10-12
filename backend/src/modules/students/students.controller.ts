@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Put,
+  UploadedFile,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -14,6 +23,8 @@ import { ErrorResponseDto } from '../../common/dto/error-response.dto.js';
 import type { AuthenticatedUser } from '../../common/interfaces/authenticated-user.interface.js';
 import { ParseIdPipe } from '../../common/validation/ids.js';
 import { UserRole } from '../../generated/prisma/enums.js';
+import type { UploadedFile as UploadedFileData } from '../../storage/file-types.js';
+import { FileUpload, UPLOAD_RULES } from '../../storage/uploads.js';
 import {
   StudentProfileResponseDto,
   StudentProfileViewDto,
@@ -54,6 +65,34 @@ export class StudentsController {
     @Body() dto: UpdateStudentProfileDto,
   ): Promise<StudentProfileResponseDto> {
     return this.studentsService.updateOwnProfile(user.id, dto);
+  }
+
+  @Put('me/cv')
+  @Roles(UserRole.STUDENT)
+  @ApiOperation({
+    summary: 'Upload or replace the CV of the authenticated student',
+    description:
+      'The previous CV is deleted, unless an application still uses it ' +
+      '(a company keeps seeing the CV the student applied with).',
+  })
+  @FileUpload(UPLOAD_RULES.cv, 'The CV, a PDF of up to 5 MB')
+  @ApiOkResponse({ type: StudentProfileResponseDto })
+  @ApiBadRequestResponse({ description: 'No file', type: ErrorResponseDto })
+  uploadCv(
+    @CurrentUser() user: AuthenticatedUser,
+    @UploadedFile() file: UploadedFileData | undefined,
+  ): Promise<StudentProfileResponseDto> {
+    return this.studentsService.uploadCv(user.id, file);
+  }
+
+  @Delete('me/cv')
+  @Roles(UserRole.STUDENT)
+  @ApiOperation({ summary: 'Delete the CV of the authenticated student' })
+  @ApiOkResponse({ type: StudentProfileResponseDto })
+  deleteCv(
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<StudentProfileResponseDto> {
+    return this.studentsService.deleteCv(user.id);
   }
 
   @Get(':id')

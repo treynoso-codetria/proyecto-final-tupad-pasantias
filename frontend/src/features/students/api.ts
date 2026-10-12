@@ -1,4 +1,5 @@
 import { apiFetch } from '@/api/client'
+import { toFormData } from '@/lib/uploads'
 
 export type StudentProfile = {
   id: string
@@ -15,6 +16,7 @@ export type StudentProfile = {
   city: string | null
   bio: string | null
   portfolioUrl: string | null
+  // Temporary link (it works for at least an hour).
   cvUrl: string | null
   cvFileName: string | null
   updatedAt: string
@@ -42,4 +44,14 @@ export const studentsApi = {
 
   updateOwnProfile: (input: UpdateStudentProfileInput) =>
     apiFetch<StudentProfile>('/students/me', { method: 'PATCH', body: input }),
+
+  // Uploads a PDF, replacing the current CV.
+  uploadCv: (file: File) =>
+    apiFetch<StudentProfile>('/students/me/cv', {
+      method: 'PUT',
+      body: toFormData(file),
+    }),
+
+  deleteCv: () =>
+    apiFetch<StudentProfile>('/students/me/cv', { method: 'DELETE' }),
 }

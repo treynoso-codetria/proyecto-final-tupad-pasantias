@@ -24,6 +24,7 @@ export class ApiError extends Error {
 
 type RequestOptions = {
   method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
+  // Sent as JSON, except FormData (file uploads), which is sent as is.
   body?: unknown
 }
 
@@ -34,7 +35,8 @@ export async function apiFetch<T>(
   const headers: Record<string, string> = {
     'Accept-Language': getCurrentLanguage(),
   }
-  if (body !== undefined) {
+  const isForm = body instanceof FormData
+  if (body !== undefined && !isForm) {
     headers['Content-Type'] = 'application/json'
   }
   const token = getToken()
@@ -47,7 +49,7 @@ export async function apiFetch<T>(
     response = await fetch(`${API_URL}${path}`, {
       method,
       headers,
-      body: body === undefined ? undefined : JSON.stringify(body),
+      body: body === undefined || isForm ? body : JSON.stringify(body),
     })
   } catch {
     throw new ApiError(0, null, 'Network error')

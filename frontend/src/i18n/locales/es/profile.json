@@ -25,7 +25,18 @@
     "bio": "Presentación",
     "bioHint": "Unas líneas sobre qué estudiás y qué estás buscando.",
     "portfolioUrl": "Enlace a tu portfolio o perfil",
-    "portfolioUrlPlaceholder": "https://github.com/tu-usuario"
+    "portfolioUrlPlaceholder": "https://github.com/tu-usuario",
+    "cv": {
+      "title": "CV",
+      "hint": "Un PDF de hasta 5 MB. Cada empresa ve el CV que tenías cuando te postulaste a su oferta.",
+      "none": "Todavía no subiste tu CV.",
+      "upload": "Subir PDF",
+      "open": "Abrir {{name}}",
+      "uploaded": "Tu CV se subió.",
+      "deleted": "Tu CV se eliminó.",
+      "confirmTitle": "¿Eliminar tu CV?",
+      "confirmBody": "Las empresas a las que ya te postulaste conservan el CV que les enviaste."
+    }
   },
   "company": {
     "title": "Perfil de la empresa",
@@ -45,6 +56,21 @@
     "phone": "Teléfono",
     "phonePlaceholder": "+54 261 555-0100",
     "province": "Provincia",
-    "city": "Ciudad"
+    "city": "Ciudad",
+    "logo": {
+      "title": "Logo",
+      "hint": "Una imagen PNG, JPG o WebP de hasta 2 MB, cuadrada si es posible. Se muestra en tus ofertas y en la página de la empresa.",
+      "none": "Tu empresa todavía no tiene logo: en su lugar se muestra la inicial del nombre.",
+      "upload": "Subir imagen",
+      "uploaded": "El logo se actualizó.",
+      "deleted": "El logo se eliminó.",
+      "confirmTitle": "¿Eliminar el logo?",
+      "confirmBody": "En tus ofertas se va a mostrar la inicial de la empresa."
+    }
+  },
+  "files": {
+    "replace": "Reemplazar",
+    "delete": "Eliminar",
+    "cancel": "Cancelar"
   }
 }

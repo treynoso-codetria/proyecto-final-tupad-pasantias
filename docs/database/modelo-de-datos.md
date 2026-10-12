@@ -183,7 +183,7 @@ erDiagram
 | **`admin_actions` como bitácora de moderación** | Deja trazabilidad de quién activó/desactivó una cuenta o dio de baja una publicación y por qué. |
 | **`applications.cv_url`** (copia del CV al postularse) | Si el estudiante actualiza su CV, el empleador sigue viendo el CV con el que se postuló. |
 | **Notificaciones internas** (tabla `notifications`) | La consigna pide notificar al estudiante al aprobar/rechazar; se resuelve dentro de la plataforma. Las notificaciones *push* están fuera de alcance. |
-| **Archivos (CV, logo) fuera de la base** | Solo se guarda la URL; el archivo vive en el servicio de almacenamiento (ver [arquitectura](../arquitectura.md)). Neon gratuito ofrece 0,5 GB, que no conviene gastar en binarios. |
+| **Archivos (CV, logo) fuera de la base** | Solo se guarda la clave del archivo (las columnas conservan el nombre `*_url` del esquema aprobado); el archivo vive en un bucket privado (ver [arquitectura](../arquitectura.md#6-almacenamiento-de-archivos)). El almacenamiento gratuito de Neon (1 GB) no conviene gastarlo en binarios. |
 | **`timestamptz`** en todas las fechas con hora | Evita ambigüedades de zona horaria entre Render, Neon y el navegador. |
 
 ---
@@ -231,7 +231,7 @@ erDiagram
 | `province`, `city` | `VARCHAR(100)` | Sí | Ubicación. |
 | `bio` | `TEXT` | Sí | Presentación personal. |
 | `portfolio_url` | `VARCHAR(500)` | Sí | Portfolio / repositorio personal. |
-| `cv_url` | `VARCHAR(500)` | Sí | URL del CV (PDF) en el almacenamiento de archivos. |
+| `cv_url` | `VARCHAR(500)` | Sí | Clave del CV (PDF) en el almacenamiento de archivos (`cvs/<perfil>/<uuid>.pdf`); la API la convierte en un enlace firmado. |
 | `cv_file_name` | `VARCHAR(255)` | Sí | Nombre original del archivo. |
 | `created_at` / `updated_at` | `TIMESTAMPTZ` | No | Auditoría. |
 
@@ -245,7 +245,7 @@ erDiagram
 | `cuit` | `VARCHAR(13)` | No | **UK**. CUIT con formato `XX-XXXXXXXX-X`. |
 | `industry` | `VARCHAR(100)` | Sí | Rubro. |
 | `description` | `TEXT` | Sí | Descripción de la empresa. |
-| `website`, `logo_url` | `VARCHAR(500)` | Sí | Sitio web y logo. |
+| `website`, `logo_url` | `VARCHAR(500)` | Sí | Sitio web, y clave del logo en el almacenamiento de archivos (`logos/<empresa>/<uuid>.<ext>`). |
 | `phone` | `VARCHAR(30)` | Sí | Teléfono. |
 | `province`, `city` | `VARCHAR(100)` | Sí | Ubicación. |
 | `created_at` / `updated_at` | `TIMESTAMPTZ` | No | Auditoría. |
@@ -310,7 +310,7 @@ erDiagram
 | `student_id` | `UUID` | No | | **FK → student_profiles.id**. `ON DELETE CASCADE`. |
 | `status` | `ApplicationStatus` | No | `PENDING` | Estado de la postulación. |
 | `cover_letter` | `TEXT` | Sí | | Mensaje de presentación. |
-| `cv_url` | `VARCHAR(500)` | Sí | | Copia de la URL del CV al momento de postularse. |
+| `cv_url` | `VARCHAR(500)` | Sí | | Copia de la clave del CV al momento de postularse. |
 | `applied_at` | `TIMESTAMPTZ` | No | `now()` | Fecha de postulación. |
 | `reviewed_at` | `TIMESTAMPTZ` | Sí | | Cuándo el empleador aceptó/rechazó. |
 | `updated_at` | `TIMESTAMPTZ` | No | `now()` | Auditoría. |

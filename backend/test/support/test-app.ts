@@ -1,4 +1,7 @@
 import { randomUUID } from 'node:crypto';
+import { rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { Test } from '@nestjs/testing';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import request from 'supertest';
@@ -8,6 +11,8 @@ import { hashPassword } from '../../src/common/security/password.js';
 import { UserRole } from '../../src/generated/prisma/enums.js';
 import { MailService } from '../../src/mail/mail.service.js';
 import { PrismaService } from '../../src/prisma/prisma.service.js';
+import { FILE_STORAGE } from '../../src/storage/file-storage.js';
+import { LocalStorage } from '../../src/storage/local-storage.js';
 
 type SentEmail =
   | {
@@ -74,12 +79,19 @@ export class FakeMailService implements Pick<
 
 // Runs against the database in DATABASE_URL. Every account created through
 // this helper or with an email from `email()` uses a domain unique to the
-// run, and is deleted by `close()`.
+// run, and is deleted by `close()`. Uploaded files go to a temporary
+// directory of the run (local storage), also deleted by `close()`.
 export async function createTestApp() {
   const mail = new FakeMailService();
+  const runId = randomUUID().slice(0, 8);
+  const storageDir = join(tmpdir(), `pasantias-e2e-${runId}`);
   const moduleFixture = await Test.createTestingModule({ imports: [AppModule] })
     .overrideProvider(MailService)
     .useValue(mail)
+    .overrideProvider(FILE_STORAGE)
+    .useValue(
+      new LocalStorage(storageDir, 'http://localhost:3000', `secret-${runId}`),
+    )
     .compile();
 
   const app = moduleFixture.createNestApplication<NestExpressApplication>();
@@ -87,7 +99,6 @@ export async function createTestApp() {
   await app.init();
   const prisma = app.get(PrismaService);
 
-  const runId = randomUUID().slice(0, 8);
   const emailDomain = `e2e-${runId}.test`;
   const password = 'Password123!';
   const email = (name: string) => `${name}@${emailDomain}`;
@@ -97,6 +108,7 @@ export async function createTestApp() {
     prisma,
     mail,
     runId,
+    storageDir,
     password,
     email,
     http: () => request(app.getHttpServer()),
@@ -188,6 +200,7 @@ export async function createTestApp() {
         where: { slug: { endsWith: `-${runId}` } },
       });
       await app.close();
+      await rm(storageDir, { recursive: true, force: true });
     },
   };
 }

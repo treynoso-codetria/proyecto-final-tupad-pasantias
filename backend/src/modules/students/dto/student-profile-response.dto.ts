@@ -48,10 +48,18 @@ export class StudentProfileResponseDto {
   @ApiProperty({ type: String, nullable: true })
   portfolioUrl: string | null;
 
-  @ApiProperty({ type: String, nullable: true })
+  @ApiProperty({
+    type: String,
+    nullable: true,
+    description: 'Signed link to the CV (PDF), valid for at least an hour',
+  })
   cvUrl: string | null;
 
-  @ApiProperty({ type: String, nullable: true })
+  @ApiProperty({
+    type: String,
+    nullable: true,
+    description: 'Original name of the CV file',
+  })
   cvFileName: string | null;
 
   @ApiProperty({ type: String, format: 'date-time' })

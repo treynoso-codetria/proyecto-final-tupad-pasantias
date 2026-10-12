@@ -18,6 +18,12 @@ import {
 const mailIsRequired = (env: EnvironmentVariables) =>
   env.NODE_ENV === 'production' || env.BREVO_API_KEY !== undefined;
 
+// Same for file storage: production needs object storage (Render's disk is
+// wiped on every deploy); elsewhere files go to the local disk unless a
+// bucket is configured.
+const objectStorageIsRequired = (env: EnvironmentVariables) =>
+  env.NODE_ENV === 'production' || env.S3_BUCKET !== undefined;
+
 export class EnvironmentVariables {
   @IsString()
   @IsNotEmpty()
@@ -65,6 +71,43 @@ export class EnvironmentVariables {
   @IsString()
   @IsOptional()
   MAIL_FROM_NAME: string = 'Internship Portal';
+
+  // S3-compatible object storage (Backblaze B2 in production), e.g.
+  // endpoint https://s3.us-east-005.backblazeb2.com and region us-east-005.
+  @ValidateIf(objectStorageIsRequired)
+  @IsString()
+  @IsNotEmpty()
+  S3_BUCKET?: string;
+
+  @ValidateIf(objectStorageIsRequired)
+  @IsUrl({ require_tld: false })
+  S3_ENDPOINT?: string;
+
+  @ValidateIf(objectStorageIsRequired)
+  @IsString()
+  @IsNotEmpty()
+  S3_REGION?: string;
+
+  @ValidateIf(objectStorageIsRequired)
+  @IsString()
+  @IsNotEmpty()
+  S3_ACCESS_KEY_ID?: string;
+
+  @ValidateIf(objectStorageIsRequired)
+  @IsString()
+  @IsNotEmpty()
+  S3_SECRET_ACCESS_KEY?: string;
+
+  // Without object storage: where files are kept.
+  @IsString()
+  @IsOptional()
+  LOCAL_STORAGE_DIR: string = 'uploads';
+
+  // Public URL of this API, used in the links to files (company logos). In
+  // development it defaults to http://localhost:<PORT>.
+  @ValidateIf((env: EnvironmentVariables) => env.NODE_ENV === 'production')
+  @IsUrl({ require_tld: false })
+  PUBLIC_API_URL?: string;
 }
 
 // Fails fast at startup when a required variable is missing or malformed.

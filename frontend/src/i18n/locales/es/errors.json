@@ -18,7 +18,9 @@
     "amountInvalid": "Ingresá un monto en pesos, sin separadores.",
     "dateInPast": "La fecha no puede ser anterior a hoy.",
     "choose": "Elegí una opción.",
-    "vacanciesInvalid": "Ingresá un número del 1 al 100."
+    "vacanciesInvalid": "Ingresá un número del 1 al 100.",
+    "cvFile": "Elegí un PDF de hasta 5 MB.",
+    "logoFile": "Elegí una imagen PNG, JPG o WebP de hasta 2 MB."
   },
   "api": {
     "EMAIL_TAKEN": "Ya existe una cuenta con este email.",
@@ -46,6 +48,10 @@
     "ALREADY_APPLIED": "Ya te postulaste a esta oferta.",
     "APPLICATION_NOT_PENDING": "Solo se pueden retirar postulaciones pendientes.",
     "APPLICATION_WITHDRAWN": "El estudiante retiró esta postulación.",
+    "FILE_REQUIRED": "Elegí un archivo para subir.",
+    "FILE_TOO_LARGE": "El archivo es demasiado grande.",
+    "FILE_TYPE_NOT_ALLOWED": "Este tipo de archivo no está permitido.",
+    "STORAGE_UNAVAILABLE": "No pudimos guardar el archivo. Probá de nuevo en unos minutos.",
     "network": "No pudimos conectar con el servidor. Revisá tu conexión y probá de nuevo.",
     "unexpected": "Ocurrió un error inesperado. Probá de nuevo en unos minutos."
   }
