@@ -8,18 +8,18 @@ El sistema sigue una arquitectura **cliente-servidor desacoplada** de tres nivel
 2. **API REST** — backend NestJS organizado como un **monolito modular en capas**.
 3. **Base de datos** — PostgreSQL gestionado con Prisma ORM.
 
-El cliente y la API se comunican exclusivamente por HTTP/JSON y se despliegan de forma independiente. Ambos viven en el **mismo repositorio** (monorepo con npm workspaces).
+El cliente y la API se comunican exclusivamente por HTTP/JSON. En producción los sirve el mismo servidor bajo un único origen (la SPA como archivos estáticos y la API en `/api`). Ambos viven en el **mismo repositorio** (monorepo con npm workspaces).
 
 ```mermaid
 flowchart LR
     subgraph Cliente["Navegador"]
-        SPA["SPA React 19 + TS<br/>(Vercel)"]
+        SPA["SPA React 19 + TS"]
     end
-    subgraph Servidor["Render"]
+    subgraph Servidor["Servidor propio (Docker)"]
         API["API REST NestJS<br/>JWT + Passport"]
+        DB[("PostgreSQL")]
     end
-    DB[("PostgreSQL<br/>(Neon)")]
-    FS[["Almacenamiento de archivos<br/>(Cloudinary)"]]
+    FS[["Almacenamiento de archivos<br/>(Backblaze B2)"]]
 
     SPA -- "HTTPS / JSON<br/>Authorization: Bearer JWT" --> API
     API -- "Prisma Client (SQL/TLS)" --> DB
@@ -32,7 +32,7 @@ flowchart LR
 | Criterio | Monolito modular | Microservicios |
 | --- | --- | --- |
 | Tamaño del equipo (1 desarrollador) | Adecuado | Sobrecosto de operación y coordinación |
-| Despliegue en planes gratuitos | 1 servicio en Render | N servicios, cada uno con su *cold start* |
+| Despliegue en un servidor chico | 1 contenedor | N contenedores, cada uno con su memoria y su configuración |
 | Transacciones (ej. registro = usuario + perfil) | Una transacción de base | Requiere coordinación distribuida |
 | Separación por dominios | Módulos de NestJS con límites claros | Servicios independientes |
 
@@ -69,7 +69,7 @@ Prisma ya cumple el rol de repositorio (cliente tipado por modelo), por lo que n
 
 ### 2.2 Autenticación y autorización
 
-- **Autenticación:** login con email + contraseña (bcrypt). La API emite un **JWT firmado (HS256)** con `sub` (id de usuario), `role` y expiración. El cliente lo envía en `Authorization: Bearer <token>`. No hay sesión en el servidor (*stateless*), lo que simplifica el despliegue en Render.
+- **Autenticación:** login con email + contraseña (bcrypt). La API emite un **JWT firmado (HS256)** con `sub` (id de usuario), `role` y expiración. El cliente lo envía en `Authorization: Bearer <token>`. No hay sesión en el servidor (*stateless*), lo que simplifica el despliegue: reiniciar o reemplazar el contenedor de la API no cierra ninguna sesión.
 - **Autorización en dos niveles:**
   1. **Por rol** — `RolesGuard` + `@Roles('EMPLOYER')` en cada endpoint.
   2. **Por recurso** — en el service se verifica la pertenencia (ej. un empleador solo edita sus propias ofertas y solo ve postulantes de ellas).
@@ -154,12 +154,12 @@ frontend/src/
 | ORM | **Prisma 7** | Schema declarativo como fuente de verdad, migraciones versionadas y cliente 100 % tipado generado a partir del modelo. |
 | Autenticación | **JWT + Passport.js** (`@nestjs/jwt`, `passport-jwt`), bcrypt | Autenticación *stateless*, estándar para APIs REST y compatible con despliegue en servicios sin estado. |
 | Documentación API | Swagger / OpenAPI (`@nestjs/swagger`) | Documentación generada desde el código; sirve como contrato entre frontend y backend. |
-| Almacenamiento de archivos | **Cloudinary** (plan gratuito) | El disco de Render en plan gratuito es efímero y Neon tiene 0,5 GB; se guardan CV y logos fuera de la base. |
+| Almacenamiento de archivos | **Backblaze B2** (API S3, plan gratuito) | Los CV y logos se guardan fuera de la base, en un bucket privado con enlaces firmados (ver §6). |
 | Testing | Vitest + Supertest | Ya configurados en el backend; tests unitarios de services y e2e de endpoints. |
 | Calidad | Oxlint + Prettier | Linter rápido y formato uniforme en todo el monorepo. |
-| Deploy frontend | **Vercel** | Despliegue automático desde GitHub, HTTPS y CDN gratuitos. |
-| Deploy backend | **Render** | Hosting de servicios Node.js con despliegue continuo desde GitHub. |
-| Base en la nube | **Neon** | PostgreSQL *serverless* gratuito (0,5 GB), con *branching* para entornos de prueba. |
+| Despliegue | **Servidor propio** (DigitalOcean) con **Docker** | Frontend, API y base en un mismo servidor de costo fijo, sin el arranque en frío ni la suspensión de los planes gratuitos. Imágenes definidas en el `Dockerfile` del repo. |
+| Proxy y HTTPS | **Caddy** | Sirve la SPA estática, redirige `/api` a la API y obtiene los certificados de Let's Encrypt solo. |
+| Emails | **Brevo** (API HTTPS) | Envío transaccional gratuito (300 por día) sin depender de SMTP. |
 | Repositorio / CI | Git + GitHub (monorepo npm workspaces) + GitHub Actions | Requisito de la cátedra: un único repositorio; CI para lint, tests y build en cada PR. |
 
 ---
@@ -169,20 +169,22 @@ frontend/src/
 ```mermaid
 flowchart LR
     Dev["Desarrollo local<br/>Vite :5173 · Nest :3000<br/>Postgres en Docker :5434"] -->|push / PR| GH["GitHub<br/>Actions: lint + test + build"]
-    GH -->|merge a main| V["Vercel<br/>frontend/"]
-    GH -->|merge a main| R["Render<br/>backend/"]
-    R -->|prisma migrate deploy| N[("Neon")]
+    GH -->|deploy/deploy.sh| S["Servidor<br/>build de imágenes Docker"]
+    S -->|prisma migrate deploy| N[("PostgreSQL")]
+    S --> A["API NestJS<br/>(contenedor)"]
+    S --> C["Caddy<br/>SPA estática + /api"]
 ```
 
 | Variable | Dónde | Uso |
 | --- | --- | --- |
-| `DATABASE_URL` | backend | Conexión a PostgreSQL (local o Neon). |
+| `DATABASE_URL` | backend | Conexión a PostgreSQL. |
 | `JWT_SECRET`, `JWT_EXPIRES_IN` | backend | Firma y duración de los tokens. |
 | `CORS_ORIGIN` | backend | URL del frontend permitida. |
-| `CLOUDINARY_URL` | backend | Credenciales del almacenamiento de archivos. |
+| `S3_*`, `PUBLIC_API_URL` | backend | Bucket de archivos y URL pública de la API (enlaces a logos). |
+| `BREVO_API_KEY`, `MAIL_FROM_EMAIL` | backend | Envío de emails. |
 | `VITE_API_URL` | frontend | URL base de la API. |
 
-Las migraciones se aplican en Render con `prisma migrate deploy` como parte del *build*. Los secretos se configuran en los paneles de Render y Vercel, nunca en el repositorio (`.env` está en `.gitignore`; solo se versiona `.env.example`).
+Las migraciones se aplican con `prisma migrate deploy` en cada despliegue, antes de reiniciar la API; si una falla, sigue en línea la versión anterior. Los secretos viven en `deploy/.env` en el servidor, nunca en el repositorio (`.env` está en `.gitignore`; solo se versiona `.env.example`). Detalle en [despliegue.md](despliegue.md).
 
 ---
 

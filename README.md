@@ -50,11 +50,10 @@ Desarrollado como **Trabajo Final Integrador** de la Tecnicatura en Programació
 | Backend               | NestJS + TypeScript          |
 | Base de datos         | PostgreSQL + Prisma ORM      |
 | Autenticación         | JWT + Passport.js            |
-| Deploy Frontend       | [Vercel](https://vercel.com) |
-| Deploy Backend        | [Render](https://render.com) |
-| Base de datos (cloud) | [Neon](https://neon.tech)    |
+| Despliegue            | Servidor propio (DigitalOcean) con Docker + Caddy |
 | Control de versiones  | Git + GitHub                 |
-| Almacenamiento de archivos | Cloudinary (CV y logos) |
+| Almacenamiento de archivos | Backblaze B2 (CV y logos) |
+| Emails                | Brevo                        |
 
 Arquitectura: SPA React + API REST NestJS organizada como **monolito modular en capas**. Detalle y justificación en [`docs/arquitectura.md`](docs/arquitectura.md).
 
@@ -74,14 +73,13 @@ Arquitectura: SPA React + API REST NestJS organizada como **monolito modular en 
 
 ## ☁️ Despliegue
 
-| Servicio          | URL                                                                                      |
-| ----------------- | ---------------------------------------------------------------------------------------- |
-| Frontend          | <https://proyecto-final-tupad-pasantias.vercel.app>                                      |
-| Backend (API)     | <https://pasantias-api.onrender.com/api>                                                 |
-| Documentación API | <https://pasantias-api.onrender.com/api/docs> (Swagger)                                  |
-| Base de datos     | Neon (PostgreSQL serverless)                                                             |
+| Servicio          | URL                                                    |
+| ----------------- | ------------------------------------------------------ |
+| Aplicación        | <https://pasantias.165-227-8-179.sslip.io>                |
+| Backend (API)     | <https://pasantias.165-227-8-179.sslip.io/api>            |
+| Documentación API | <https://pasantias.165-227-8-179.sslip.io/api/docs> (Swagger) |
 
-> El backend usa el plan gratuito de Render: tras unos 15 minutos sin uso se suspende y la primera solicitud puede tardar cerca de un minuto.
+Frontend, API y PostgreSQL corren en un servidor propio con Docker; Caddy sirve la SPA y redirige `/api` al backend. La configuración está en [`Dockerfile`](Dockerfile) y [`deploy/`](deploy/).
 
 Guía paso a paso: [`docs/despliegue.md`](docs/despliegue.md).
 
@@ -96,11 +94,13 @@ Guía paso a paso: [`docs/despliegue.md`](docs/despliegue.md).
 │   └── prisma/
 │       └── schema.prisma  # Modelo de datos (fuente de verdad)
 ├── database/              # Scripts DDL (schema.sql) y DML (seed.sql)
+├── deploy/                # Despliegue en el servidor (compose, Caddy, script)
 ├── docs/
 │   ├── arquitectura.md    # Arquitectura, tecnologías y justificación
 │   ├── modulos.md         # Listado de módulos y prioridades
 │   ├── database/          # DER y diccionario de datos
 │   └── informes/          # Informes de avance por entrega
+├── Dockerfile             # Imágenes de producción (API y frontend)
 ├── package.json           # Monorepo (npm workspaces)
 └── README.md
 ```
@@ -114,7 +114,7 @@ Este repositorio es un **monorepo** (npm workspaces): `frontend/` y `backend/` c
 ### Requisitos previos
 
 - Node.js 22.22+ (recomendado: 24 LTS)
-- PostgreSQL (local, por ejemplo vía Docker, o una instancia en Neon)
+- PostgreSQL (local, por ejemplo vía Docker)
 
 ### Instalación
 

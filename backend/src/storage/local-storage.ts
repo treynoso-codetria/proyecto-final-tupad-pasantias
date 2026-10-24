@@ -16,7 +16,7 @@ export interface SignedParams {
 // Stores files on the local disk. For development and tests, where there is
 // no object storage account: it behaves like S3Storage, including signed
 // links that expire, served by LocalFilesController. Not for production:
-// Render's disk is wiped on every deploy.
+// container disks are wiped on every deploy and are not backed up.
 export class LocalStorage implements FileStorage {
   constructor(
     private readonly directory: string,

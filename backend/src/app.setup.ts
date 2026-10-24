@@ -11,7 +11,7 @@ export function configureApp(app: NestExpressApplication): void {
   const config =
     app.get<ConfigService<EnvironmentVariables, true>>(ConfigService);
 
-  // The app runs behind one reverse proxy in production (Render). Trusting
+  // The app runs behind one reverse proxy in production (Caddy). Trusting
   // it makes `req.ip` the real client IP, which the rate limiter relies on.
   app.set('trust proxy', 1);
   app.setGlobalPrefix('api');

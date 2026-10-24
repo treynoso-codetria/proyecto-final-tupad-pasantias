@@ -1,0 +1,43 @@
+# Production services of the Internship Portal. Run through ./deploy.sh, not by hand.
+# Joins the server's shared "web" (Caddy) and "db" (PostgreSQL) networks:
+# see docs/despliegue.md.
+name: pasantias
+
+services:
+  api:
+    build:
+      context: ..
+      target: api
+    image: pasantias-api
+    container_name: pasantias-api
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_OPTIONS: --max-old-space-size=384
+    mem_limit: 640m
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api').then(r => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+    networks:
+      - web
+      - db
+
+  # Applies the pending Prisma migrations and exits.
+  migrate:
+    build:
+      context: ..
+      target: backend-build
+    image: pasantias-migrate
+    env_file: .env
+    profiles: [tools]
+    networks:
+      - db
+
+networks:
+  web:
+    external: true
+  db:
+    external: true

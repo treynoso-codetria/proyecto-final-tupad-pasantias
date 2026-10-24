@@ -133,7 +133,7 @@ No es un módulo funcional, pero se planifica como tal porque condiciona a todos
 - Documentación de la API con Swagger (OpenAPI) en `/api/docs`.
 - Seed de datos de prueba.
 - Tests unitarios de servicios críticos (auth, postulaciones) y tests e2e de los flujos principales.
-- CI con GitHub Actions (lint + tests + build) y despliegue: frontend en Vercel, backend en Render, base en Neon.
+- CI con GitHub Actions (lint + tests + build) y despliegue en un servidor propio con Docker (frontend, backend y base).
 
 ---
 

@@ -17,8 +17,8 @@ type Template =
   | 'emailChangeNotice'
   | 'passwordChanged';
 
-// Sends the account emails through Brevo's HTTPS API (the free Render plan
-// blocks outbound SMTP). Texts are in src/i18n/<lang>/mail.json and follow
+// Sends the account emails through Brevo's HTTPS API (no SMTP server to run
+// or credentials to keep). Texts are in src/i18n/<lang>/mail.json and follow
 // the language of the request that triggers the email.
 //
 // Every method resolves to whether the email was handed over for delivery;

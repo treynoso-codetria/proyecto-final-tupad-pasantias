@@ -47,3 +47,6 @@ coverage/
 
 # Uploaded files in development (LocalStorage, when S3_BUCKET is not set)
 backend/uploads/
+
+# Frontend built by deploy/deploy.sh on the server
+deploy/www*/

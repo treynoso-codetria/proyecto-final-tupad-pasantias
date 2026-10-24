@@ -1,6 +1,6 @@
 # Modelo de datos — Portal de Pasantías
 
-**Motor:** PostgreSQL 16 (Neon en producción) · **ORM:** Prisma 7
+**Motor:** PostgreSQL 16+ (18 en producción) · **ORM:** Prisma 7
 **Fuente de verdad:** [`backend/prisma/schema.prisma`](../../backend/prisma/schema.prisma) · **DDL equivalente:** [`database/schema.sql`](../../database/schema.sql) · **Datos de prueba:** [`database/seed.sql`](../../database/seed.sql)
 
 El modelo es **relacional** y está normalizado a 3FN. Tiene 11 tablas y 8 tipos enumerados.
@@ -183,8 +183,8 @@ erDiagram
 | **`admin_actions` como bitácora de moderación** | Deja trazabilidad de quién activó/desactivó una cuenta o dio de baja una publicación y por qué. |
 | **`applications.cv_url`** (copia del CV al postularse) | Si el estudiante actualiza su CV, el empleador sigue viendo el CV con el que se postuló. |
 | **Notificaciones internas** (tabla `notifications`) | La consigna pide notificar al estudiante al aprobar/rechazar; se resuelve dentro de la plataforma. Las notificaciones *push* están fuera de alcance. |
-| **Archivos (CV, logo) fuera de la base** | Solo se guarda la clave del archivo (las columnas conservan el nombre `*_url` del esquema aprobado); el archivo vive en un bucket privado (ver [arquitectura](../arquitectura.md#6-almacenamiento-de-archivos)). El almacenamiento gratuito de Neon (1 GB) no conviene gastarlo en binarios. |
-| **`timestamptz`** en todas las fechas con hora | Evita ambigüedades de zona horaria entre Render, Neon y el navegador. |
+| **Archivos (CV, logo) fuera de la base** | Solo se guarda la clave del archivo (las columnas conservan el nombre `*_url` del esquema aprobado); el archivo vive en un bucket privado (ver [arquitectura](../arquitectura.md#6-almacenamiento-de-archivos)). Así la base queda chica y los backups diarios son livianos. |
+| **`timestamptz`** en todas las fechas con hora | Evita ambigüedades de zona horaria entre el servidor, la base y el navegador. |
 
 ---
 

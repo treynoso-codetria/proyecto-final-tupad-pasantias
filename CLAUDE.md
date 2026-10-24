@@ -34,9 +34,9 @@ Explícitamente fuera de alcance en esta versión: pasarela de pagos, integracio
 └── README.md
 ```
 
-- **Frontend**: React 19 + TypeScript, desplegado en Vercel.
-- **Backend**: NestJS + TypeScript, exponiendo una API REST, desplegado en Render. El sistema de módulos de NestJS debería mapear naturalmente a los dominios por rol descriptos arriba (ej. un módulo por: auth, estudiantes, empleadores, ofertas, postulaciones, mensajería, admin).
-- **Base de datos**: PostgreSQL con Prisma ORM (schema/migraciones en `backend/prisma`), alojada en Neon (Postgres serverless) en producción.
+- **Frontend**: React 19 + TypeScript; en producción, archivos estáticos servidos por Caddy.
+- **Backend**: NestJS + TypeScript, exponiendo una API REST; en producción, un contenedor Docker detrás de Caddy. El sistema de módulos de NestJS debería mapear naturalmente a los dominios por rol descriptos arriba (ej. un módulo por: auth, estudiantes, empleadores, ofertas, postulaciones, mensajería, admin).
+- **Base de datos**: PostgreSQL con Prisma ORM (schema/migraciones en `backend/prisma`), en producción, un contenedor PostgreSQL 18 compartido del servidor (base y usuario `pasantias`).
 - **Autenticación**: JWT + Passport.js, autenticación stateless para la API REST. La lógica de autorización debe contemplar los tres roles (estudiante / empleador / administrador) en toda la API.
 
 ## Desarrollo local
@@ -82,7 +82,7 @@ Nota sobre Prisma: el proyecto está fijado a la versión estable `prisma@7.10.0
 
 ## Emails y enlaces de cuenta
 
-- **Envío**: `MailService` (`backend/src/mail`) usa la API HTTPS de Brevo, no SMTP (el plan gratuito de Render bloquea los puertos SMTP). Sin `BREVO_API_KEY` (desarrollo y tests) no envía nada: escribe el email y su enlace en el log del servidor. En producción `BREVO_API_KEY` y `MAIL_FROM_EMAIL` son obligatorias y el backend no arranca sin ellas.
+- **Envío**: `MailService` (`backend/src/mail`) usa la API HTTPS de Brevo, no SMTP (no hay servidor SMTP propio). Sin `BREVO_API_KEY` (desarrollo y tests) no envía nada: escribe el email y su enlace en el log del servidor. En producción `BREVO_API_KEY` y `MAIL_FROM_EMAIL` son obligatorias y el backend no arranca sin ellas.
 - **`MailService` nunca lanza**: cada método devuelve si el email salió, y quien llama decide si un fallo es un error para el usuario (reenvío, cambio de email → 503) o no (avisos).
 - **Enlaces**: `EmailLinkService` (`modules/auth`) genera enlaces con un JWT firmado y con vencimiento (verificación 24 h, cambio de email 1 h); no hay tabla de tokens. Se firman con una clave derivada de `JWT_SECRET` distinta de la de los tokens de acceso, así que ninguno sirve en lugar del otro. Un enlace deja de valer cuando el email de la cuenta ya no coincide con el que tenía al generarse.
 - **Tests e2e**: usan `FakeMailService` (`backend/test/support/test-app.ts`), que captura los emails para seguir sus enlaces. El límite de peticiones está desactivado con `NODE_ENV=test`.
@@ -97,13 +97,14 @@ Nota sobre Prisma: el proyecto está fijado a la versión estable `prisma@7.10.0
 
 ## Despliegue
 
-Neon (base) + Render (backend, definido en `render.yaml`) + Vercel (frontend, `frontend/vercel.json`) + Backblaze B2 (archivos), todo en plan gratuito y con despliegue automático desde `main`. La guía paso a paso y las variables de entorno de producción están en `docs/despliegue.md`.
+Servidor propio (droplet de DigitalOcean, Ubuntu 24.04) con Docker: Caddy sirve la SPA y redirige `/api` a la API, PostgreSQL 18 corre en un contenedor compartido con otros proyectos del autor, Backblaze B2 guarda los archivos y Brevo envía los emails. La guía completa está en `docs/despliegue.md`.
 
-En producción desde el 01/10/2026: frontend en <https://proyecto-final-tupad-pasantias.vercel.app>, API en <https://pasantias-api.onrender.com/api> (Swagger en `/api/docs`). La base de Neon ya tiene la migración `init` y el seed cargados. Las credenciales de la base no se guardan en el repo: están en el panel de Neon y en las variables de entorno de Render.
+En producción desde el 23/10/2026 en <https://pasantias.165-227-8-179.sslip.io> (API en `/api`, Swagger en `/api/docs`; sslip.io hasta tener dominio propio). Antes estaba en Vercel + Render + Neon; los datos se migraron con `pg_dump`.
 
-- El build del backend corre desde la raíz del monorepo y termina con `prisma migrate deploy` (script `db:deploy`): toda migración nueva commiteada se aplica sola en producción al desplegar.
+- Configuración en el repo: `Dockerfile` (etapas `api`, `backend-build` para migraciones y `web` para el frontend) y `deploy/` (`compose.yml`, `site.caddy`, `deploy.sh`, `.env.example`). En el servidor el repo está clonado en `~/apps/pasantias` y los secretos están en `deploy/.env` (no versionado).
+- Desplegar: `deploy/deploy.sh [rama]` en el servidor. Actualiza el clon, compila, corre `prisma migrate deploy` (si falla, se corta y sigue la versión anterior), reinicia la API esperando el healthcheck y publica el frontend.
+- Frontend y API comparten origen: `PUBLIC_API_URL`, `FRONTEND_URL`, `CORS_ORIGIN` y `VITE_API_URL` (que `deploy.sh` toma de `PUBLIC_API_URL`) valen lo mismo.
 - `npm run build` del backend ejecuta antes `prisma generate` (script `prebuild`), porque el cliente generado no se versiona.
-- `DATABASE_URL` de producción es la conexión **directa** de Neon (sin pooler), porque `prisma migrate deploy` no funciona a través del pooler.
 
 ## Versiones y dependencias fijadas
 

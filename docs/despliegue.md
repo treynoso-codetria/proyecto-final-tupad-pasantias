@@ -1,153 +1,164 @@
 # Despliegue — Portal de Pasantías
 
-| Parte | Plataforma | Qué despliega | Configuración en el repo |
-| --- | --- | --- | --- |
-| Base de datos | [Neon](https://neon.tech) | PostgreSQL | — |
-| Backend | [Render](https://render.com) | `backend/` (API NestJS) | [`render.yaml`](../render.yaml) |
-| Frontend | [Vercel](https://vercel.com) | `frontend/` (SPA React) | [`frontend/vercel.json`](../frontend/vercel.json) |
-| Emails | [Brevo](https://www.brevo.com) | Envío de emails de la cuenta (verificación, cambio de email) | — |
-| Archivos | [Backblaze B2](https://www.backblaze.com/cloud-storage) | CV (PDF) y logos de las empresas | — |
+Producción corre en un servidor virtual propio (un *droplet* de DigitalOcean) con Docker. Frontend, API y base de datos están en el mismo servidor; los emails y los archivos usan servicios externos.
 
-Todas se usan en su plan gratuito. Render y Vercel despliegan solos en cada push a `main`.
+| Parte | Dónde | Configuración en el repo |
+| --- | --- | --- |
+| Frontend (SPA React) | Archivos estáticos servidos por **Caddy** en el servidor | [`Dockerfile`](../Dockerfile) (etapa `web`), [`deploy/site.caddy`](../deploy/site.caddy) |
+| Backend (API NestJS) | Contenedor Docker `pasantias-api` en el servidor | [`Dockerfile`](../Dockerfile) (etapa `api`), [`deploy/compose.yml`](../deploy/compose.yml) |
+| Base de datos | **PostgreSQL 18** en un contenedor del servidor, compartido con otros proyectos (una base y un usuario por proyecto) | — |
+| Emails | [Brevo](https://www.brevo.com) (API HTTPS) | — |
+| Archivos (CV y logos) | [Backblaze B2](https://www.backblaze.com/cloud-storage), bucket privado | — |
 
-El orden importa, porque cada paso necesita un dato del anterior: **Neon → Brevo → Backblaze B2 → Render → Vercel → volver a Render**.
+URL de producción: <https://pasantias.165-227-8-179.sslip.io> (API en `/api`, Swagger en `/api/docs`). Hasta tener un dominio propio se usa [sslip.io](https://sslip.io), que resuelve ese nombre a la IP del servidor; Caddy obtiene el certificado HTTPS de Let's Encrypt solo.
+
+```mermaid
+flowchart LR
+    B["Navegador"] -- "HTTPS" --> C["Caddy<br/>:443"]
+    subgraph Servidor["Droplet (Docker)"]
+        C -- "/*<br/>(SPA estática)" --> W[["deploy/www"]]
+        C -- "/api/*" --> A["pasantias-api<br/>NestJS :3000"]
+        A -- "red db" --> P[("PostgreSQL<br/>base pasantias")]
+    end
+    A -- "API S3" --> B2[["Backblaze B2"]]
+    A -- "API HTTPS" --> BR["Brevo"]
+```
+
+Frontend y API comparten el mismo origen: la SPA llama a `https://<host>/api`, así que no hay pedidos entre dominios distintos y `CORS_ORIGIN`, `FRONTEND_URL`, `PUBLIC_API_URL` y `VITE_API_URL` valen lo mismo.
 
 ---
 
-## 1. Base de datos en Neon
+## Cómo funciona un despliegue
 
-1. Crear un proyecto nuevo con PostgreSQL 16 en la región **AWS US East (N. Virginia)** — la misma que usa el backend en Render.
-2. En *Connect*, copiar la cadena de conexión **directa**: desactivar la opción *Connection pooling*. El host no debe contener `-pooler`.
+En el servidor, el repositorio está clonado en `~/apps/pasantias`. Un despliegue es un solo comando:
 
-   ```
-   postgresql://USUARIO:CLAVE@ep-xxxx.us-east-1.aws.neon.tech/neondb?sslmode=require
-   ```
+```bash
+ssh <servidor> '~/apps/pasantias/deploy/deploy.sh'        # rama main
+ssh <servidor> '~/apps/pasantias/deploy/deploy.sh otra'   # otra rama
+```
 
-   Se usa la conexión directa porque `prisma migrate deploy` no funciona a través del pooler, y con el tráfico de este proyecto no hace falta pooling.
+[`deploy/deploy.sh`](../deploy/deploy.sh):
 
-No hay que crear tablas a mano: las crea el primer despliegue del backend.
+1. Actualiza el clon a la última versión de la rama en GitHub.
+2. Compila las imágenes de la API y de las migraciones ([`Dockerfile`](../Dockerfile), etapas `api` y `backend-build`).
+3. Compila el frontend (etapa `web`) con `VITE_API_URL` tomada de `PUBLIC_API_URL` de `deploy/.env`, y exporta los archivos estáticos.
+4. Aplica las migraciones pendientes (`prisma migrate deploy`, servicio `migrate`). **Si una migración falla, el despliegue se corta** y sigue en línea la versión anterior.
+5. Reinicia la API y espera a que su *healthcheck* (`GET /api`) responda.
+6. Publica el frontend nuevo en `deploy/www` y recarga Caddy (por si cambió `deploy/site.caddy`).
 
-## 1 bis. Envío de emails con Brevo
+Tarda unos 3–4 minutos, casi todo en `npm ci` y el build de NestJS. La API solo deja de responder los segundos del reinicio.
 
-El backend envía emails (verificación de cuenta, cambio de email, avisos) por la API HTTPS de Brevo. No se usa SMTP porque el plan gratuito de Render bloquea los puertos SMTP salientes.
+Por qué así:
 
-1. Crear una cuenta gratuita en Brevo (300 emails por día).
-2. En *Senders, Domains & Dedicated IPs → Senders*, agregar la dirección desde la que se envía y verificarla con el código que llega a esa casilla.
-3. En *SMTP & API → API Keys*, generar una clave de API.
+- **Se compila en el servidor** y no en un servicio de CI: para un proyecto de este tamaño alcanzan los 2 GB de RAM (más swap) y no hace falta un registro de imágenes.
+- **La imagen de la API no incluye dependencias de desarrollo** (`npm ci --omit=dev`); el CLI de Prisma solo está en la imagen de migraciones, que se ejecuta y termina.
+- **El frontend no necesita un proceso propio**: son archivos estáticos que sirve Caddy, con caché permanente para `/assets` (llevan un *hash* en el nombre) y `try_files` hacia `index.html` para que recargar una ruta de la SPA no dé 404.
 
-Esos dos datos son las variables `MAIL_FROM_EMAIL` y `BREVO_API_KEY` del backend. **En producción son obligatorias:** sin ellas el backend no arranca (Render conserva en línea la versión anterior).
+---
+
+## Preparar un servidor nuevo
+
+Lo necesario una sola vez. Se asume Ubuntu 24.04 con Docker y Docker Compose instalados, y un firewall que solo deje pasar los puertos 22, 80 y 443.
+
+### 1. Infraestructura compartida (Caddy + PostgreSQL)
+
+El proyecto se suma a una infraestructura que el servidor comparte con otros proyectos: un contenedor `caddy` y un contenedor `postgres`, conectados a dos redes de Docker con nombre fijo, `web` y `db`. [`deploy/compose.yml`](../deploy/compose.yml) se une a esas redes. Lo mínimo que tiene que tener esa infraestructura:
+
+```yaml
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy          # deploy.sh lo recarga por este nombre
+    ports: ["80:80", "443:443", "443:443/udp"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ~/apps:/srv/apps:ro         # clones de los proyectos
+      - caddy_data:/data
+    networks: [web]
+  postgres:
+    image: postgres:18-alpine
+    container_name: postgres       # host de DATABASE_URL
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql
+    networks: [db]
+networks:
+  web: { name: web }
+  db: { name: db }
+volumes:
+  caddy_data:
+  pgdata:
+```
+
+Y en su `Caddyfile`, una línea que importa la configuración de sitio de cada proyecto:
+
+```
+import /srv/apps/*/deploy/site.caddy
+```
+
+### 2. Base de datos y usuario
+
+```bash
+docker exec -i postgres psql -U postgres <<'SQL'
+CREATE USER pasantias WITH PASSWORD 'UNA_CLAVE_LARGA';
+CREATE DATABASE pasantias OWNER pasantias;
+REVOKE ALL ON DATABASE pasantias FROM PUBLIC;
+SQL
+```
+
+La base no se expone a internet: la API la alcanza por la red `db` con el host `postgres`.
+
+### 3. Servicios externos
+
+**Brevo (emails).** El backend envía la verificación de cuenta, el cambio de email y los avisos por la API HTTPS de Brevo.
+
+1. Crear una cuenta gratuita (300 emails por día).
+2. En *Senders, Domains & Dedicated IPs → Senders*, agregar la dirección remitente y verificarla.
+3. En *SMTP & API → API Keys*, generar una clave.
 
 Como el remitente es una dirección de Gmail y no un dominio propio, Brevo reemplaza el dominio visible por uno suyo (`…@NNNN.brevosend.com`); el nombre que ve el destinatario es `MAIL_FROM_NAME`.
 
-## 1 ter. Archivos en Backblaze B2
+**Backblaze B2 (archivos).** Los CV y los logos se guardan en un bucket **privado**; el backend los sube por la API compatible con S3 y los entrega con enlaces firmados que vencen, así que un CV solo lo abre quien recibió el enlace de la API.
 
-Los CV y los logos se guardan en un bucket **privado** de Backblaze B2 (10 GB gratis, sin tarjeta). El backend los sube por la API compatible con S3 y los entrega con enlaces firmados que vencen: un CV solo lo puede abrir quien recibió el enlace de la API (el estudiante, una empresa a la que se postuló o un administrador). No se usa el disco de Render porque se borra en cada despliegue.
+1. En *B2 Cloud Storage → Buckets → Create a Bucket*: nombre único, **Files in Bucket: Private**. En el detalle queda su **Endpoint** (`s3.us-east-005.backblazeb2.com`).
+2. *Application Keys → Add a New Application Key*: solo ese bucket, *Read and Write*. Copiar `keyID` y `applicationKey` (se muestra una sola vez).
 
-1. Crear una cuenta en Backblaze y entrar a *B2 Cloud Storage*. La región se elige al registrarse; conviene **US East**, cerca de Render y Neon.
-2. *Buckets → Create a Bucket*: un nombre único (por ejemplo `pasantias-archivos-<algo>`), **Files in Bucket: Private**, sin cifrado ni bloqueo de objetos. En el detalle del bucket queda su **Endpoint**, del estilo `s3.us-east-005.backblazeb2.com`.
-3. *Application Keys → Add a New Application Key*: acceso solo a ese bucket, tipo *Read and Write*. Copiar el `keyID` y el `applicationKey` (se muestra una sola vez).
+El bucket no necesita reglas de CORS: el navegador solo abre los enlaces, no los pide con `fetch`.
 
-| Variable del backend | Valor |
-| --- | --- |
-| `S3_BUCKET` | El nombre del bucket. |
-| `S3_ENDPOINT` | `https://` + el endpoint del bucket, por ejemplo `https://s3.us-east-005.backblazeb2.com`. |
-| `S3_REGION` | La parte del endpoint entre `s3.` y `.backblazeb2.com`, por ejemplo `us-east-005`. |
-| `S3_ACCESS_KEY_ID` | El `keyID` de la clave. |
-| `S3_SECRET_ACCESS_KEY` | El `applicationKey` de la clave. |
-
-**En producción son obligatorias**, junto con `PUBLIC_API_URL` (la URL pública de la API, que se usa en los enlaces a los logos): sin ellas el backend no arranca. El bucket no necesita reglas de CORS, porque el navegador solo abre los enlaces (no los pide con `fetch`).
-
-En desarrollo no hace falta nada de esto: sin `S3_BUCKET`, el backend guarda los archivos en `backend/uploads/` (ignorada por git) y los sirve él mismo con enlaces firmados de la misma forma. Para probar contra B2 desde local, alcanza con definir las cinco variables en `backend/.env`.
-
-## 2. Backend en Render
-
-1. *New → Blueprint* y elegir este repositorio. Render lee `render.yaml` y propone el servicio `pasantias-api`.
-2. Completar las dos variables que pide:
-
-   | Variable | Valor |
-   | --- | --- |
-   | `DATABASE_URL` | La cadena de conexión de Neon del paso 1. |
-   | `CORS_ORIGIN` | Por ahora `http://localhost:5173`; se corrige en el paso 4. |
-   | `BREVO_API_KEY` | La clave de API de Brevo (paso 1 bis). |
-   | `MAIL_FROM_EMAIL` | La dirección verificada como remitente en Brevo. |
-   | `S3_BUCKET`, `S3_ENDPOINT`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | Los datos del bucket de B2 (paso 1 ter). |
-   | `PUBLIC_API_URL` | La URL del servicio en Render, por ejemplo `https://pasantias-api.onrender.com` (sin `/api`). |
-
-   `JWT_SECRET` se genera solo; `JWT_EXPIRES_IN`, `NODE_ENV`, `NODE_VERSION`, `FRONTEND_URL` y `MAIL_FROM_NAME` ya vienen definidas en `render.yaml`.
-
-   > Render solo pregunta por estas variables al **crear** el servicio desde el Blueprint. En un servicio que ya existe hay que agregarlas a mano en *Environment*.
-3. Esperar a que termine el despliegue y anotar la URL del servicio (`https://pasantias-api-xxxx.onrender.com`).
-
-En cada despliegue Render ejecuta, desde la raíz del monorepo:
+### 4. Clonar y configurar
 
 ```bash
-# Build: instala, genera el cliente de Prisma, compila y aplica migraciones pendientes
-npm ci --include=dev --workspace=backend --include-workspace-root
-npm run build --workspace=backend
-npm run db:deploy --workspace=backend
-
-# Start
-npm run start:prod --workspace=backend
+git clone https://github.com/treynoso-codetria/proyecto-final-tupad-pasantias.git ~/apps/pasantias
+cd ~/apps/pasantias/deploy
+cp .env.example .env && chmod 600 .env
+nano .env
 ```
 
-Si una migración falla, el build falla y sigue en línea la versión anterior.
-
-<details>
-<summary>Alternativa sin Blueprint (servicio creado a mano)</summary>
-
-*New → Web Service*, con estos valores:
-
-| Campo | Valor |
+| Variable | Valor |
 | --- | --- |
-| Root Directory | *(vacío: raíz del repositorio)* |
-| Runtime | Node |
-| Region | Virginia |
-| Build Command | `npm ci --include=dev --workspace=backend --include-workspace-root && npm run build --workspace=backend && npm run db:deploy --workspace=backend` |
-| Start Command | `npm run start:prod --workspace=backend` |
-| Health Check Path | `/api` |
-| Variables | `NODE_VERSION=24`, `NODE_ENV=production`, `DATABASE_URL`, `JWT_SECRET` (mínimo 32 caracteres), `JWT_EXPIRES_IN=1d`, `CORS_ORIGIN`, `FRONTEND_URL` (URL de Vercel), `BREVO_API_KEY`, `MAIL_FROM_EMAIL`, `MAIL_FROM_NAME`, `S3_BUCKET`, `S3_ENDPOINT`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `PUBLIC_API_URL` |
+| `DATABASE_URL` | `postgresql://pasantias:CLAVE@postgres:5432/pasantias?schema=public` (clave del paso 2). |
+| `JWT_SECRET` | Al menos 32 caracteres: `openssl rand -base64 33`. |
+| `PUBLIC_API_URL`, `FRONTEND_URL`, `CORS_ORIGIN` | La URL pública del sitio, sin `/` final (el mismo nombre que en [`deploy/site.caddy`](../deploy/site.caddy)). |
+| `BREVO_API_KEY`, `MAIL_FROM_EMAIL` | Del paso 3. |
+| `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | Del paso 3. |
+| `S3_ENDPOINT`, `S3_REGION` | `https://` + el endpoint del bucket, y la parte entre `s3.` y `.backblazeb2.com` (por ejemplo `us-east-005`). |
 
-</details>
+`deploy/.env` nunca se versiona (está en `.gitignore`). **En producción las variables de Brevo, B2 y `PUBLIC_API_URL` son obligatorias:** sin ellas la API no arranca, el *healthcheck* falla y `deploy.sh` termina con error.
 
-## 3. Frontend en Vercel
-
-1. *Add New → Project* e importar este repositorio.
-2. Configurar:
-
-   | Campo | Valor |
-   | --- | --- |
-   | Root Directory | `frontend` |
-   | Framework Preset | Vite *(se detecta solo)* |
-   | Build Command / Output Directory | *(valores por defecto: `npm run build` / `dist`)* |
-   | Variable `VITE_API_URL` | La URL de Render del paso 2, **sin** `/api` al final. |
-
-3. Desplegar y anotar la URL de producción (`https://xxxx.vercel.app`).
-
-`VITE_API_URL` se incorpora al compilar: si cambia, hay que volver a desplegar el frontend.
-
-## 4. Conectar el backend con el frontend
-
-En Render, *Environment* del servicio: cambiar `CORS_ORIGIN` por la URL de Vercel del paso 3 y guardar. Render vuelve a desplegar solo.
-
-Para permitir más de un origen (por ejemplo, también el entorno local), separarlos con comas:
-
-```
-CORS_ORIGIN=https://xxxx.vercel.app,http://localhost:5173
-```
-
-## 5. Datos iniciales (una sola vez)
-
-La base queda vacía: sin administrador y sin categorías. El administrador solo se crea por script, no por registro. Cargar `database/seed.sql` contra Neon, desde la raíz del repositorio:
+### 5. Primer despliegue y datos iniciales
 
 ```bash
-# Con psql instalado
-psql "CADENA_DE_NEON" -v ON_ERROR_STOP=1 -f database/seed.sql
-
-# Sin psql, usando el contenedor local de Postgres
-docker exec -i pasantias-postgres psql "CADENA_DE_NEON" -v ON_ERROR_STOP=1 < database/seed.sql
+~/apps/pasantias/deploy/deploy.sh
 ```
 
-El seed solo se puede cargar una vez: usa identificadores y emails fijos, así que una segunda carga falla y no modifica nada.
+Las migraciones crean las tablas, pero la base queda sin administrador y sin categorías (el administrador solo se crea por script). Cargar el seed una vez:
+
+```bash
+docker exec -i postgres psql -U pasantias -d pasantias -v ON_ERROR_STOP=1 < ~/apps/pasantias/database/seed.sql
+```
+
+El seed usa identificadores y emails fijos, así que una segunda carga falla sin modificar nada.
 
 > **Importante:** el seed crea las cuentas de prueba con la contraseña pública `Password123!`, incluida la del administrador. Antes de compartir la URL, cambiar al menos la del administrador:
 >
@@ -157,29 +168,42 @@ El seed solo se puede cargar una vez: usa identificadores y emails fijos, así q
 > WHERE email = 'admin@pasantias.dev';
 > ```
 
-## 6. Verificación
+---
+
+## Verificación
 
 | Prueba | Resultado esperado |
 | --- | --- |
-| Abrir `https://…onrender.com/api` | `Hello World!` |
-| Abrir `https://…onrender.com/api/docs` | Documentación Swagger |
-| Abrir la URL de Vercel | Pantalla de login |
+| Abrir `https://<host>/api` | `Hello World!` |
+| Abrir `https://<host>/api/docs` | Documentación Swagger |
+| Abrir `https://<host>` | Pantalla de inicio |
 | Iniciar sesión con una cuenta del seed | Home del rol correspondiente |
 | Recargar la página estando en `/student` | Sigue en `/student` (no da 404) |
 | Registrar una cuenta nueva con un email real | Muestra "revisá tu correo" y llega el email de verificación |
-| Abrir el enlace del email | Entra a la home del rol; la cuenta aparece en Neon con `email_verified_at` |
+| Abrir el enlace del email | Entra a la home del rol |
 | Subir un CV desde "Mi perfil" y abrirlo | Se abre el PDF; en B2 aparece en `cvs/<id del perfil>/` |
 | Subir un logo desde "Perfil de la empresa" | Se ve en el perfil, en las ofertas y en la página pública de la empresa |
 
-Si el login falla con un error de red y en la consola del navegador aparece un error de CORS, revisar que `CORS_ORIGIN` coincida exactamente con la URL de Vercel (paso 4).
+---
+
+## Operación
+
+```bash
+cd ~/apps/pasantias/deploy
+docker compose ps                    # estado y healthcheck de la API
+docker compose logs -f api           # logs de la API
+docker compose restart api           # reiniciar sin recompilar
+docker exec -it postgres psql -U pasantias -d pasantias   # consola SQL
+```
+
+- **Backups:** el servidor hace un `pg_dump` diario de todas las bases y conserva los últimos 7 días. Para restaurar uno: `docker exec -i postgres pg_restore -U postgres -d pasantias --clean --if-exists --no-owner < pasantias_FECHA.dump`.
+- **Cambiar de dominio:** cambiar el nombre en `deploy/site.caddy` (commit), las tres URLs de `deploy/.env` y volver a desplegar. Caddy pide el certificado nuevo solo; los enlaces de emails ya enviados siguen apuntando al dominio anterior.
+- **Variables de entorno:** después de editar `deploy/.env` alcanza con `docker compose up -d api`, salvo `PUBLIC_API_URL`, que también queda compilada en el frontend: ahí hay que volver a desplegar.
+- **Memoria:** la API está limitada a 640 MB (`mem_limit`) y el *heap* de Node a 384 MB; en reposo usa unos 140 MB.
+- **Versión de Node:** fijada en 24 (`engines` de `package.json` e imagen `node:24-slim`).
 
 ---
 
-## A tener en cuenta en el plan gratuito
+## Historial
 
-- **Arranque en frío del backend:** Render duerme el servicio tras unos 15 minutos sin uso; la primera request posterior tarda cerca de un minuto. Antes de una demostración conviene abrir `/api` unos minutos antes.
-- **Suspensión de la base:** Neon suspende la base cuando no se usa y la reactiva sola con la primera consulta (uno o dos segundos).
-- **Despliegues de vista previa de Vercel:** cada rama o pull request obtiene una URL distinta, que no está en `CORS_ORIGIN`; desde esas URL el frontend carga pero no puede llamar a la API.
-- **Redespliegue selectivo del backend:** Render solo redespliega cuando cambian `backend/`, `package.json`, `package-lock.json` o `render.yaml`.
-- **Límites de Backblaze B2:** además de los 10 GB, el plan gratuito incluye una cantidad diaria de descargas y listados; si se supera, las descargas fallan hasta el día siguiente (no se cobra nada sin tarjeta cargada). Con el uso de este proyecto no se llega: los enlaces se repiten durante una hora y el navegador los guarda en caché. En *Caps & Alerts* se ve el consumo.
-- **Versión de Node:** fijada en 24 (`engines` de `package.json` y `NODE_VERSION` en Render).
+Hasta el 23/10/2026 producción usaba servicios en plan gratuito: frontend en Vercel, API en Render y base en Neon (PostgreSQL *serverless*). Se migró a un servidor propio para evitar el arranque en frío de Render (cerca de un minuto tras 15 minutos sin uso) y la suspensión de la base de Neon. Los datos se copiaron de Neon con `pg_dump`/`pg_restore`, incluida la tabla `_prisma_migrations`, así que el historial de migraciones se conservó. Brevo y Backblaze B2 se siguen usando igual.

@@ -20,4 +20,4 @@ psql "$DATABASE_URL" -f database/seed.sql
 npx prisma migrate diff --from-empty --to-schema prisma/schema.prisma --script > ../database/schema.sql
 ```
 
-`seed.sql` usa la extensión `pgcrypto` (disponible en PostgreSQL y en Neon) para generar los hashes bcrypt de las contraseñas de prueba. Todas las cuentas de prueba usan la contraseña `Password123!` (ver encabezado del archivo).
+`seed.sql` usa la extensión `pgcrypto` (incluida en PostgreSQL) para generar los hashes bcrypt de las contraseñas de prueba. Todas las cuentas de prueba usan la contraseña `Password123!` (ver encabezado del archivo).

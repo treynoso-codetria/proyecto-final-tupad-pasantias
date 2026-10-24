@@ -18,8 +18,8 @@ import {
 const mailIsRequired = (env: EnvironmentVariables) =>
   env.NODE_ENV === 'production' || env.BREVO_API_KEY !== undefined;
 
-// Same for file storage: production needs object storage (Render's disk is
-// wiped on every deploy); elsewhere files go to the local disk unless a
+// Same for file storage: production needs object storage (container disks
+// are wiped on every deploy); elsewhere files go to the local disk unless a
 // bucket is configured (an empty S3_BUCKET counts as none).
 const objectStorageIsRequired = (env: EnvironmentVariables) =>
   env.NODE_ENV === 'production' || Boolean(env.S3_BUCKET);
