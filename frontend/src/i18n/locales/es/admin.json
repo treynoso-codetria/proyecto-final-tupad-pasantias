@@ -1,0 +1,128 @@
+{
+  "cancel": "Cancelar",
+  "search": {
+    "submit": "Buscar",
+    "label": "Buscar"
+  },
+  "dashboard": {
+    "title": "Panel de administración",
+    "description": "Un resumen del portal y el acceso a la moderación de cuentas y ofertas y al catálogo.",
+    "students": "Estudiantes",
+    "companies": "Empresas",
+    "openOffers": "Ofertas abiertas",
+    "applications": "Postulaciones",
+    "activeOf": "{{active}} activas de {{total}}",
+    "offersDetail": "{{closed}} cerradas · {{removed}} dadas de baja",
+    "applicationsDetail": "{{pending}} pendientes · {{accepted}} aceptadas",
+    "sections": "Secciones",
+    "recent": "Moderación reciente",
+    "viewAll": "Ver toda la actividad",
+    "noActions": "Todavía no hay acciones de moderación."
+  },
+  "sections": {
+    "users": {
+      "title": "Cuentas",
+      "description": "Buscá estudiantes y empresas; activá o desactivá sus cuentas."
+    },
+    "offers": {
+      "title": "Ofertas",
+      "description": "Revisá todas las ofertas y dá de baja las que no cumplan las reglas."
+    },
+    "catalog": {
+      "title": "Catálogo",
+      "description": "Categorías y etiquetas que organizan las ofertas."
+    },
+    "activity": {
+      "title": "Actividad",
+      "description": "Registro de todas las acciones de moderación."
+    }
+  },
+  "users": {
+    "title": "Cuentas",
+    "description": "Estudiantes y empresas registrados en el portal. Una cuenta desactivada no puede iniciar sesión, y las ofertas de una empresa desactivada se ocultan.",
+    "searchPlaceholder": "Email, nombre, empresa o CUIT",
+    "roleLabel": "Rol",
+    "statusLabel": "Estado",
+    "all": "Todas",
+    "roles": {
+      "STUDENT": "Estudiantes",
+      "EMPLOYER": "Empresas"
+    },
+    "statuses": {
+      "active": "Activas",
+      "inactive": "Desactivadas"
+    },
+    "role": {
+      "STUDENT": "Estudiante",
+      "EMPLOYER": "Empresa"
+    },
+    "active": "Activa",
+    "inactive": "Desactivada",
+    "unverified": "Email sin verificar",
+    "joined": "Se registró {{when}}",
+    "lastLogin": "último ingreso {{when}}",
+    "neverLoggedIn": "nunca ingresó",
+    "viewProfile": "Ver perfil",
+    "viewCompany": "Ver página de la empresa",
+    "deactivate": "Desactivar",
+    "activate": "Reactivar",
+    "empty": "Ninguna cuenta coincide con la búsqueda.",
+    "total_one": "{{count}} cuenta",
+    "total_other": "{{count}} cuentas",
+    "deactivateTitle": "¿Desactivar a {{name}}?",
+    "deactivateText": "No va a poder iniciar sesión hasta que se reactive la cuenta. Si es una empresa, sus ofertas se ocultan mientras tanto. Se le avisa por email con el motivo.",
+    "activateTitle": "¿Reactivar a {{name}}?",
+    "activateText": "Va a poder volver a iniciar sesión y, si es una empresa, sus ofertas vuelven a estar visibles. Se le avisa por email.",
+    "reason": "Motivo",
+    "reasonHint": "Se le envía al usuario.",
+    "deactivated": "Se desactivó la cuenta de {{name}}.",
+    "activated": "Se reactivó la cuenta de {{name}}.",
+    "back": "Volver a las cuentas"
+  },
+  "offers": {
+    "title": "Ofertas",
+    "description": "Todas las ofertas del portal, en cualquier estado. Dar de baja una la oculta a los estudiantes; su empresa ve el motivo.",
+    "searchPlaceholder": "Título de la oferta o empresa",
+    "statusLabel": "Estado",
+    "all": "Todas",
+    "status": {
+      "OPEN": "Abierta",
+      "CLOSED": "Cerrada",
+      "REMOVED": "Dada de baja"
+    },
+    "published": "Publicada {{when}}",
+    "applications_one": "{{count}} postulación",
+    "applications_other": "{{count}} postulaciones",
+    "companyInactive": "Empresa desactivada",
+    "removedReason": "Dada de baja {{when}}. Motivo: {{reason}}",
+    "remove": "Dar de baja",
+    "restore": "Restaurar",
+    "empty": "Ninguna oferta coincide con la búsqueda.",
+    "total_one": "{{count}} oferta",
+    "total_other": "{{count}} ofertas",
+    "removeTitle": "¿Dar de baja \"{{title}}\"?",
+    "removeText": "Los estudiantes dejan de verla y de poder postularse, y sus conversaciones se cierran. Se le avisa a la empresa con el motivo.",
+    "restoreTitle": "¿Restaurar \"{{title}}\"?",
+    "restoreText": "Vuelve al estado que tenía antes de la baja y se le avisa a la empresa.",
+    "reason": "Motivo",
+    "reasonHint": "La empresa lo va a ver.",
+    "removed": "Se dio de baja \"{{title}}\".",
+    "restored": "Se restauró \"{{title}}\".",
+    "moderation": "Moderación",
+    "moderationHint": "Como administrador podés dar de baja esta oferta del portal o restaurarla."
+  },
+  "activity": {
+    "title": "Actividad",
+    "description": "Todas las acciones de moderación, de la más reciente a la más antigua.",
+    "empty": "Todavía no hay acciones de moderación.",
+    "by": "por {{email}}",
+    "reason": "Motivo: {{reason}}",
+    "deleted": "(eliminado)",
+    "action": {
+      "USER_ACTIVATED": "Cuenta reactivada",
+      "USER_DEACTIVATED": "Cuenta desactivada",
+      "OFFER_REMOVED": "Oferta dada de baja",
+      "OFFER_RESTORED": "Oferta restaurada"
+    }
+  }
+}

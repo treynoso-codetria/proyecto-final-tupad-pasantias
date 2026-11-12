@@ -53,6 +53,10 @@
     "FILE_TYPE_NOT_ALLOWED": "This type of file is not allowed.",
     "STORAGE_UNAVAILABLE": "We couldn't save the file. Try again in a few minutes.",
     "network": "We couldn't reach the server. Check your connection and try again.",
-    "unexpected": "Something went wrong. Try again in a few minutes."
+    "unexpected": "Something went wrong. Try again in a few minutes.",
+    "ACCOUNT_STATUS_UNCHANGED": "The account already had that status. Reload the list.",
+    "ADMIN_ACCOUNT_NOT_MANAGEABLE": "Administrator accounts cannot be managed from the panel.",
+    "OFFER_ALREADY_REMOVED": "The offer was already removed. Reload the list.",
+    "OFFER_NOT_REMOVED": "The offer is not removed. Reload the list."
   }
 }

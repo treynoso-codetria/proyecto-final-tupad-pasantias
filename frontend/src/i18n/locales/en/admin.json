@@ -1,0 +1,128 @@
+{
+  "cancel": "Cancel",
+  "search": {
+    "submit": "Search",
+    "label": "Search"
+  },
+  "dashboard": {
+    "title": "Administration panel",
+    "description": "An overview of the portal, and access to account and offer moderation and to the catalog.",
+    "students": "Students",
+    "companies": "Companies",
+    "openOffers": "Open offers",
+    "applications": "Applications",
+    "activeOf": "{{active}} active of {{total}}",
+    "offersDetail": "{{closed}} closed · {{removed}} removed",
+    "applicationsDetail": "{{pending}} pending · {{accepted}} accepted",
+    "sections": "Sections",
+    "recent": "Recent moderation",
+    "viewAll": "View all activity",
+    "noActions": "No moderation actions yet."
+  },
+  "sections": {
+    "users": {
+      "title": "Accounts",
+      "description": "Search students and companies; activate or deactivate their accounts."
+    },
+    "offers": {
+      "title": "Offers",
+      "description": "Review every offer and remove the ones that break the rules."
+    },
+    "catalog": {
+      "title": "Catalog",
+      "description": "Categories and tags that organize the offers."
+    },
+    "activity": {
+      "title": "Activity",
+      "description": "Log of every moderation action."
+    }
+  },
+  "users": {
+    "title": "Accounts",
+    "description": "Students and companies registered in the portal. A deactivated account cannot log in, and a deactivated company's offers are hidden.",
+    "searchPlaceholder": "Email, name, company or CUIT",
+    "roleLabel": "Role",
+    "statusLabel": "Status",
+    "all": "All",
+    "roles": {
+      "STUDENT": "Students",
+      "EMPLOYER": "Companies"
+    },
+    "statuses": {
+      "active": "Active",
+      "inactive": "Deactivated"
+    },
+    "role": {
+      "STUDENT": "Student",
+      "EMPLOYER": "Company"
+    },
+    "active": "Active",
+    "inactive": "Deactivated",
+    "unverified": "Email not verified",
+    "joined": "Joined {{when}}",
+    "lastLogin": "last login {{when}}",
+    "neverLoggedIn": "never logged in",
+    "viewProfile": "View profile",
+    "viewCompany": "View company page",
+    "deactivate": "Deactivate",
+    "activate": "Reactivate",
+    "empty": "No accounts match the search.",
+    "total_one": "{{count}} account",
+    "total_other": "{{count}} accounts",
+    "deactivateTitle": "Deactivate {{name}}?",
+    "deactivateText": "They will not be able to log in until the account is reactivated. A company's offers are hidden meanwhile. They are notified by email with the reason.",
+    "activateTitle": "Reactivate {{name}}?",
+    "activateText": "They will be able to log in again, and a company's offers will be visible again. They are notified by email.",
+    "reason": "Reason",
+    "reasonHint": "It is sent to the user.",
+    "deactivated": "{{name}}'s account was deactivated.",
+    "activated": "{{name}}'s account was reactivated.",
+    "back": "Back to the accounts"
+  },
+  "offers": {
+    "title": "Offers",
+    "description": "Every offer in the portal, in any status. Removing one hides it from students; its company sees the reason.",
+    "searchPlaceholder": "Offer title or company",
+    "statusLabel": "Status",
+    "all": "All",
+    "status": {
+      "OPEN": "Open",
+      "CLOSED": "Closed",
+      "REMOVED": "Removed"
+    },
+    "published": "Published {{when}}",
+    "applications_one": "{{count}} application",
+    "applications_other": "{{count}} applications",
+    "companyInactive": "Company deactivated",
+    "removedReason": "Removed {{when}}. Reason: {{reason}}",
+    "remove": "Remove",
+    "restore": "Restore",
+    "empty": "No offers match the search.",
+    "total_one": "{{count}} offer",
+    "total_other": "{{count}} offers",
+    "removeTitle": "Remove \"{{title}}\"?",
+    "removeText": "Students will no longer see it or be able to apply, and its conversations are closed. The company is notified with the reason.",
+    "restoreTitle": "Restore \"{{title}}\"?",
+    "restoreText": "It goes back to the status it had before being removed, and the company is notified.",
+    "reason": "Reason",
+    "reasonHint": "The company will see it.",
+    "removed": "\"{{title}}\" was removed.",
+    "restored": "\"{{title}}\" was restored.",
+    "moderation": "Moderation",
+    "moderationHint": "As an administrator you can remove this offer from the portal or restore it."
+  },
+  "activity": {
+    "title": "Activity",
+    "description": "Every moderation action, newest first.",
+    "empty": "No moderation actions yet.",
+    "by": "by {{email}}",
+    "reason": "Reason: {{reason}}",
+    "deleted": "(deleted)",
+    "action": {
+      "USER_ACTIVATED": "Account reactivated",
+      "USER_DEACTIVATED": "Account deactivated",
+      "OFFER_REMOVED": "Offer removed",
+      "OFFER_RESTORED": "Offer restored"
+    }
+  }
+}

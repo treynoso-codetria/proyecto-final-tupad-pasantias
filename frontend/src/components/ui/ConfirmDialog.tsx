@@ -14,6 +14,8 @@ type ConfirmDialogProps = {
   confirming?: boolean
   // Shown inside the dialog, e.g. when the confirmed action failed.
   error?: ReactNode
+  // Extra content below the description, e.g. a field asking for a reason.
+  children?: ReactNode
 }
 
 // Asks before an action that cannot be undone. Radix handles focus trapping,
@@ -28,6 +30,7 @@ export function ConfirmDialog({
   onConfirm,
   confirming = false,
   error,
+  children,
 }: ConfirmDialogProps) {
   return (
     <AlertDialog.Root open={open} onOpenChange={onOpenChange}>
@@ -40,6 +43,7 @@ export function ConfirmDialog({
           <AlertDialog.Description className="mt-3 text-muted">
             {description}
           </AlertDialog.Description>
+          {children && <div className="mt-5">{children}</div>}
           {error && <div className="mt-4">{error}</div>}
           <div className="mt-7 flex flex-wrap justify-end gap-3">
             <AlertDialog.Cancel className={buttonStyles('secondary')}>

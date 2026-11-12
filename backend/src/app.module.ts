@@ -12,6 +12,7 @@ import { RolesGuard } from './common/guards/roles.guard.js';
 import { validateEnv } from './config/env.validation.js';
 import { MailModule } from './mail/mail.module.js';
 import { StorageModule } from './storage/storage.module.js';
+import { AdminModule } from './modules/admin/admin.module.js';
 import { ApplicationsModule } from './modules/applications/applications.module.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { CatalogModule } from './modules/catalog/catalog.module.js';
@@ -55,6 +56,7 @@ import { PrismaModule } from './prisma/prisma.module.js';
     NotificationsModule,
     MessagesModule,
     ApplicationsModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [

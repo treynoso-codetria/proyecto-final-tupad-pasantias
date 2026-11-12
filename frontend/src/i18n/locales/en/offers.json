@@ -75,7 +75,8 @@
     "expired": "The deadline of this offer has passed.",
     "removed": "An administrator removed this offer, so only you can see it. Reason: {{reason}}",
     "edit": "Edit offer",
-    "notFound": "This offer doesn't exist or is no longer available."
+    "notFound": "This offer doesn't exist or is no longer available.",
+    "removedAdmin": "An administrator removed this offer, so students cannot see it. Reason: {{reason}}"
   },
   "company": {
     "openOffers": "Open offers",

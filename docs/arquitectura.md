@@ -106,7 +106,7 @@ Cada carpeta de `modules/` contiene `*.module.ts`, `*.controller.ts`, `*.service
 
 ### 2.4 Convenciones de la API
 
-- Recursos en plural y en inglés: `/offers`, `/offers/:id/applications`, `/applications/:id/messages`, `/admin/users/:id/deactivate`.
+- Recursos en plural y en inglés: `/offers`, `/offers/:id/applications`, `/applications/:id/messages`, `/admin/users/:id/status`.
 - Prefijo global `/api` y documentación Swagger en `/api/docs`.
 - Paginación con `?page=&limit=`; filtros por query string (`/offers?category=...&modality=REMOTE&type=INTERNSHIP`).
 - Códigos HTTP estándar: `201` creación, `400` validación, `401` sin token, `403` rol/recurso no permitido, `404`, `409` conflicto (ej. postulación duplicada).

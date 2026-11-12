@@ -22,5 +22,15 @@
     "subject": "Your password was changed",
     "heading": "Your password was changed",
     "body": "The password of your account was just changed. If it wasn't you, contact an administrator."
+  },
+  "accountDeactivated": {
+    "subject": "Your account was deactivated",
+    "heading": "Your account was deactivated",
+    "body": "An administrator deactivated your account on the Internship Portal, so you cannot log in for now. Reason: {reason}. If you think this is a mistake, contact the portal administrators."
+  },
+  "accountReactivated": {
+    "subject": "Your account was reactivated",
+    "heading": "Your account was reactivated",
+    "body": "An administrator reactivated your account on the Internship Portal. You can log in again."
   }
 }

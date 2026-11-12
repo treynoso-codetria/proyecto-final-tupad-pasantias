@@ -24,6 +24,9 @@ type NavItem = {
     | 'catalog'
     | 'myApplications'
     | 'messages'
+    | 'users'
+    | 'adminOffers'
+    | 'activity'
   // Only active on that exact path, not on the pages below it.
   end?: boolean
 }
@@ -46,8 +49,10 @@ const NAVIGATION: Record<Role, NavItem[]> = {
   ],
   ADMIN: [
     { to: '/admin', label: 'home', end: true },
-    { to: '/offers', label: 'offers' },
+    { to: '/admin/users', label: 'users' },
+    { to: '/admin/offers', label: 'adminOffers' },
     { to: '/admin/catalog', label: 'catalog' },
+    { to: '/admin/activity', label: 'activity' },
   ],
 }
 

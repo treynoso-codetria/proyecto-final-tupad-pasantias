@@ -11,6 +11,7 @@ import { Card } from '@/components/ui/Card'
 import { FullPageLoader } from '@/components/ui/FullPageLoader'
 import { LoadError } from '@/components/ui/LoadError'
 import { NotFoundNotice } from '@/components/ui/NotFoundNotice'
+import { OfferModerationCard } from '@/features/admin/components/OfferModerationCard'
 import { CompanyLogo } from '@/features/companies/CompanyLogo'
 import { ApplyPanel } from '@/features/applications/components/ApplyPanel'
 import { useAuth } from '@/features/auth/auth-context'
@@ -91,7 +92,7 @@ function OfferDetailView({ offer }: { offer: OfferDetail }) {
           )}
         </header>
 
-        <StatusNotice offer={offer} />
+        <StatusNotice offer={offer} isAdmin={user?.role === 'ADMIN'} />
 
         <Section title={t('detail.description')}>
           <p className="whitespace-pre-line">{offer.description}</p>
@@ -109,6 +110,7 @@ function OfferDetailView({ offer }: { offer: OfferDetail }) {
       </article>
 
       <aside className="space-y-6">
+        {user?.role === 'ADMIN' && <OfferModerationCard offer={offer} />}
         <ApplyPanel offer={offer} />
         <Card className="p-6">
           <h2 className="font-display text-xl font-extrabold">{t('detail.facts')}</h2>
@@ -150,12 +152,15 @@ function OfferDetailView({ offer }: { offer: OfferDetail }) {
 }
 
 // Why the offer cannot be applied to, when that is the case.
-function StatusNotice({ offer }: { offer: OfferDetail }) {
+function StatusNotice({ offer, isAdmin }: { offer: OfferDetail; isAdmin: boolean }) {
   const { t } = useTranslation('offers')
 
   if (offer.status === 'REMOVED') {
+    const reason = offer.removalReason ?? '—'
     return (
-      <Alert>{t('detail.removed', { reason: offer.removalReason ?? '—' })}</Alert>
+      <Alert>
+        {isAdmin ? t('detail.removedAdmin', { reason }) : t('detail.removed', { reason })}
+      </Alert>
     )
   }
   if (offer.status === 'CLOSED') {

@@ -75,7 +75,8 @@
     "expired": "Venció el plazo para postularse a esta oferta.",
     "removed": "Un administrador dio de baja esta oferta, por eso solo la ves vos. Motivo: {{reason}}",
     "edit": "Editar oferta",
-    "notFound": "Esta oferta no existe o ya no está disponible."
+    "notFound": "Esta oferta no existe o ya no está disponible.",
+    "removedAdmin": "Un administrador dio de baja esta oferta, así que los estudiantes no la ven. Motivo: {{reason}}"
   },
   "company": {
     "openOffers": "Ofertas abiertas",

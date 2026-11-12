@@ -1,4 +1,7 @@
 import { createBrowserRouter } from 'react-router'
+import { ActivityAdminPage } from '@/features/admin/ActivityAdminPage'
+import { OffersAdminPage } from '@/features/admin/OffersAdminPage'
+import { UsersAdminPage } from '@/features/admin/UsersAdminPage'
 import { AccountPage } from '@/features/account/AccountPage'
 import { ConfirmEmailChangePage } from '@/features/account/ConfirmEmailChangePage'
 import { ApplicantProfilePage } from '@/features/applications/pages/ApplicantProfilePage'
@@ -109,7 +112,11 @@ export const router = createBrowserRouter([
         element: <AppShell />,
         children: [
           { index: true, element: <AdminHomePage /> },
+          { path: 'users', element: <UsersAdminPage /> },
+          { path: 'students/:id', element: <ApplicantProfilePage /> },
+          { path: 'offers', element: <OffersAdminPage /> },
           { path: 'catalog', element: <CatalogAdminPage /> },
+          { path: 'activity', element: <ActivityAdminPage /> },
         ],
       },
     ],

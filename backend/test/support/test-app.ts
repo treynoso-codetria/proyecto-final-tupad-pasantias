@@ -21,7 +21,13 @@ type SentEmail =
       url: string;
     }
   | { type: 'email-change-notice'; to: string; newEmail: string }
-  | { type: 'password-changed'; to: string };
+  | { type: 'password-changed'; to: string }
+  | {
+      type: 'account-status';
+      to: string;
+      isActive: boolean;
+      reason: string | null;
+    };
 
 // Stands in for MailService: records the emails instead of sending them, so
 // the tests can follow the links a real user would receive.
@@ -31,6 +37,7 @@ export class FakeMailService implements Pick<
   | 'sendEmailChangeConfirmation'
   | 'sendEmailChangeNotice'
   | 'sendPasswordChangedNotice'
+  | 'sendAccountStatusNotice'
 > {
   sent: SentEmail[] = [];
   // Set to true to simulate the mail provider being down.
@@ -50,6 +57,14 @@ export class FakeMailService implements Pick<
 
   sendPasswordChangedNotice(to: string) {
     return this.record({ type: 'password-changed', to });
+  }
+
+  sendAccountStatusNotice(
+    to: string,
+    isActive: boolean,
+    reason: string | null,
+  ) {
+    return this.record({ type: 'account-status', to, isActive, reason });
   }
 
   emailsTo(to: string, type: SentEmail['type']): SentEmail[] {
@@ -189,7 +204,12 @@ export async function createTestApp() {
 
     async close() {
       // Deleting the users cascades to their profiles, companies, offers and
-      // applications; categories and tags are not owned by a user.
+      // applications; categories and tags are not owned by a user. The
+      // moderation log keeps its admin (ON DELETE RESTRICT), so the actions
+      // of the run's admins go first.
+      await prisma.adminAction.deleteMany({
+        where: { admin: { email: { endsWith: `@${emailDomain}` } } },
+      });
       await prisma.user.deleteMany({
         where: { email: { endsWith: `@${emailDomain}` } },
       });

@@ -19,6 +19,24 @@ export type NotificationContent =
   | {
       type: typeof NotificationType.NEW_MESSAGE;
       data: { applicationId: string; offerTitle: string; senderName: string };
+    }
+  // Moderation of an offer by an administrator, sent to its company. The
+  // type is named after the removal; restoring uses it too, with the other
+  // status.
+  | {
+      type: typeof NotificationType.OFFER_REMOVED;
+      data:
+        | {
+            offerId: string;
+            offerTitle: string;
+            status: 'REMOVED';
+            reason: string;
+          }
+        | { offerId: string; offerTitle: string; status: 'RESTORED' };
+    }
+  | {
+      type: typeof NotificationType.ACCOUNT_STATUS_CHANGED;
+      data: { status: 'DEACTIVATED'; reason: string } | { status: 'ACTIVATED' };
     };
 
 // Key of the texts of a notification in notifications.json. Some types have

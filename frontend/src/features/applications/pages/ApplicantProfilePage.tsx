@@ -12,11 +12,12 @@ import { FullPageLoader } from '@/components/ui/FullPageLoader'
 import { LoadError } from '@/components/ui/LoadError'
 import { studentsApi, type StudentProfileView } from '@/features/students/api'
 
-// Passed by the applicants list, so the back link returns to it.
-export type ApplicantLinkState = { backTo?: string }
+// Passed by the list that links here (applicants, or the admin's accounts),
+// so the back link returns to it.
+export type ApplicantLinkState = { backTo?: string; backLabel?: string }
 
 // A student's profile as a company sees it: only for students who applied
-// to one of its offers (the API enforces it).
+// to one of its offers (the API enforces it). Administrators see any.
 export function ApplicantProfilePage() {
   const { t } = useTranslation('applications')
   const { id = '' } = useParams()
@@ -45,7 +46,7 @@ export function ApplicantProfilePage() {
 
   return (
     <>
-      {state?.backTo && <BackLink to={state.backTo} label={t('profile.back')} />}
+      {state?.backTo && <BackLink to={state.backTo} label={state.backLabel ?? t('profile.back')} />}
       {content}
     </>
   )

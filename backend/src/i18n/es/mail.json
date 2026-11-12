@@ -22,5 +22,15 @@
     "subject": "Tu contraseña fue cambiada",
     "heading": "Tu contraseña fue cambiada",
     "body": "La contraseña de tu cuenta se acaba de cambiar. Si no fuiste vos, contactá a un administrador."
+  },
+  "accountDeactivated": {
+    "subject": "Tu cuenta fue desactivada",
+    "heading": "Tu cuenta fue desactivada",
+    "body": "Un administrador desactivó tu cuenta del Portal de Pasantías, así que por ahora no podés iniciar sesión. Motivo: {reason}. Si creés que es un error, contactá a los administradores del portal."
+  },
+  "accountReactivated": {
+    "subject": "Tu cuenta fue reactivada",
+    "heading": "Tu cuenta fue reactivada",
+    "body": "Un administrador reactivó tu cuenta del Portal de Pasantías. Ya podés volver a iniciar sesión."
   }
 }

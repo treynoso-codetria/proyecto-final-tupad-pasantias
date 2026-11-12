@@ -16,5 +16,25 @@
   "NEW_MESSAGE": {
     "title": "Nuevo mensaje de {senderName}",
     "body": "Sobre \"{offerTitle}\"."
+  },
+  "OFFER_REMOVED": {
+    "REMOVED": {
+      "title": "Tu oferta \"{offerTitle}\" fue dada de baja",
+      "body": "Un administrador la dio de baja del portal. Motivo: {reason}"
+    },
+    "RESTORED": {
+      "title": "Tu oferta \"{offerTitle}\" fue restaurada",
+      "body": "Un administrador la restauró; vuelve a estar visible."
+    }
+  },
+  "ACCOUNT_STATUS_CHANGED": {
+    "DEACTIVATED": {
+      "title": "Tu cuenta fue desactivada",
+      "body": "Un administrador desactivó tu cuenta. Motivo: {reason}"
+    },
+    "ACTIVATED": {
+      "title": "Tu cuenta fue reactivada",
+      "body": "Un administrador reactivó tu cuenta. Ya podés volver a usar el portal."
+    }
   }
 }

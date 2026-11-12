@@ -15,7 +15,9 @@ type Template =
   | 'verifyEmail'
   | 'confirmEmailChange'
   | 'emailChangeNotice'
-  | 'passwordChanged';
+  | 'passwordChanged'
+  | 'accountDeactivated'
+  | 'accountReactivated';
 
 // Sends the account emails through Brevo's HTTPS API (no SMTP server to run
 // or credentials to keep). Texts are in src/i18n/<lang>/mail.json and follow
@@ -56,6 +58,18 @@ export class MailService {
 
   sendPasswordChangedNotice(to: string): Promise<boolean> {
     return this.send(to, 'passwordChanged', {});
+  }
+
+  // An administrator activated or deactivated the account. A deactivated
+  // user cannot log in to read the notification, so they are also emailed.
+  sendAccountStatusNotice(
+    to: string,
+    isActive: boolean,
+    reason: string | null,
+  ): Promise<boolean> {
+    return isActive
+      ? this.send(to, 'accountReactivated', {})
+      : this.send(to, 'accountDeactivated', { args: { reason: reason ?? '' } });
   }
 
   private async send(

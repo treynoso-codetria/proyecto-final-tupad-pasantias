@@ -17,7 +17,10 @@
     "myOffers": "My offers",
     "catalog": "Catalog",
     "myApplications": "My applications",
-    "messages": "Messages"
+    "messages": "Messages",
+    "users": "Accounts",
+    "adminOffers": "Offers",
+    "activity": "Activity"
   },
   "account": "My account",
   "logout": "Log out",

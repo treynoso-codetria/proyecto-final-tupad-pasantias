@@ -53,6 +53,10 @@
     "FILE_TYPE_NOT_ALLOWED": "Este tipo de archivo no está permitido.",
     "STORAGE_UNAVAILABLE": "No pudimos guardar el archivo. Probá de nuevo en unos minutos.",
     "network": "No pudimos conectar con el servidor. Revisá tu conexión y probá de nuevo.",
-    "unexpected": "Ocurrió un error inesperado. Probá de nuevo en unos minutos."
+    "unexpected": "Ocurrió un error inesperado. Probá de nuevo en unos minutos.",
+    "ACCOUNT_STATUS_UNCHANGED": "La cuenta ya tenía ese estado. Recargá la lista.",
+    "ADMIN_ACCOUNT_NOT_MANAGEABLE": "Las cuentas de administrador no se gestionan desde el panel.",
+    "OFFER_ALREADY_REMOVED": "La oferta ya estaba dada de baja. Recargá la lista.",
+    "OFFER_NOT_REMOVED": "La oferta no está dada de baja. Recargá la lista."
   }
 }
