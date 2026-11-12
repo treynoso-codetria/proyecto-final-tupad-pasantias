@@ -135,6 +135,7 @@ No es un módulo funcional, pero se planifica como tal porque condiciona a todos
 - Seed de datos de prueba.
 - Tests unitarios de servicios críticos (auth, postulaciones) y tests e2e de los flujos principales.
 - CI con GitHub Actions (lint + tests + build) y despliegue en un servidor propio con Docker (frontend, backend y base).
+- Implementado: CI en `.github/workflows/ci.yml`, en cada push y en los pull requests a `main`. Backend: lint, chequeo de tipos (incluidos los tests), tests unitarios, migraciones sobre un PostgreSQL 18 vacío, tests e2e y build. Frontend: lint y build (chequeo de tipos incluido).
 
 ---
 

@@ -134,5 +134,7 @@ Ambos proyectos usan **inglés por defecto** y **español** como segundo idioma.
 
 ## Convenciones del repositorio
 
+- **CI** (`.github/workflows/ci.yml`): en cada push corre lint, `typecheck`, tests unitarios, migraciones + e2e contra un PostgreSQL 18 vacío y build del backend; lint y build del frontend. Los tests e2e no deben depender del seed.
+
 - El desarrollo está pensado por ramas de módulo (una rama por área funcional/dominio), que se mergean a `main`.
 - Un único `.gitignore` en la raíz cubre todo el monorepo (node_modules, dist, .env, cliente generado de Prisma, etc.) — no agregar `.gitignore` sueltos dentro de `frontend/` o `backend/`.

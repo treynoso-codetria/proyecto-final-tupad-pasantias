@@ -17,6 +17,7 @@
     "start:prod": "node dist/main",
     "db:deploy": "prisma migrate deploy",
     "lint": "oxlint src/ test/",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",

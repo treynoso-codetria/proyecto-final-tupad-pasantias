@@ -1,0 +1,91 @@
+# Lint, type check, tests and build of both workspaces, on every push and on
+# pull requests to main. The backend's e2e tests run against a throwaway
+# PostgreSQL (same major version as production) migrated from scratch.
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches: [main]
+
+# A newer push to the same branch cancels the run still in progress.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: pasantias
+          POSTGRES_PASSWORD: pasantias
+          POSTGRES_DB: pasantias
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U pasantias"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://pasantias:pasantias@localhost:5432/pasantias?schema=public
+      # Only for the tests: not a real secret.
+      JWT_SECRET: ci-only-secret-that-is-at-least-32-characters-long
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        working-directory: .
+        run: npm ci
+      - name: Generate Prisma client
+        run: npx prisma generate
+      - name: Lint
+        run: npm run lint
+      - name: Type check
+        run: npm run typecheck
+      - name: Unit tests
+        run: npm test
+      - name: Apply migrations
+        run: npx prisma migrate deploy
+      - name: e2e tests
+        run: npm run test:e2e
+        env:
+          NODE_ENV: test
+      - name: Build
+        run: npm run build
+
+  frontend:
+    name: Frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        working-directory: .
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      # tsc -b (type check, including the translation keys) + vite build.
+      - name: Build
+        run: npm run build

@@ -1,5 +1,7 @@
 # 🎓 Portal de Pasantías y Búsqueda Laboral Estudiantil
 
+[![CI](https://github.com/treynoso-codetria/proyecto-final-tupad-pasantias/actions/workflows/ci.yml/badge.svg)](https://github.com/treynoso-codetria/proyecto-final-tupad-pasantias/actions/workflows/ci.yml)
+
 Plataforma web que conecta **estudiantes** con **empresas** que ofrecen pasantías y empleos junior, facilitando la publicación de ofertas, la postulación y la comunicación entre ambas partes.
 
 Desarrollado como **Trabajo Final Integrador** de la Tecnicatura en Programación.
