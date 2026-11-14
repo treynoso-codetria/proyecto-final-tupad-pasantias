@@ -7,6 +7,6 @@
 | [Listado de módulos](modulos.md) | Módulos funcionales con descripción, prioridad, dependencias y orden de desarrollo. |
 | [Modelo de datos](database/modelo-de-datos.md) | Diagrama entidad-relación, diccionario de datos, relaciones e índices. |
 | [DER (imagen)](database/der.png) | Diagrama entidad-relación exportado ([SVG](database/der.svg)). |
-| [Informes de avance](informes/) | Documentos de cada entrega. |
+| [Informes de avance](informes/) | Documentos de cada entrega; el de la entrega final es [entrega-final.md](informes/entrega-final.md). |
 
 Los scripts SQL (DDL/DML) están en [`/database`](../database).

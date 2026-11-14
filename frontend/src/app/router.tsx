@@ -1,12 +1,4 @@
 import { createBrowserRouter } from 'react-router'
-import { ActivityAdminPage } from '@/features/admin/ActivityAdminPage'
-import { OffersAdminPage } from '@/features/admin/OffersAdminPage'
-import { UsersAdminPage } from '@/features/admin/UsersAdminPage'
-import { AccountPage } from '@/features/account/AccountPage'
-import { ConfirmEmailChangePage } from '@/features/account/ConfirmEmailChangePage'
-import { ApplicantProfilePage } from '@/features/applications/pages/ApplicantProfilePage'
-import { ApplicantsPage } from '@/features/applications/pages/ApplicantsPage'
-import { MyApplicationsPage } from '@/features/applications/pages/MyApplicationsPage'
 import { AuthLayout } from '@/features/auth/components/AuthLayout'
 import type { AuthPanel } from '@/features/auth/components/auth-panel'
 import {
@@ -15,30 +7,8 @@ import {
   RequireRole,
   RootRedirect,
 } from '@/features/auth/components/guards'
-import { CheckEmailPage } from '@/features/auth/pages/CheckEmailPage'
-import { LoginPage } from '@/features/auth/pages/LoginPage'
-import { RegisterChoicePage } from '@/features/auth/pages/RegisterChoicePage'
-import { RegisterEmployerPage } from '@/features/auth/pages/RegisterEmployerPage'
-import { RegisterStudentPage } from '@/features/auth/pages/RegisterStudentPage'
-import { VerifyEmailPage } from '@/features/auth/pages/VerifyEmailPage'
-import { CatalogAdminPage } from '@/features/catalog/CatalogAdminPage'
-import { CompanyProfilePage } from '@/features/companies/CompanyProfilePage'
-import { PublicCompanyPage } from '@/features/companies/PublicCompanyPage'
-import { AdminHomePage } from '@/features/home/AdminHomePage'
-import { EmployerHomePage } from '@/features/home/EmployerHomePage'
-import { StudentHomePage } from '@/features/home/StudentHomePage'
-import { ConversationPage } from '@/features/messages/ConversationPage'
-import { MessagesPage } from '@/features/messages/MessagesPage'
-import { NotificationsPage } from '@/features/notifications/NotificationsPage'
-import { MyOffersPage } from '@/features/offers/pages/MyOffersPage'
-import { OfferDetailPage } from '@/features/offers/pages/OfferDetailPage'
-import {
-  EditOfferPage,
-  NewOfferPage,
-} from '@/features/offers/pages/OfferFormPage'
-import { OffersPage } from '@/features/offers/pages/OffersPage'
-import { StudentProfilePage } from '@/features/students/StudentProfilePage'
 import { AppShell } from './AppShell'
+import { page } from './lazy-page'
 import { NotFoundPage } from './NotFoundPage'
 
 const studentPanel: AuthPanel = { role: 'STUDENT', content: 'student' }
@@ -52,24 +22,60 @@ export const router = createBrowserRouter([
       {
         element: <GuestOnly />,
         children: [
-          { path: '/login', element: <LoginPage /> },
-          { path: '/register', element: <RegisterChoicePage /> },
+          {
+            path: '/login',
+            element: page(
+              () => import('@/features/auth/pages/LoginPage'),
+              'LoginPage',
+            ),
+          },
+          {
+            path: '/register',
+            element: page(
+              () => import('@/features/auth/pages/RegisterChoicePage'),
+              'RegisterChoicePage',
+            ),
+          },
           {
             path: '/register/student',
-            element: <RegisterStudentPage />,
+            element: page(
+              () => import('@/features/auth/pages/RegisterStudentPage'),
+              'RegisterStudentPage',
+            ),
             handle: studentPanel,
           },
           {
             path: '/register/employer',
-            element: <RegisterEmployerPage />,
+            element: page(
+              () => import('@/features/auth/pages/RegisterEmployerPage'),
+              'RegisterEmployerPage',
+            ),
             handle: employerPanel,
           },
-          { path: '/check-email', element: <CheckEmailPage /> },
+          {
+            path: '/check-email',
+            element: page(
+              () => import('@/features/auth/pages/CheckEmailPage'),
+              'CheckEmailPage',
+            ),
+          },
         ],
       },
       // Opened from emailed links; they work with or without a session.
-      { path: '/verify-email', element: <VerifyEmailPage /> },
-      { path: '/confirm-email-change', element: <ConfirmEmailChangePage /> },
+      {
+        path: '/verify-email',
+        element: page(
+          () => import('@/features/auth/pages/VerifyEmailPage'),
+          'VerifyEmailPage',
+        ),
+      },
+      {
+        path: '/confirm-email-change',
+        element: page(
+          () => import('@/features/account/ConfirmEmailChangePage'),
+          'ConfirmEmailChangePage',
+        ),
+      },
     ],
   },
   {
@@ -79,9 +85,27 @@ export const router = createBrowserRouter([
         path: '/student',
         element: <AppShell />,
         children: [
-          { index: true, element: <StudentHomePage /> },
-          { path: 'profile', element: <StudentProfilePage /> },
-          { path: 'applications', element: <MyApplicationsPage /> },
+          {
+            index: true,
+            element: page(
+              () => import('@/features/home/StudentHomePage'),
+              'StudentHomePage',
+            ),
+          },
+          {
+            path: 'profile',
+            element: page(
+              () => import('@/features/students/StudentProfilePage'),
+              'StudentProfilePage',
+            ),
+          },
+          {
+            path: 'applications',
+            element: page(
+              () => import('@/features/applications/pages/MyApplicationsPage'),
+              'MyApplicationsPage',
+            ),
+          },
         ],
       },
     ],
@@ -93,13 +117,56 @@ export const router = createBrowserRouter([
         path: '/employer',
         element: <AppShell />,
         children: [
-          { index: true, element: <EmployerHomePage /> },
-          { path: 'company', element: <CompanyProfilePage /> },
-          { path: 'offers', element: <MyOffersPage /> },
-          { path: 'offers/new', element: <NewOfferPage /> },
-          { path: 'offers/:id/edit', element: <EditOfferPage /> },
-          { path: 'offers/:id/applications', element: <ApplicantsPage /> },
-          { path: 'students/:id', element: <ApplicantProfilePage /> },
+          {
+            index: true,
+            element: page(
+              () => import('@/features/home/EmployerHomePage'),
+              'EmployerHomePage',
+            ),
+          },
+          {
+            path: 'company',
+            element: page(
+              () => import('@/features/companies/CompanyProfilePage'),
+              'CompanyProfilePage',
+            ),
+          },
+          {
+            path: 'offers',
+            element: page(
+              () => import('@/features/offers/pages/MyOffersPage'),
+              'MyOffersPage',
+            ),
+          },
+          {
+            path: 'offers/new',
+            element: page(
+              () => import('@/features/offers/pages/OfferFormPage'),
+              'NewOfferPage',
+            ),
+          },
+          {
+            path: 'offers/:id/edit',
+            element: page(
+              () => import('@/features/offers/pages/OfferFormPage'),
+              'EditOfferPage',
+            ),
+          },
+          {
+            path: 'offers/:id/applications',
+            element: page(
+              () => import('@/features/applications/pages/ApplicantsPage'),
+              'ApplicantsPage',
+            ),
+          },
+          {
+            path: 'students/:id',
+            element: page(
+              () =>
+                import('@/features/applications/pages/ApplicantProfilePage'),
+              'ApplicantProfilePage',
+            ),
+          },
         ],
       },
     ],
@@ -111,12 +178,49 @@ export const router = createBrowserRouter([
         path: '/admin',
         element: <AppShell />,
         children: [
-          { index: true, element: <AdminHomePage /> },
-          { path: 'users', element: <UsersAdminPage /> },
-          { path: 'students/:id', element: <ApplicantProfilePage /> },
-          { path: 'offers', element: <OffersAdminPage /> },
-          { path: 'catalog', element: <CatalogAdminPage /> },
-          { path: 'activity', element: <ActivityAdminPage /> },
+          {
+            index: true,
+            element: page(
+              () => import('@/features/home/AdminHomePage'),
+              'AdminHomePage',
+            ),
+          },
+          {
+            path: 'users',
+            element: page(
+              () => import('@/features/admin/UsersAdminPage'),
+              'UsersAdminPage',
+            ),
+          },
+          {
+            path: 'students/:id',
+            element: page(
+              () =>
+                import('@/features/applications/pages/ApplicantProfilePage'),
+              'ApplicantProfilePage',
+            ),
+          },
+          {
+            path: 'offers',
+            element: page(
+              () => import('@/features/admin/OffersAdminPage'),
+              'OffersAdminPage',
+            ),
+          },
+          {
+            path: 'catalog',
+            element: page(
+              () => import('@/features/catalog/CatalogAdminPage'),
+              'CatalogAdminPage',
+            ),
+          },
+          {
+            path: 'activity',
+            element: page(
+              () => import('@/features/admin/ActivityAdminPage'),
+              'ActivityAdminPage',
+            ),
+          },
         ],
       },
     ],
@@ -128,8 +232,20 @@ export const router = createBrowserRouter([
       {
         element: <AppShell />,
         children: [
-          { path: '/messages', element: <MessagesPage /> },
-          { path: '/messages/:applicationId', element: <ConversationPage /> },
+          {
+            path: '/messages',
+            element: page(
+              () => import('@/features/messages/MessagesPage'),
+              'MessagesPage',
+            ),
+          },
+          {
+            path: '/messages/:applicationId',
+            element: page(
+              () => import('@/features/messages/ConversationPage'),
+              'ConversationPage',
+            ),
+          },
         ],
       },
     ],
@@ -138,9 +254,27 @@ export const router = createBrowserRouter([
   {
     element: <AppShell />,
     children: [
-      { path: '/offers', element: <OffersPage /> },
-      { path: '/offers/:id', element: <OfferDetailPage /> },
-      { path: '/companies/:id', element: <PublicCompanyPage /> },
+      {
+        path: '/offers',
+        element: page(
+          () => import('@/features/offers/pages/OffersPage'),
+          'OffersPage',
+        ),
+      },
+      {
+        path: '/offers/:id',
+        element: page(
+          () => import('@/features/offers/pages/OfferDetailPage'),
+          'OfferDetailPage',
+        ),
+      },
+      {
+        path: '/companies/:id',
+        element: page(
+          () => import('@/features/companies/PublicCompanyPage'),
+          'PublicCompanyPage',
+        ),
+      },
     ],
   },
   {
@@ -149,8 +283,20 @@ export const router = createBrowserRouter([
       {
         element: <AppShell />,
         children: [
-          { path: '/account', element: <AccountPage /> },
-          { path: '/notifications', element: <NotificationsPage /> },
+          {
+            path: '/account',
+            element: page(
+              () => import('@/features/account/AccountPage'),
+              'AccountPage',
+            ),
+          },
+          {
+            path: '/notifications',
+            element: page(
+              () => import('@/features/notifications/NotificationsPage'),
+              'NotificationsPage',
+            ),
+          },
         ],
       },
     ],

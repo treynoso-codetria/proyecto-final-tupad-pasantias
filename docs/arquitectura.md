@@ -206,7 +206,7 @@ Las migraciones se aplican con `prisma migrate deploy` en cada despliegue, antes
 - Contraseñas con **bcrypt** (nunca en texto plano ni en respuestas de la API).
 - Validación y *whitelisting* de todos los DTOs de entrada (`whitelist: true`, `forbidNonWhitelisted: true`).
 - Prisma usa consultas parametrizadas (previene inyección SQL).
-- CORS restringido al dominio del frontend; cabeceras de seguridad con Helmet.
+- CORS restringido al dominio del frontend; HTTPS en producción (Caddy, certificado de Let's Encrypt). Las cabeceras de seguridad con Helmet quedaron pendientes.
 - Límite de intentos en login (`@nestjs/throttler`).
 - IDs UUID no enumerables en todas las URLs.
 - Autorización por rol **y** por pertenencia del recurso en cada operación de escritura.

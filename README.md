@@ -69,6 +69,7 @@ Arquitectura: SPA React + API REST NestJS organizada como **monolito modular en 
 | Listado de módulos y prioridades | [`docs/modulos.md`](docs/modulos.md) |
 | Modelo de datos (DER, diccionario, índices) | [`docs/database/modelo-de-datos.md`](docs/database/modelo-de-datos.md) |
 | Scripts DDL / DML | [`database/`](database/) |
+| Informe final | [`docs/informes/entrega-final.md`](docs/informes/entrega-final.md) |
 | Informes de avance | [`docs/informes/`](docs/informes/) |
 
 ---
