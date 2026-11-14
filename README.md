@@ -6,6 +6,17 @@ Plataforma web que conecta **estudiantes** con **empresas** que ofrecen pasantí
 
 Desarrollado como **Trabajo Final Integrador** de la Tecnicatura en Programación.
 
+## 📦 Entrega final
+
+| | |
+| --- | --- |
+| 📄 **Informe final (PDF)** | [`docs/informes/entrega-final.pdf`](docs/informes/entrega-final.pdf) |
+| 🎬 **Video de presentación** | <https://youtu.be/BZSSqYAoDoc> |
+| 🌐 **Aplicación en producción** | <https://pasantias.165-227-8-179.sslip.io> |
+| 📘 **Documentación de la API** | <https://pasantias.165-227-8-179.sslip.io/api/docs> (Swagger) |
+
+Las cuentas de prueba para entrar a la aplicación están en el informe (sección 1).
+
 ---
 
 ## 👤 Integrante
@@ -69,7 +80,7 @@ Arquitectura: SPA React + API REST NestJS organizada como **monolito modular en 
 | Listado de módulos y prioridades | [`docs/modulos.md`](docs/modulos.md) |
 | Modelo de datos (DER, diccionario, índices) | [`docs/database/modelo-de-datos.md`](docs/database/modelo-de-datos.md) |
 | Scripts DDL / DML | [`database/`](database/) |
-| Informe final | [`docs/informes/entrega-final.md`](docs/informes/entrega-final.md) |
+| Informe final | [`docs/informes/entrega-final.pdf`](docs/informes/entrega-final.pdf) (PDF) · [`entrega-final.md`](docs/informes/entrega-final.md) (Markdown) |
 | Video de presentación | <https://youtu.be/BZSSqYAoDoc> |
 | Informes de avance | [`docs/informes/`](docs/informes/) |
 
