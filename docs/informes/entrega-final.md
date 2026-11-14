@@ -20,6 +20,7 @@ Se implementaron los **once módulos funcionales** del plan aprobado en la 2.ª 
 | API (REST) | <https://pasantias.165-227-8-179.sslip.io/api> |
 | Documentación de la API (Swagger) | <https://pasantias.165-227-8-179.sslip.io/api/docs> |
 | Repositorio | <https://github.com/treynoso-codetria/proyecto-final-tupad-pasantias> |
+| Video de presentación | <https://youtu.be/BZSSqYAoDoc> |
 
 ### Cuentas de prueba
 

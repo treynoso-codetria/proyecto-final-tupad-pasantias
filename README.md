@@ -70,6 +70,7 @@ Arquitectura: SPA React + API REST NestJS organizada como **monolito modular en 
 | Modelo de datos (DER, diccionario, índices) | [`docs/database/modelo-de-datos.md`](docs/database/modelo-de-datos.md) |
 | Scripts DDL / DML | [`database/`](database/) |
 | Informe final | [`docs/informes/entrega-final.md`](docs/informes/entrega-final.md) |
+| Video de presentación | <https://youtu.be/BZSSqYAoDoc> |
 | Informes de avance | [`docs/informes/`](docs/informes/) |
 
 ---
@@ -81,6 +82,7 @@ Arquitectura: SPA React + API REST NestJS organizada como **monolito modular en 
 | Aplicación        | <https://pasantias.165-227-8-179.sslip.io>                |
 | Backend (API)     | <https://pasantias.165-227-8-179.sslip.io/api>            |
 | Documentación API | <https://pasantias.165-227-8-179.sslip.io/api/docs> (Swagger) |
+| Video de presentación | <https://youtu.be/BZSSqYAoDoc> |
 
 Frontend, API y PostgreSQL corren en un servidor propio con Docker; Caddy sirve la SPA y redirige `/api` al backend. La configuración está en [`Dockerfile`](Dockerfile) y [`deploy/`](deploy/).
 
@@ -167,7 +169,7 @@ La API estará disponible en `http://localhost:3000/api`, su documentación inte
 | ---------------- | ------------------------------------------------- | -------------- |
 | ✅ 1.ª Entrega   | Propuesta de proyecto y repositorio               | 30/08/2026     |
 | 📤 2.ª Entrega   | Esquema de BD y listado de módulos                | 27/09/2026     |
-| ⏳ Entrega Final | Repositorio completo, despliegue, informe y video | 14/11/2026     |
+| ✅ Entrega Final | Repositorio completo, despliegue, informe y video | 14/11/2026     |
 | 🎤 Defensa oral  | Presentación ante el comité                       | Mesa de examen |
 
 ---
